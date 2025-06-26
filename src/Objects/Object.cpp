@@ -32,7 +32,6 @@ void Object::setPosition(const sf::Vector2f pos)
 
 void Object::update(float dt)
 {	
-	//m_animation.update(dt);
 	m_animation.applyToSprite(m_sprite);
 }
 
