@@ -36,6 +36,10 @@ void WalkingState::enter(Player& player)
 	std::cout << "enter:: WalkingState\n";
 	player.setAniName("walking");
 	player.setDiraction(m_input);
+	if(player.getHeldObject())
+	{
+		player.getHeldObject()->setStateName("walkingk");
+	}
 	
 	
 }

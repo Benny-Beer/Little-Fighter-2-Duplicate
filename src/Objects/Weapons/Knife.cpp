@@ -4,7 +4,7 @@ Knife::Knife(const sf::Vector2f pos, const std::string& name)
 	:SmallWeapon(pos, name)
 {
 	setScale(1.1f);
-	setAnimation(AnimationManager::getAnimation(getName() + getStateName(), getTexture()));
+	setAnimation(AnimationManager::getAnimation(getStateName(), getTexture()));
 	
 }
 
@@ -13,6 +13,17 @@ void Knife::playAttack()
 	std::cout << "in Knife attack playattack\n";
 }
 
+void Knife::update(float dt)
+{
+	if (getAnimationName() != getName() + getStateName())
+	{
+		setAnimationName(getStateName());
+		setAnimation(AnimationManager::getAnimation(getAnimationName(), getTexture()));
+	}
+	updateAnimation(dt);
+	apllySprite();
+	
+}
 
 
 

@@ -45,6 +45,8 @@ public:
 
 	const int getDirection() const { return static_cast<int>(m_dir); } 
     const PlayerBaseState* getState() const { return m_state.get(); }
+
+	PickableObject* getHeldObject()  { return m_heldObject; }
 private:
     float m_speed = 600.f;
     bool m_alive = true;

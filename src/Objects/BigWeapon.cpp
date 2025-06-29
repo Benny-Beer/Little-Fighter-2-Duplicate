@@ -28,6 +28,7 @@ void BigWeapon::update(float dt)
 
         setPosition(pos);
     }
+	updateAnimation(dt);
     apllySprite();
 }
 

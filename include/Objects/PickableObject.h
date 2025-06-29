@@ -1,5 +1,7 @@
 #pragma once
 #include "Objects/Object.h"
+#include "Objects/ObjectStates/ObjectBaseState.h"
+#include <memory>
 
 
 class PickableObject : public Object {
@@ -9,13 +11,18 @@ public:
 	const std::string& getName();
 	virtual void move(sf::Vector2f goal);
 	virtual void playAttack() = 0;
-	const std::string& getStateName() const { return m_state; }
-	virtual void setStateName(const std::string& state) { m_state = state; }
+	const std::string& getStateName() const { return m_stateName; }
+	void setStateName(const std::string& state) { m_stateName = state; }
+	void setAnimationName(const std::string& animationName) { m_animationName = animationName; }
+	const std::string& getAnimationName() const { return m_animationName; }
+	void setState(std::unique_ptr<ObjectBaseState> state);
 protected:
 	sf::Vector2f m_offset;
 private:
+	std::unique_ptr<ObjectBaseState> m_state;
+
 	sf::Vector2f m_goalPosition;
 	std::string m_name;
-	std::string m_state = "idle"; // Default state is idle
+	std::string m_stateName ; // Default state is idle
 	std::string m_animationName; // Default animation name is idle
 };
