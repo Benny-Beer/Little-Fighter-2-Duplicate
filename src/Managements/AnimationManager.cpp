@@ -11,7 +11,7 @@ void AnimationManager::loadAnimations() {
     s_animationMap["jumpingr"] = JUMPING_WITH_ROCK;
     s_animationMap["attackingr"] = ATTACKING_WITH_ROCK;
     s_animationMap["attacking"] = ATTACKING;
-    s_animationMap["idle"] = KNIFE;
+    s_animationMap["k"]= KNIFE;
 	
     s_animationMap["standingk"] = STANDING;
     s_animationMap["jumpingk"] = JUMPING;
@@ -21,7 +21,6 @@ void AnimationManager::loadAnimations() {
 
     s_animationMap["r"] = ROCK;
 	s_animationMap["rock_flying"] = ROCK_FLYING;
-
 
 
 }
