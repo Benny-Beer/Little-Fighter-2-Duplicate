@@ -199,19 +199,23 @@ void Controller::updateComputerPlayerTargets() {
         }
         else if (closest)
             ally->setTargetEnemy(closest);
+        if (ally->needItem()) {
 
-        std::shared_ptr<PickableObject> closestObj = nullptr;
-        closestDist = std::numeric_limits<float>::max();
+            std::shared_ptr<PickableObject> closestObj = nullptr;
+            closestDist = std::numeric_limits<float>::max();
 
-        for (std::shared_ptr<PickableObject> obj : m_pickables) {
-            float dist = distanceBetween(ally->getPosition(), obj->getPosition());
-            if (dist < closestDist) {
-                closestDist = dist;
-                closestObj = obj;
+            for (std::shared_ptr<PickableObject> obj : m_pickables) {
+                float dist = distanceBetween(ally->getPosition(), obj->getPosition());
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closestObj = obj;
+                }
             }
+            if (closest)
+                ally->setTargetObject(closestObj);
+        } else {
+            ally->setTargetObject(nullptr);
         }
-        if (closest)
-            ally->setTargetObject(closestObj);
     }
 
     // Update targets for enemies (their enemies are players and allies)
@@ -259,19 +263,23 @@ void Controller::updateComputerPlayerTargets() {
         }
         else if (closest)
             enemy->setTargetEnemy(closest);
+        if (enemy->needItem()) {
+            std::shared_ptr<PickableObject> closestObj = nullptr;
+            closestDist = std::numeric_limits<float>::max();
 
-        std::shared_ptr<PickableObject> closestObj = nullptr;
-        closestDist = std::numeric_limits<float>::max();
-
-        for (std::shared_ptr<PickableObject> obj : m_pickables) {
-            float dist = distanceBetween(enemy->getPosition(), obj->getPosition());
-            if (dist < closestDist) {
-                closestDist = dist;
-                closestObj = obj;
+            for (std::shared_ptr<PickableObject> obj : m_pickables) {
+                float dist = distanceBetween(enemy->getPosition(), obj->getPosition());
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closestObj = obj;
+                }
             }
+            if (closest)
+                enemy->setTargetObject(closestObj);
+        } 
+        else {
+            enemy->setTargetObject(nullptr);
         }
-        if (closest)
-            enemy->setTargetObject(closestObj);
     }
 }
 

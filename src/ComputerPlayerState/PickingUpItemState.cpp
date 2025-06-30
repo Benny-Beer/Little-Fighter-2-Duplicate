@@ -9,7 +9,7 @@ PickingUpItemState::PickingUpItemState(std::shared_ptr<PickableObject> item)
     : m_targetItem(std::move(item)) {}
 
 void PickingUpItemState::enter(ComputerPlayer& player) {
-    std::cout << "enter:: PickingUpItemState\n";
+    //std::cout << "enter:: PickingUpItemState\n";
     player.setAniName("walking");
 
     //Animation pickingUpItemAnim(player.getTexture(),
@@ -40,6 +40,7 @@ void PickingUpItemState::update(ComputerPlayer& player, float deltaTime) {
     if (distance <= pickupRange) {
         // Pick up item
         player.pickUp(*m_targetItem);
+        player.tookItem();
         player.changeState(std::make_unique<IdleState>());
     }
     else {

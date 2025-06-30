@@ -1,5 +1,6 @@
 #include "ComputerPlayerState/ApproachingEnemyState.h"
 #include "ComputerPlayerState/AttackingState.h"
+#include "ComputerPlayerState/BlockingState.h"
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PlayableObject.h"
 #include <cmath> // sqrt, etc.
@@ -29,6 +30,11 @@ void ApproachingEnemyState::update(ComputerPlayer& player, float deltaTime) {
     if (!m_target)
         return;
     // std::cout << player.getName() << " - MY TARGET NAME IS: " << m_target->getName() << std::endl;
+
+    if (player.isAttacked()) {
+        player.changeState(std::make_unique<BlockingState>());
+        return;
+    }
 
     sf::Vector2f playerPos = player.getPosition();
     PlayableObject* target = player.getTarget();

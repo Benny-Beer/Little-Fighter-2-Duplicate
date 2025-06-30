@@ -7,7 +7,7 @@
 void IdleState::enter(ComputerPlayer& player) {
     // Optional: reset animation or internal timer
     // player.setAnimation("Idle");
-    std::cout << player.getName() << "enter:: IdleState\n";
+   // std::cout << player.getName() << "enter:: IdleState\n";
 
     //Animation idleAnim(player.getTexture(),
     //    0, 0,          // x, y

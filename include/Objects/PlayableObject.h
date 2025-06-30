@@ -15,7 +15,8 @@ public:
 	virtual void updateScale();
 	virtual bool isAttacked() const;
 	virtual void attack();
-
+	virtual void tookItem();
+	virtual bool needItem();
 
 
 protected:
@@ -28,4 +29,5 @@ protected:
 	std::string m_name;
 	sf::Vector2f m_prevPosition;
 	bool m_underAttack = false;
+	bool m_needItem = true;
 };
