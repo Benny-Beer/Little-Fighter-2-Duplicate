@@ -1,14 +1,14 @@
 #pragma once
-#include "../include/States/IState.h"
-#include "../include/States/CharacterSelectState.h"
-#include "../include/States/InGameState.h"
-#include "../include/UI/Background.h"
-#include "../include/UI/Button.h"
-#include "../include/Management/GameManager.h"
+#include "Screens/IScreen.h"
+#include "Screens/CharacterSelectScreen.h"
+#include "Screens/InGameScreen.h"
+#include "UI/Background.h"
+#include "UI/Button.h"
+#include "Management/GameManager.h"
 #include <iostream>
 #include <stdexcept>
 
-CharacterSelectState::CharacterSelectState(sf::RenderWindow& window, GameManager& manager) : IState(window, manager)
+CharacterSelectScreen::CharacterSelectScreen(sf::RenderWindow& window, GameManager& manager) : IScreen(window, manager)
 {
 	if (!m_bgTexture.loadFromFile("resources/state_backgrounds/bg_cc.png")) throw std::runtime_error("From CharcterSelectState - bg image not found");
 
@@ -18,21 +18,21 @@ CharacterSelectState::CharacterSelectState(sf::RenderWindow& window, GameManager
 
 }
 
-void CharacterSelectState::update(sf::Time deltaTime) {
+void CharacterSelectScreen::update(sf::Time deltaTime) {
 
 }
 
-void CharacterSelectState::handleEvents(sf::Event& ev) {
+void CharacterSelectScreen::handleEvents(sf::Event& ev) {
 	if (ev.type == sf::Event::MouseButtonPressed && 
 		ev.mouseButton.button == sf::Mouse::Button::Left) {
 		auto mousePos = sf::Vector2f(ev.mouseButton.x, ev.mouseButton.y);
 		if (m_startButton.isClicked(mousePos)) {
-			m_manager.switchState(std::make_unique<InGameState>(m_window, m_manager));
+			m_manager.switchScreen(std::make_unique<InGameScreen>(m_window, m_manager));
 		}
 	}
 }
 
-void CharacterSelectState::render() {
+void CharacterSelectScreen::render() {
 
 	m_backGround->draw(m_window, sf::RenderStates::Default);
 	m_startButton.draw(m_window, sf::RenderStates::Default);

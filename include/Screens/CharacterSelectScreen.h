@@ -1,11 +1,11 @@
 #pragma once
-#include "IState.h"
+#include "IScreen.h"
 #include "UI/Background.h"
 #include "UI/Button.h"
 
-class CharacterSelectState : public IState {
+class CharacterSelectScreen : public IScreen {
 public:
-	CharacterSelectState(sf::RenderWindow& window, GameManager& manager);
+	CharacterSelectScreen(sf::RenderWindow& window, GameManager& manager);
 	void update(sf::Time deltaTime) override;
 	void handleEvents(sf::Event& ev) override;
 	void render() override;

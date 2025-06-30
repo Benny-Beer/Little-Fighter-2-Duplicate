@@ -1,16 +1,16 @@
 #pragma once
-#include "../include/States/IState.h"
-#include "../include/States/InGameState.h"
-#include "../include/UI/Background.h"
-#include "../include/UI/Button.h"
-#include "../include/Management/GameManager.h"
+#include "Screens/IScreen.h"
+#include "Screens/InGameScreen.h"
+#include "UI/Background.h"
+#include "UI/Button.h"
+#include "Management/GameManager.h"
 #include "Management/ResourceManager.h"
 
 #include <iostream>
 #include <stdexcept>
 #include <memory>
 
-InGameState::InGameState(sf::RenderWindow& window, GameManager& manager) : IState(window, manager),
+InGameScreen::InGameScreen(sf::RenderWindow& window, GameManager& manager) : IScreen(window, manager),
 																			m_controller(window, std::make_unique<Level>("lvl1bg", sf::Vector2f(m_window.getSize())), 
 																			std::vector<std::shared_ptr<Player>>{},
 																			std::vector<std::shared_ptr<Ally>>{})
@@ -23,7 +23,7 @@ InGameState::InGameState(sf::RenderWindow& window, GameManager& manager) : IStat
 
 
 
-void InGameState::update(sf::Time deltaTime) {
+void InGameScreen::update(sf::Time deltaTime) {
     float dt = deltaTime.asSeconds();
     //m_level.update(dt);
 	//m_player.update(dt);
@@ -38,7 +38,7 @@ void InGameState::update(sf::Time deltaTime) {
 
 }
 
-void InGameState::handleEvents(sf::Event& ev) {
+void InGameScreen::handleEvents(sf::Event& ev) {
 	if (ev.type == sf::Event::KeyPressed || ev.type == sf::Event::KeyReleased )
 	{
 		m_controller.handleInput(ev);
@@ -52,7 +52,7 @@ void InGameState::handleEvents(sf::Event& ev) {
 	}
 }
 
-void InGameState::render() {
+void InGameScreen::render() {
 
 	//m_backGround->draw(m_window, sf::RenderStates::Default);
 	//m_startButton.draw(m_window, sf::RenderStates::Default);
