@@ -2,6 +2,7 @@
 #include "IScreen.h"
 #include "UI/Background.h"
 #include "UI/Button.h"
+#include <vector>
 
 class CharacterSelectScreen : public IScreen {
 public:
@@ -10,7 +11,7 @@ public:
 	void handleEvents(sf::Event& ev) override;
 	void render() override;
 private:
-	sf::Texture m_bgTexture;
 	std::optional<Background> m_backGround;
-	Button m_startButton;
+	std::vector<sf::Texture> m_characters;
+	
 };
