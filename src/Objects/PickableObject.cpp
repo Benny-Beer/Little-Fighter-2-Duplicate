@@ -21,6 +21,16 @@ void PickableObject::move(sf::Vector2f goal)
 	
 }
 
+void PickableObject::setHolder(PlayableObject* holder)
+{
+	m_holder = holder;
+}
+
+PlayableObject* PickableObject::getHolder() const
+{
+	return m_holder;
+}
+
 void PickableObject::setState(std::unique_ptr<ObjectBaseState> state)
 {
 	m_state = std::move(state);

@@ -24,6 +24,7 @@ void BigWeapon::update(float dt)
             m_isFlying = false;  // הפסיק לעוף
             m_velocity = { 0.f, 0.f };
             std::cout << "Rock landed!\n";
+            setAnimation(AnimationManager::getAnimation("r", getTexture()));
         }
 
         setPosition(pos);

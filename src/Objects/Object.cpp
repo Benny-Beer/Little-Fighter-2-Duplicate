@@ -50,7 +50,7 @@ sf::Vector2f Object::getPosition() const
 	return m_sprite.getPosition();
 }
 
-void Object::setScale(float scale)
+void Object::setSize(float scale)
 {
 	m_sprite.setScale(scale, scale);
 }
@@ -74,6 +74,7 @@ void Object::moveSprite(sf::Vector2f pos)
 
 void Object::setScale(int side)
 {
-	m_sprite.setScale(side, 1);
+	auto scaleX = m_sprite.getScale().x; // Get current scale
+	m_sprite.setScale(side*scaleX, m_sprite.getScale().y);
 }
 

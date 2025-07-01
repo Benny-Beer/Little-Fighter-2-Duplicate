@@ -3,6 +3,7 @@
 #include "PlayerStates/JumpingState.h"
 #include "PlayerStates/AttackingState.h"
 #include"Gameplay/Player.h"
+#include "Objects/ObjectStates/HeldObjState.h"
 
 StandingState::StandingState(Input input)
 {
@@ -34,5 +35,4 @@ void StandingState::enter(Player& player)
 	std::cout << "enter:: StandingState\n";
 	player.setAniName("standing");
 	player.setDiraction(m_input);
-
 }

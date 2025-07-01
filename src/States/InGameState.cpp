@@ -15,10 +15,6 @@ InGameState::InGameState(sf::RenderWindow& window, GameManager& manager) : IStat
 																			std::vector<std::shared_ptr<Player>>{},
 																			std::vector<std::shared_ptr<Ally>>{})
 {
-	
-
-	std::cout << "InGameState created, m_manager ptr: " << &m_manager << std::endl;
-
 }
 
 void InGameState::update(sf::Time deltaTime) {

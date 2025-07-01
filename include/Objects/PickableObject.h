@@ -1,6 +1,7 @@
 #pragma once
 #include "Objects/Object.h"
 #include "Objects/ObjectStates/ObjectBaseState.h"
+#include "Objects/PlayableObject.h"
 #include <memory>
 
 
@@ -11,6 +12,10 @@ public:
 	const std::string& getName();
 	virtual void move(sf::Vector2f goal);
 	virtual void playAttack() = 0;
+
+
+	void setHolder(PlayableObject* holder); 
+	PlayableObject* getHolder() const;
 	const std::string& getStateName() const { return m_stateName; }
 	void setStateName(const std::string& state) { m_stateName = state; }
 	void setAnimationName(const std::string& animationName) { m_animationName = animationName; }
@@ -20,6 +25,7 @@ protected:
 	sf::Vector2f m_offset;
 private:
 	std::unique_ptr<ObjectBaseState> m_state;
+	PlayableObject* m_holder = nullptr;
 
 	sf::Vector2f m_goalPosition;
 	std::string m_name;

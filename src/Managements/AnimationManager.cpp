@@ -1,4 +1,5 @@
 #include "Management/AnimationManager.h"
+#include <iostream>
 
 std::map<std::string, AnimationInfo> AnimationManager::s_animationMap;
 
@@ -11,7 +12,7 @@ void AnimationManager::loadAnimations() {
     s_animationMap["jumpingr"] = JUMPING_WITH_ROCK;
     s_animationMap["attackingr"] = ATTACKING_WITH_ROCK;
     s_animationMap["attacking"] = ATTACKING;
-    s_animationMap["k"]= KNIFE;
+    s_animationMap["idle"]= IDLE;
 	
     s_animationMap["standingk"] = STANDING;
     s_animationMap["jumpingk"] = JUMPING;
@@ -20,9 +21,10 @@ void AnimationManager::loadAnimations() {
     s_animationMap["attackingk"] = ATTACKING_WITH_KNIFE;
 
     s_animationMap["r"] = ROCK;
+	s_animationMap["b"] = BOX;
 	s_animationMap["rock_flying"] = ROCK_FLYING;
 
-
+	s_animationMap["held"] = HELD;
 }
 
 Animation AnimationManager::getAnimation(const std::string& aniName, const sf::Texture* texture) {

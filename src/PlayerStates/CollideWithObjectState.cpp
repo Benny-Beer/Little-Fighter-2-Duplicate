@@ -6,6 +6,7 @@
 #include "PlayerStates/AttackingState.h"
 #include "Gameplay/Player.h"
 
+class PlayableObject;
 
 CollideWithObject::CollideWithObject(Input input, PickableObject* obj)
 	:m_obj(obj)
@@ -53,6 +54,7 @@ void CollideWithObject::update(Player& player, float dt)
 	if (m_pickupPending)
 	{
 		player.pickUpObject(m_obj);
+		m_obj->setHolder(&player);
 		m_pickupPending = false;
 		player.setState(std::make_unique<StandingState>(Input::NONE));
 	}

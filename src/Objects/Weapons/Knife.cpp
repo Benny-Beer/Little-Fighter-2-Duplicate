@@ -1,11 +1,14 @@
 #include "Objects/Weapons/Knife.h"
+#include "Objects/ObjectStates/IdleObjState.h"
 
 Knife::Knife(const sf::Vector2f pos, const std::string& name)
 	:SmallWeapon(pos, name)
 {
-	setScale(1.1f);
+	setState(std::make_unique<IdleObjState>());
+	m_offset = sf::Vector2f(13.f, 24.f); // Adjust the offset as needed
+	setSize(1.1f);
+	std::cout << getStateName() << '\n';	
 	setAnimation(AnimationManager::getAnimation(getStateName(), getTexture()));
-	
 }
 
 void Knife::playAttack()
@@ -15,9 +18,9 @@ void Knife::playAttack()
 
 void Knife::update(float dt)
 {
-	if (getAnimationName() != getName() + getStateName())
+	if (getAnimationName() != /*getName() +*/ getStateName())
 	{
-		setAnimationName(getStateName());
+		setAnimationName(/*getName() +*/ getStateName());
 		setAnimation(AnimationManager::getAnimation(getAnimationName(), getTexture()));
 	}
 	updateAnimation(dt);
