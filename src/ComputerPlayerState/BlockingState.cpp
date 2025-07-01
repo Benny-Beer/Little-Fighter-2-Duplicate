@@ -8,7 +8,7 @@ void BlockingState::enter(ComputerPlayer& player) {
     std::cout << "enter:: BlockingState\n";
 
     Animation blockingAnim(player.getTexture(),
-        400, 480,          // x, y
+        480, 400,          // x, y
         80, 80,        // width, height
         2,             // מספר פריימים
         0.2f);         // זמן בין פריימים

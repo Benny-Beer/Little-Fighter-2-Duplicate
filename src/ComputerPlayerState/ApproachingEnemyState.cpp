@@ -1,5 +1,6 @@
 #include "ComputerPlayerState/ApproachingEnemyState.h"
 #include "ComputerPlayerState/AttackingState.h"
+#include "ComputerPlayerState/BlockingState.h"
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PlayableObject.h"
 #include <cmath> // sqrt, etc.
@@ -7,11 +8,11 @@
 
 ApproachingEnemyState::ApproachingEnemyState(PlayableObject* target)
     : m_target(std::move(target)) {
-    std::cout << target->getPosition().x << "." << target->getPosition().y << std::endl;
+    //std::cout << target->getPosition().x << "." << target->getPosition().y << std::endl;
 }
 
 void ApproachingEnemyState::enter(ComputerPlayer& player) {
-    std::cout << "enter:: ApproachingEnemyState\n";
+    //std::cout << "enter:: ApproachingEnemyState\n";
     
 
     //Animation approachingEnemyAnim(player.getTexture(),
@@ -30,6 +31,11 @@ void ApproachingEnemyState::update(ComputerPlayer& player, float deltaTime) {
         return;
     // std::cout << player.getName() << " - MY TARGET NAME IS: " << m_target->getName() << std::endl;
 
+    if (player.isAttacked()) {
+        player.changeState(std::make_unique<BlockingState>());
+        return;
+    }
+
     sf::Vector2f playerPos = player.getPosition();
     PlayableObject* target = player.getTarget();
     sf::Vector2f direction = target->getPosition() - playerPos;
@@ -37,7 +43,7 @@ void ApproachingEnemyState::update(ComputerPlayer& player, float deltaTime) {
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
     //std::cout << "[ApproachingEnemyState] " << player.getName() << " distance to " << m_target->getName() << ":" << distance << std::endl;
 
-    if (distance < 60.f /* && (playerPos.x - target->getPosition().x) == 0.f*/) {
+    if (distance < 50.f /* && (playerPos.x - target->getPosition().x) == 0.f*/) {
         player.changeState(std::make_unique<AttackingState>(m_target));
         return;
     }

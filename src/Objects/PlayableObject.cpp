@@ -61,3 +61,13 @@ void PlayableObject::attack()
 {
     m_underAttack = true;
 }
+
+void PlayableObject::tookItem()
+{
+    m_needItem = false;
+}
+
+bool PlayableObject::needItem()
+{
+    return m_needItem;
+}

@@ -2,11 +2,12 @@
 #include "GamePlay/ComputerPlayer.h"
 #include "ComputerPlayerState/ApproachingEnemyState.h" // the next state
 #include <cmath> // distance calculation
+#include "ComputerPlayerState/PickingUpItemState.h"
 
 void IdleState::enter(ComputerPlayer& player) {
     // Optional: reset animation or internal timer
     // player.setAnimation("Idle");
-    std::cout << player.getName() << "enter:: IdleState\n";
+   // std::cout << player.getName() << "enter:: IdleState\n";
 
     //Animation idleAnim(player.getTexture(),
     //    0, 0,          // x, y
@@ -24,21 +25,28 @@ void IdleState::update(ComputerPlayer& player, float deltaTime) {
     //auto enemies = player.getKnownEnemies();
     //float closestDist = std::numeric_limits<float>::max(); // init to largest float number
     PlayableObject* closestEnemy = nullptr;
-
+    std::shared_ptr<PickableObject> closestObject = nullptr;
     //for (const auto& enemy : enemies) {
     //    float dist = distance(player.getPosition(), enemy->getPosition());
     //    if (dist < closestDist) {
     //        closestDist = dist;
     //        closestEnemy = enemy;
     //    //}
+
+    closestObject = player.getObject();
     closestEnemy = player.getTarget();
-    if (closestEnemy)
+    if (closestObject)
+    {
+        player.changeState(std::make_unique<PickingUpItemState>(closestObject));
+    }
+
+ /*   if (closestEnemy)
         std::cout << player.getName() << "[IdleState] Update, target: "  << std::endl;
     else
-        std::cout << "THERE IS NO TARGET YET\n";
+        std::cout << "THERE IS NO TARGET YET\n";*/
 
     // 2. If enemy is close enough, change to Approaching state
-    if (closestEnemy) { // threshold distance
+    else if (closestEnemy) { // threshold distance
         std::cout << "ENEMY FOUND!" << std::endl;
 
         player.changeState(std::make_unique<ApproachingEnemyState>(closestEnemy));

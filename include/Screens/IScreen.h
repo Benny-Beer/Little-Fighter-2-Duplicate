@@ -3,11 +3,11 @@
 
 class GameManager; //forward declaration
 
-class IState {
+class IScreen {
 public:
-	virtual ~IState() = default;
-	IState(sf::RenderWindow& window, GameManager& manager) : m_window(window), m_manager(manager) {};
-	virtual void update(sf::Time deltaTime) = 0;
+	virtual ~IScreen() = default;
+	IScreen(sf::RenderWindow& window, GameManager& manager) : m_window(window), m_manager(manager) {};
+	virtual void update(sf::Time deltaTime) {};
 	virtual void handleEvents(sf::Event& ev) = 0;
 	virtual void render() = 0;
 
