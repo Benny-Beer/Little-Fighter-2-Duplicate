@@ -1,5 +1,5 @@
 #include "Gameplay/Player.h"
-#include <algorithm>            // std::clamp
+#include <algorithm>
 #include "PlayerStates/StandingState.h"
 #include "PlayerStates/PlayerBaseState.h"
 #include "Management/AnimationManager.h"
