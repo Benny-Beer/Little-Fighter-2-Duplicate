@@ -1,9 +1,10 @@
 #pragma once
-#include "IScreen.h"
-#include "UI/Background.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <optional>
+#include "IScreen.h"
+#include "UI/Background.h"
+#include "Gameplay/Player.h"
 
 class CharacterSelectScreen : public IScreen {
 public:
@@ -13,13 +14,18 @@ public:
     void render() override;
 
 private:
+    std::vector<PlayerData> m_characters;
+    bool m_selectionMode = false;
+    bool m_selected = false;
+    // General UI
+    sf::RectangleShape m_frame;
+    sf::Text m_instructionText;
+    sf::Text m_Title;
     std::optional<Background> m_backGround;
     sf::Font m_font;
-    sf::Text m_instructionText;
     float m_opacityTime = 0.f;
 
     // Character frame
-    sf::RectangleShape m_frame;
     sf::RectangleShape m_profilePlaceholder;
     sf::Text m_characterName;
     sf::Text m_characterDescription;

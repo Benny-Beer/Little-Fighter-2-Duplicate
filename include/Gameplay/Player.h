@@ -1,11 +1,19 @@
-
 #pragma once
 #include "Objects/PlayableObject.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include<PlayerStates/PlayerBaseState.h>
+#include <string>
+#include "PlayerStates/PlayerBaseState.h"
 #include "Objects/PickableObject.h"
 #include "Attacks/AttackBehavior.h"
+
+struct PlayerData {
+    std::string m_name;
+    std::string m_description;
+    sf::Texture* m_profilePic;
+    sf::Texture* m_chracterIcon;
+    sf::Texture* m_animationSheet;
+};
 
 enum class Direction
 {
