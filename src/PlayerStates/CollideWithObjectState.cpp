@@ -1,9 +1,9 @@
 
-#include "PlayerStates/CollideWithObjectState.h"
-#include "PlayerStates/JumpingState.h"
-#include "PlayerStates/WalkingState.h"
-#include "PlayerStates/StandingState.h"
-#include "PlayerStates/AttackState.h"
+#include "PlayableObjectStates/PlayerStates/CollideWithObjectState.h"
+#include "PlayableObjectStates/PlayerStates/JumpingState.h"
+#include "PlayableObjectStates/PlayerStates/WalkingState.h"
+#include "PlayableObjectStates/PlayerStates/StandingState.h"
+#include "PlayableObjectStates/PlayerStates/AttackState.h"
 #include "Gameplay/Player.h"
 
 
@@ -13,7 +13,7 @@ CollideWithObject::CollideWithObject(Input input, PickableObject* obj)
 	m_input = input;
 }
 
-std::unique_ptr<PlayerBaseState> CollideWithObject::handleInput(Input input)
+std::unique_ptr<PlayableObjectState> CollideWithObject::handleInput(Input input)
 {
 	if (input == Input::ADD_OBJ)
 	{
@@ -41,14 +41,14 @@ std::unique_ptr<PlayerBaseState> CollideWithObject::handleInput(Input input)
 	return nullptr;
 }
 
-void CollideWithObject::enter(Player& player)
+void CollideWithObject::enter(PlayableObject& player)
 {
 	std::cout << "enter::CollideWithObject\n";
 
 	//player.setDiraction(m_input);
 }
 
-void CollideWithObject::update(Player& player, float dt)
+void CollideWithObject::update(PlayableObject& player, float dt)
 {
 	if (m_pickupPending)
 	{

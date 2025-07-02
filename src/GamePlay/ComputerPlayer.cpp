@@ -1,6 +1,6 @@
 #include "GamePlay/ComputerPlayer.h"
-#include "ComputerPlayerState/IdleState.h"
-#include "ComputerPlayerState/ApproachingEnemyState.h"
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
 #include <iostream>
 
 ComputerPlayer::ComputerPlayer(const sf::Vector2f pos, const std::string& name) : PlayableObject(pos, name)
@@ -17,8 +17,6 @@ void ComputerPlayer::update(float dt)
     }
 }
 void ComputerPlayer::changeState(std::unique_ptr<ComputerPlayerState> newState) {
-    if (m_state)
-        m_state->exit(*this);
 
     m_state = std::move(newState);
 
@@ -27,7 +25,7 @@ void ComputerPlayer::changeState(std::unique_ptr<ComputerPlayerState> newState) 
 }
 
 // Returns current state
-ComputerPlayerState* ComputerPlayer::getState() const {
+PlayableObjectState* ComputerPlayer::getState() const {
     return m_state.get();
 }
 

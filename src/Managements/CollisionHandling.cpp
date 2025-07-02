@@ -71,9 +71,9 @@
 #include "Objects/Weapons/Rock.h"
 #include "Objects/Weapons/Knife.h"
 #include "Objects/PickableObject.h"
-#include "PlayerStates/CollideWithObjectState.h"
-#include "PlayerStates/JumpingState.h"
-#include "PlayerStates/AttackState.h"
+#include "PlayableObjectStates/PlayerStates/CollideWithObjectState.h"
+#include "PlayableObjectStates/PlayerStates/JumpingState.h"
+#include "PlayableObjectStates/PlayerStates/AttackState.h"
 
 #include <iostream>
 #include <typeindex>
@@ -95,7 +95,7 @@ void playerPickableObject(Object& playerObj, Object& pickableObj)
 	{
 		return;
 	}
-    if (player.isHoldingWaepon(&object))
+    if (player.isHoldingWeapon(&object))
         return;
     
     player.setState(std::make_unique<CollideWithObject>(Input::NONE, &object));

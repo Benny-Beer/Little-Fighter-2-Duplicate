@@ -1,10 +1,10 @@
-#include "ComputerPlayerState/IdleState.h"
-#include "GamePlay/ComputerPlayer.h"
-#include "ComputerPlayerState/ApproachingEnemyState.h" // the next state
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
+#include "GamePlay/ComputerPlayer.h"  
+#include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h" // the next state
 #include <cmath> // distance calculation
-#include "ComputerPlayerState/PickingUpItemState.h"
+#include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
 
-void IdleState::enter(ComputerPlayer& player) {
+void IdleState::enter(PlayableObject& player) {
     // Optional: reset animation or internal timer
     // player.setAnimation("Idle");
    // std::cout << player.getName() << "enter:: IdleState\n";
@@ -20,7 +20,7 @@ void IdleState::enter(ComputerPlayer& player) {
     //player.setDiraction(m_input); 
 }
 
-void IdleState::update(ComputerPlayer& player, float deltaTime) {
+void IdleState::update(PlayableObject& player, float deltaTime) {
     //// 1. Scan for closest enemy (pseudo code)
     //auto enemies = player.getKnownEnemies();
     //float closestDist = std::numeric_limits<float>::max(); // init to largest float number
@@ -37,7 +37,7 @@ void IdleState::update(ComputerPlayer& player, float deltaTime) {
     closestEnemy = player.getTarget();
     if (closestObject)
     {
-        player.changeState(std::make_unique<PickingUpItemState>(closestObject));
+        player.setState(std::make_unique<PickingUpItemState>(closestObject));
     }
 
  /*   if (closestEnemy)
@@ -49,7 +49,7 @@ void IdleState::update(ComputerPlayer& player, float deltaTime) {
     else if (closestEnemy) { // threshold distance
         std::cout << "ENEMY FOUND!" << std::endl;
 
-        player.changeState(std::make_unique<ApproachingEnemyState>(closestEnemy));
+        player.setState(std::make_unique<ApproachingEnemyState>(closestEnemy));
     }
 
     // 3. Otherwise, stay idle
@@ -57,4 +57,8 @@ void IdleState::update(ComputerPlayer& player, float deltaTime) {
 
 void IdleState::exit(ComputerPlayer& player) {
     // Optional: stop idle animation, log transition, etc.
+}
+
+void IdleState::onHandsAttack(PlayableObject& player) {
+    std::cout << "Im in IdleState and i got attacked by hands";
 }

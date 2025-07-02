@@ -1,15 +1,15 @@
-#include "PlayerStates/StandingState.h"
-#include "PlayerStates/WalkingState.h" 
-#include "PlayerStates/JumpingState.h"
-#include "PlayerStates/AttackState.h"
-#include"Gameplay/Player.h"
+#include "PlayableObjectStates/PlayerStates/StandingState.h"
+#include "PlayableObjectStates/PlayerStates/WalkingState.h" 
+#include "PlayableObjectStates/PlayerStates/JumpingState.h"
+#include "PlayableObjectStates/PlayerStates/AttackState.h"
+#include "Gameplay/Player.h"
 #include <iostream>
 StandingState::StandingState(Input input)
 {
 	m_input = input;
 }
 
-std::unique_ptr<PlayerBaseState> StandingState::handleInput(Input input)
+std::unique_ptr<PlayableObjectState> StandingState::handleInput(Input input)
 {
 	switch (input)
 	{
@@ -30,7 +30,7 @@ std::unique_ptr<PlayerBaseState> StandingState::handleInput(Input input)
 	return nullptr;
 }
 
-void StandingState::enter(Player& player)
+void StandingState::enter(PlayableObject& player)
 {
 	std::cout << "enter:: StandingState\n";
 	player.setAniName("standing");

@@ -28,9 +28,9 @@ Controller::Controller(sf::RenderWindow& window,
     // creating user's player
     m_players.push_back(std::make_shared<Player>(sf::Vector2f(1000, 800), "davis_ani", 320.f));
     // creating ally
-    auto ally = std::make_shared<Ally>(sf::Vector2f(800, 40), "davis_ani", 100.f);
-    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 100.f);
-    auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 100.f);
+    auto ally = std::make_shared<Ally>(sf::Vector2f(800, 40), "davis_ani", 10.f);
+    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 10.f);
+    auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 10.f);
 
     m_allies.push_back(ally);
     m_allies.push_back(allyTwo);
@@ -73,6 +73,7 @@ void Controller::updateWorld(float deltaTime)
     for (auto& obj : m_pickables)
     {
         obj->update(deltaTime);
+        std::cout << obj->getName() << " position: (" << obj->getPosition().x << ", " << obj->getPosition().y << ")\n";
     }
 
     updateComputerPlayerTargets();
@@ -188,7 +189,7 @@ void Controller::updateComputerPlayerTargets() {
                 closestDist = dist;
                 closest = enemy;
             }
-            if (!enemy->isAttacked() && dist < freeDist) {
+            if (/*!enemy->isAttacked() &&*/ dist < freeDist) {
                 freeDist = dist;
                 freeClosest = enemy;
             }
@@ -240,7 +241,7 @@ void Controller::updateComputerPlayerTargets() {
                 closestDist = dist;
                 closest = ally.get();
             }
-            if (!ally->isAttacked() && dist < freeDist) {
+            if (/*!ally->isAttacked() && */dist < freeDist) {
                 freeDist = dist;
                 freeClosest = ally.get();
             }
@@ -253,7 +254,7 @@ void Controller::updateComputerPlayerTargets() {
                 closestDist = dist;
                 closest = player.get();
             }
-            if (!player->isAttacked() && dist < freeDist) {
+            if (/*!player->isAttacked() &&*/ dist < freeDist) {
                 freeDist = dist;
                 freeClosest = player.get();
             }

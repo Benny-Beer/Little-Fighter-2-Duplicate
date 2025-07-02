@@ -11,6 +11,6 @@ void HandsAttack::attack()
 }
 
 bool HandsAttack::m_register = Factory<AttackBehavior>::registerAttackBehavior("h",
-	[](const std::string& name, PickableObject* obj, Player* player) {
+	[](const std::string& name, PickableObject* obj, PlayableObject* player) {
 		return std::make_unique<HandsAttack>();
 	});

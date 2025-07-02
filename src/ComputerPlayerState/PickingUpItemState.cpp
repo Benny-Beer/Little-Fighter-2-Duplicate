@@ -1,14 +1,14 @@
-#include "ComputerPlayerState/PickingUpItemState.h"
+#include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PickableObject.h"
-#include "ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 
 PickingUpItemState::PickingUpItemState(std::shared_ptr<PickableObject> item)
     : m_targetItem(std::move(item)) {}
 
-void PickingUpItemState::enter(ComputerPlayer& player) {
+void PickingUpItemState::enter(PlayableObject& player) {
     //std::cout << "enter:: PickingUpItemState\n";
     player.setAniName("walking");
 
@@ -23,10 +23,10 @@ void PickingUpItemState::enter(ComputerPlayer& player) {
     //player.setDiraction(m_input); 
 }
 
-void PickingUpItemState::update(ComputerPlayer& player, float deltaTime) {
+void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
     if (!m_targetItem) {
         // Item already gone – return to idle
-        player.changeState(std::make_unique<IdleState>());
+        player.setState(std::make_unique<IdleState>());
         return;
     }
 
@@ -39,9 +39,11 @@ void PickingUpItemState::update(ComputerPlayer& player, float deltaTime) {
     const float pickupRange = 40.f;
     if (distance <= pickupRange) {
         // Pick up item
-        player.pickUp(*m_targetItem);
+        //player.pickUp(*m_targetItem);
+        player.pickUpObject(m_targetItem.get());
+        std::cout << player.getDirection() << "and " << player.getPosition().y << " picked item up\n";
         player.tookItem();
-        player.changeState(std::make_unique<IdleState>());
+        player.setState(std::make_unique<IdleState>());
     }
     else {
         // Move toward item

@@ -1,0 +1,8 @@
+#include "EventCommands/ICommand.h"
+#include "Objects/PlayableObject.h"
+
+class HandsAttackCommand : public ICommand {
+public:
+    HandsAttackCommand() = default;
+    void execute(PlayableObject& player) override { player.onHandsAttack(); };
+};

@@ -9,7 +9,7 @@ KnifeAttack::KnifeAttack(const std::string& name, PickableObject* obj)
 	std::cout << " creating attack\n";
 }
 
-KnifeAttack::KnifeAttack(const std::string& name, PickableObject* obj, Player* player)
+KnifeAttack::KnifeAttack(const std::string& name, PickableObject* obj, PlayableObject* player)
 	:m_player(player), m_knife(obj)
 {
 	std::cout << " creating attack with player\n";
@@ -27,6 +27,6 @@ void KnifeAttack::attack()
 
 
 bool KnifeAttack::m_register = Factory<AttackBehavior>::registerAttackBehavior("k",
-	[](const std::string& name, PickableObject* obj, Player* player) {
+	[](const std::string& name, PickableObject* obj, PlayableObject* player) {
 		return std::make_unique<KnifeAttack>(name, obj, player);
 	});

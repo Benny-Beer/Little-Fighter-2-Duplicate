@@ -1,13 +1,15 @@
-#include "ComputerPlayerState/AttackingState.h"
-#include "ComputerPlayerState/ApproachingEnemyState.h"
+#include "PlayableObjectStates/ComputerPlayerState/AttackingState.h"
+#include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PlayableObject.h"
+#include "EventCommands/HandsAttackCommand.h"
+#include <memory>
 #include <cmath>
 
 AttackingState::AttackingState(PlayableObject* target)
     : m_target(std::move(target)) {}
 
-void AttackingState::enter(ComputerPlayer& player) {
+void AttackingState::enter(PlayableObject& player) {
     //std::cout << "enter:: AttackingState\n";
 
     //Animation attackingAnim(player.getTexture(),
@@ -24,12 +26,13 @@ void AttackingState::enter(ComputerPlayer& player) {
     //player.setPosition({ targetPos.x, targetPos.y });
     alignAttacker(player);
     player.setAniName("attacking");
-    m_target->attack();
+    player.attack();
+    m_target->handleCommand(std::make_unique<HandsAttackCommand>());
     // I think we need switch-case here according to the attack
     //player.setDiraction(m_input);     m_attackCooldown = 0.f; // Start immediately
 }
 
-void AttackingState::update(ComputerPlayer& player, float deltaTime) {
+void AttackingState::update(PlayableObject& player, float deltaTime) {
     if (!m_target)
         return;
     //std::cout << player.getName() <<" - MY TARGET NAME IS: " << m_target->getName() << std::endl;
@@ -49,7 +52,7 @@ void AttackingState::update(ComputerPlayer& player, float deltaTime) {
     const float attackRange = 150.f;
     if (distance > attackRange) {
         // Too far — switch back to approach state
-        player.changeState(std::make_unique<ApproachingEnemyState>(m_target));
+        player.setState(std::make_unique<ApproachingEnemyState>(m_target));
         return;
     }
 
@@ -61,8 +64,8 @@ void AttackingState::update(ComputerPlayer& player, float deltaTime) {
         return;
     }
 
-    // Perform attack
-    player.performAttack(*m_target);
+    // Perform attack - TODO the logic
+    //player.performAttack(*m_target);
 
     // Reset cooldown
     m_attackCooldown = 1.0f; // One second between attacks
@@ -72,7 +75,7 @@ void AttackingState::exit(ComputerPlayer& player) {
     // Stop attack animation or cleanup if needed
 }
 
-void AttackingState::alignAttacker(ComputerPlayer& player)
+void AttackingState::alignAttacker(PlayableObject& player)
 {
     sf::Vector2f playerPos = player.getPosition();
     sf::Vector2f targetPos = m_target->getPosition();

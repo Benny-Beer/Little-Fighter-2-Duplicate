@@ -11,7 +11,7 @@ RockAttack::RockAttack(const std::string& name, PickableObject* obj)
     std::cout << " creating attack\n";
 }
 
-RockAttack::RockAttack(const std::string& name, PickableObject* obj, Player* player)
+RockAttack::RockAttack(const std::string& name, PickableObject* obj, PlayableObject* player)
 	:m_player(player), m_rock(obj)
 {
 	std::cout << " creating attack with player\n";
@@ -34,7 +34,7 @@ void RockAttack::attack()
 
 
 bool RockAttack::m_register = Factory<AttackBehavior>::registerAttackBehavior("r",
-    [](const std::string& name, PickableObject* obj, Player* player) {
+    [](const std::string& name, PickableObject* obj, PlayableObject* player) {
         return std::make_unique<RockAttack>(name, obj, player);
     });
 
