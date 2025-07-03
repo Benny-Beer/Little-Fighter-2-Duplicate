@@ -37,10 +37,13 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
         std::pow(playerPos.y - itemPos.y, 2));
 
     const float pickupRange = 40.f;
+    std::cout << "THERE !\n";
+
     if (distance <= pickupRange) {
         // Pick up item
         //player.pickUp(*m_targetItem);
-        player.pickUpObject(m_targetItem.get());
+        player.pickUpObject(m_targetItem);
+        
         std::cout << player.getDirection() << "and " << player.getPosition().y << " picked item up\n";
         player.tookItem();
         player.setState(std::make_unique<IdleState>());

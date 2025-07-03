@@ -15,12 +15,12 @@ template<typename T>
 class Factory {
 public:
     using creatorFunc = std::function<std::unique_ptr<T>(const sf::Vector2f&, const std::string&)>;
-    using attackCreatorFunc = std::function<std::unique_ptr<AttackBehavior>(const std::string&, PickableObject*, PlayableObject*)>;
+    using attackCreatorFunc = std::function<std::unique_ptr<AttackBehavior>(const std::string&, std::shared_ptr<PickableObject>, PlayableObject*)>;
 
     static std::unique_ptr<T> create(const std::string& name, const sf::Vector2f& pos);
     static bool registerIt(const std::string& name, creatorFunc f);
 
-    static std::unique_ptr<AttackBehavior> createAttackBehavior(const std::string& name, PickableObject* obj, PlayableObject* player);
+    static std::unique_ptr<AttackBehavior> createAttackBehavior(const std::string& name, std::shared_ptr<PickableObject> obj, PlayableObject* player);
     static bool registerAttackBehavior(const std::string& name, attackCreatorFunc f);
 
 private:
@@ -54,7 +54,7 @@ inline bool Factory<T>::registerIt(const std::string& name, creatorFunc f) {
 }
 
 template<typename T>
-inline std::unique_ptr<AttackBehavior> Factory<T>::createAttackBehavior(const std::string& name, PickableObject* obj, PlayableObject* player)
+inline std::unique_ptr<AttackBehavior> Factory<T>::createAttackBehavior(const std::string& name, std::shared_ptr<PickableObject> obj, PlayableObject* player)
 {
     auto it = getAttackMap().find(name);
     if (it == getAttackMap().end())

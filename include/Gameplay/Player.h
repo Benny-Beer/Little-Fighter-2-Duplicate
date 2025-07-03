@@ -36,12 +36,12 @@ public:
     /*void setAnimation(const Animation& anim);*/
     //void setState(std::unique_ptr<PlayerBaseState> state);
     void setAttack(std::unique_ptr<AttackBehavior> attack);
-    //void pickUpObject(PickableObject* obj);
+    //void pickUpObject(std::shared_ptr<PickableObject> obj);
 
     void setAniName(const std::string& name);
     //void setStrategyName(const std::string& name); 
     //void attack();
-	bool isHoldingWeapon(PickableObject* obj) const;
+	bool isHoldingWeapon(std::shared_ptr<PickableObject> obj) const;
 
 	//int getDirection() const { return static_cast<int>(m_dir); } 
     const PlayableObjectState* getState() const { return m_state.get(); }
@@ -53,7 +53,7 @@ private:
 
     //std::unique_ptr<PlayerBaseState> m_state; -->INHERIT IT FROM PLAYABLEOBJECT
     //std::unique_ptr<AttackBehavior> m_attack;
-    //PickableObject* m_heldObject = nullptr;
+    //std::shared_ptr<PickableObject> m_heldObject = nullptr;
     
 
 

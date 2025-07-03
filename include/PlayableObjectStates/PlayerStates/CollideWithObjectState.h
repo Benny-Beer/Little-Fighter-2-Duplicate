@@ -5,7 +5,7 @@
 class CollideWithObject : public PlayerBaseState
 {
 public:
-	CollideWithObject(Input input, PickableObject* obj);
+	CollideWithObject(Input input, std::shared_ptr<PickableObject> obj);
 	virtual std::unique_ptr<PlayableObjectState> handleInput(Input input) override;
 	virtual void enter(PlayableObject& player) override;
 	virtual void update(PlayableObject& player, float dt)override;
@@ -14,7 +14,7 @@ public:
 	void onStoneHit(PlayableObject& player) override {};
 	void onExplosion(PlayableObject& player) override {};
 private:
-	PickableObject* m_obj;
+	std::shared_ptr<PickableObject> m_obj;
 	bool m_pickupPending = false;
 
 

@@ -145,7 +145,7 @@ void Player::setAttack(std::unique_ptr<AttackBehavior> attack)
     m_attack = std::move(attack);
 }
 
-//void Player::pickUpObject(PickableObject* obj)
+//void Player::pickUpObject(std::shared_ptr<PickableObject> obj)
 //{
 //    m_heldObject = obj;
 //    //just for expirience. must do it nice
@@ -191,7 +191,7 @@ void Player::setAniName(const std::string& name)
 //
 //}
 
-bool Player::isHoldingWeapon(PickableObject* obj) const
+bool Player::isHoldingWeapon(std::shared_ptr<PickableObject> obj) const
 {
 	return m_heldObject != nullptr;
 }

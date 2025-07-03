@@ -5,12 +5,12 @@ class PlayableObject;
 
 class RockAttack : public AttackBehavior {
 public:
-	RockAttack(const std::string& name, PickableObject* obj);
-	RockAttack(const std::string& name, PickableObject* obj, PlayableObject* player);
+	RockAttack(const std::string& name, std::shared_ptr<PickableObject> obj);
+	RockAttack(const std::string& name, std::shared_ptr<PickableObject> obj, PlayableObject* player);
 
 	virtual void attack()override;
 private:
-	PickableObject* m_rock = nullptr;
+	std::shared_ptr<PickableObject> m_rock = nullptr;
 	PlayableObject* m_player = nullptr;
 	static bool m_register;
 

@@ -14,7 +14,7 @@ public:
 	PlayableObject(sf::Vector2f pos, const std::string& name) : Object(pos, name), m_prevPosition(pos) {}
 	void setState(std::unique_ptr<PlayableObjectState> newState); 
 	virtual void handleCommand(std::unique_ptr<ICommand> command);
-	virtual void pickUpObject(PickableObject* obj);
+	virtual void pickUpObject(std::shared_ptr<PickableObject> obj);
 	virtual void setDiraction(Input input);
 	virtual void attack();
 	virtual int getDirection() const { return static_cast<int>(m_dir); }
@@ -55,8 +55,8 @@ protected:
 	bool m_needItem = true;
 	std::unique_ptr<PlayableObjectState> m_state;
 	std::unique_ptr<AttackBehavior> m_attack;
-	PickableObject* m_heldObject = nullptr;
-	Direction m_dir;
+	std::shared_ptr<PickableObject> m_heldObject = nullptr;
+	Direction m_dir = Direction::RIGHT;
 	sf::Vector2f m_direction{ 0.f,0.f };
 
 };

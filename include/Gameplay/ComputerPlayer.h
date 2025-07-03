@@ -36,7 +36,7 @@ protected:
     bool m_wasHit = false;
     bool m_wasKnockedDown = false;
     PlayableObject* m_target = nullptr;
-    std::shared_ptr<PickableObject> m_object = nullptr;
+    std::shared_ptr<PickableObject> m_targetObject = nullptr;
     sf::Vector2f m_position;
     bool m_controllable = true;
     bool m_blocking = false;

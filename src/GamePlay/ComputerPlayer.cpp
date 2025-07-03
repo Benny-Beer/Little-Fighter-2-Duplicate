@@ -73,7 +73,7 @@ void ComputerPlayer::setTargetEnemy(PlayableObject* target) {
 }
 
 void ComputerPlayer::setTargetObject(std::shared_ptr<PickableObject> obj) {
-    m_object = obj;
+    m_targetObject = obj;
 }
 //sf::Vector2f ComputerPlayer::getPosition()
 //{
@@ -88,9 +88,13 @@ PlayableObject* ComputerPlayer::getTarget()
 }
 std::shared_ptr<PickableObject> ComputerPlayer::getObject()
 {
-    if (!m_object)
+    if (!m_targetObject)
         std::cout << "THERE IS NO OBJECT!\n";
-    return m_object;
+    else {
+        std::cout << "THERE IS OBJECT!\n";
+
+    }
+    return m_targetObject;
 }
 
 void ComputerPlayer::setBlocking(bool blocking)

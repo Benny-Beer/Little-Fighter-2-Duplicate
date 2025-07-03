@@ -52,10 +52,16 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     if (distance != 0) {
         direction /= distance;
     }
-
+    //
     // Move toward enemy
     float speed = player.getSpeed(); 
     player.move(direction * speed * deltaTime);
+
+    if (player.getObject())
+    {
+        std::cout << player.getName() << " was here!!1\n";
+        player.getObject()->move(player.getPosition());
+    }
 }
 
 void ApproachingEnemyState::exit(ComputerPlayer& player) {

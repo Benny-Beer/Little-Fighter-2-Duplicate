@@ -13,9 +13,12 @@ void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
     command->execute(*this);
 }
 
-void PlayableObject::pickUpObject(PickableObject* obj)
+void PlayableObject::pickUpObject(std::shared_ptr<PickableObject> obj)
 {
     m_heldObject = obj;
+    std::cout << obj->getName() << std::endl;
+
+    std::cout << getName() << " got here\n";
     //just for expirience. must do it nice
     m_strategyName = obj->getName();
     auto attack = Factory<AttackBehavior>::createAttackBehavior(m_strategyName, m_heldObject, this);
@@ -121,6 +124,10 @@ void PlayableObject::updateScale()
         setScale(-1); // moving left
 
     m_prevPosition = pos;
+
+    int dir = static_cast<int>(m_dir);
+    dir *= -1;
+    m_dir = static_cast<Direction>(dir);
 }
 
 float PlayableObject::getSpeed() const
@@ -130,7 +137,13 @@ float PlayableObject::getSpeed() const
 
 void PlayableObject::move(const sf::Vector2f& delta) {
     m_sprite.move(delta);
+    if (m_heldObject)
+    {
+        //std::cout << getName() << " was here!!1\n";
+        m_heldObject->move(getPosition());
+    }
 }
+
 void PlayableObject::move(float dt)
 {
     sf::Vector2f velocity = m_direction;
@@ -149,6 +162,7 @@ void PlayableObject::move(float dt)
     moveSprite(delta);
     if (m_heldObject)
     {
+        //std::cout << getName() << " was here!!1\n";
         m_heldObject->move(getPosition());
     }
 

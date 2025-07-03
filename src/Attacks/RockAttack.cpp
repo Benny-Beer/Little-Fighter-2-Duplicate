@@ -5,13 +5,13 @@
 
 
 
-RockAttack::RockAttack(const std::string& name, PickableObject* obj)
+RockAttack::RockAttack(const std::string& name, std::shared_ptr<PickableObject> obj)
     :m_rock(obj)
 {
     std::cout << " creating attack\n";
 }
 
-RockAttack::RockAttack(const std::string& name, PickableObject* obj, PlayableObject* player)
+RockAttack::RockAttack(const std::string& name, std::shared_ptr<PickableObject> obj, PlayableObject* player)
 	:m_player(player), m_rock(obj)
 {
 	std::cout << " creating attack with player\n";
@@ -25,7 +25,7 @@ void RockAttack::attack()
     {
 
 		m_rock->playAttack();
-		dynamic_cast<Rock*>(m_rock)->throwRock(m_player->getDirection(), m_player->getPosition().y);
+		dynamic_cast<Rock*>(m_rock.get())->throwRock(m_player->getDirection(), m_player->getPosition().y);
 		//m_rock->playAttack();
 		m_rock = nullptr; 
     } 
@@ -34,7 +34,7 @@ void RockAttack::attack()
 
 
 bool RockAttack::m_register = Factory<AttackBehavior>::registerAttackBehavior("r",
-    [](const std::string& name, PickableObject* obj, PlayableObject* player) {
+    [](const std::string& name, std::shared_ptr<PickableObject> obj, PlayableObject* player) {
         return std::make_unique<RockAttack>(name, obj, player);
     });
 

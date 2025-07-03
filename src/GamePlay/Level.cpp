@@ -130,7 +130,8 @@ void Level::handleCollisionsWithPlayer(Player& player)
     {
         if (player.collide(*obj)) {
             
-            processCollision(player, *obj);
+            processCollision(player, obj);
+            std::cout << "im here\n";
             
         }
     }
