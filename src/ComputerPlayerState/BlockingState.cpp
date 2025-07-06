@@ -32,3 +32,7 @@ void BlockingState::update(PlayableObject& player, float deltaTime) {
 void BlockingState::exit(ComputerPlayer& player) {
     player.setBlocking(false); // Ensure cleanup even if exited early
 }
+
+void BlockingState::name() {
+    std::cout << "BlockingState" << std::endl;
+}

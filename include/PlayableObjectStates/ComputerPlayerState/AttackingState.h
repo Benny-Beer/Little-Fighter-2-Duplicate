@@ -16,7 +16,7 @@ public:
     void onHandsAttack(PlayableObject& player) override {};
     void onStoneHit(PlayableObject& player) override {};
     void onExplosion(PlayableObject& player) override {};
-
+    void name();
 private:
     PlayableObject* m_target; // the target for attacking
     float m_attackCooldown = 0.f; // time betweeen attacks

@@ -14,6 +14,8 @@ Enemy::Enemy(const sf::Vector2f pos, const std::string& name, float speed)
 
 void Enemy::update(float dt)
 {
+    //m_prevPosition = getPosition();
+
     ComputerPlayer::update(dt);  // זה מפעיל את ה־state
     if (m_currentAnimationName != m_aniName) {
         setAnimation(AnimationManager::getAnimation(m_aniName + m_strategyName, getTexture()));
@@ -23,6 +25,8 @@ void Enemy::update(float dt)
     updateScale();
     updateAnimation(dt);
     apllySprite();
+    //m_prevPosition = getPosition();
+
 }
 
 void Enemy::handleCollision() {

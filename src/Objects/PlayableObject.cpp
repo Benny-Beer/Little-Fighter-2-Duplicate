@@ -123,11 +123,10 @@ void PlayableObject::updateScale()
     else if (dx < -0.01f)
         setScale(-1); // moving left
 
-    m_prevPosition = pos;
 
-    int dir = static_cast<int>(m_dir);
-    dir *= -1;
-    m_dir = static_cast<Direction>(dir);
+    //int dir = static_cast<int>(m_dir);
+    //dir *= -1;
+    //m_dir = static_cast<Direction>(dir);
 }
 
 float PlayableObject::getSpeed() const
@@ -146,6 +145,8 @@ void PlayableObject::move(const sf::Vector2f& delta) {
 
 void PlayableObject::move(float dt)
 {
+    m_prevPosition = getPosition();
+
     sf::Vector2f velocity = m_direction;
 
     // Normalize diagonal movement (to prevent faster diagonal movement)
@@ -192,6 +193,11 @@ void PlayableObject::tookItem()
 {
     m_needItem = false;
 }
+void PlayableObject::wantItem()
+{
+    m_needItem = true;
+}
+
 
 bool PlayableObject::needItem()
 {

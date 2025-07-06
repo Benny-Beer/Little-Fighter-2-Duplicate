@@ -26,6 +26,7 @@ void PickingUpItemState::enter(PlayableObject& player) {
 void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
     if (!m_targetItem) {
         // Item already gone – return to idle
+        std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
         player.setState(std::make_unique<IdleState>());
         return;
     }
@@ -37,7 +38,6 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
         std::pow(playerPos.y - itemPos.y, 2));
 
     const float pickupRange = 40.f;
-    std::cout << "THERE !\n";
 
     if (distance <= pickupRange) {
         // Pick up item
@@ -61,4 +61,8 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
 
 void PickingUpItemState::exit(ComputerPlayer& player) {
     // No cleanup needed for now
+}
+
+void PickingUpItemState::name() {
+    std::cout << "PickingUpItemState" << std::endl;
 }

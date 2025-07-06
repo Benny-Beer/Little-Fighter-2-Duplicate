@@ -13,7 +13,7 @@ public:
     void onHandsAttack(PlayableObject& player) override {};
     void onStoneHit(PlayableObject& player) override {};
     void onExplosion(PlayableObject& player) override {};
-
+    void name();
 private:
     float m_blockDuration = 0.7f; // Time to stay in block
     float m_elapsedTime = 0.0f;

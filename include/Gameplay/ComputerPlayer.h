@@ -37,11 +37,12 @@ protected:
     bool m_wasKnockedDown = false;
     PlayableObject* m_target = nullptr;
     std::shared_ptr<PickableObject> m_targetObject = nullptr;
-    sf::Vector2f m_position;
+    //sf::Vector2f m_position;
     bool m_controllable = true;
     bool m_blocking = false;
 
 private:
     float distance(const sf::Vector2f& a, const sf::Vector2f& b);
+    void updateDirection();
 
 };

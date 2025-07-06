@@ -35,6 +35,8 @@ public:
 	//virtual bool isAttacked() const;
 	//virtual void attack();
 	virtual void tookItem();
+	virtual void wantItem();
+
 	virtual bool needItem();
 
 	// in-game Events:
@@ -56,7 +58,7 @@ protected:
 	std::unique_ptr<PlayableObjectState> m_state;
 	std::unique_ptr<AttackBehavior> m_attack;
 	std::shared_ptr<PickableObject> m_heldObject = nullptr;
-	Direction m_dir = Direction::RIGHT;
+	Direction m_dir;
 	sf::Vector2f m_direction{ 0.f,0.f };
 
 };

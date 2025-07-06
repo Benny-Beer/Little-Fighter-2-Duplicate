@@ -33,5 +33,5 @@ public:
     virtual void onHandsAttack(PlayableObject& player) = 0;
     virtual void onStoneHit(PlayableObject& player) = 0;
     virtual void onExplosion(PlayableObject& player) = 0;
-
+    virtual void name() = 0; // for debug only... (u can add this func to verify that you are in the correct state)
 };

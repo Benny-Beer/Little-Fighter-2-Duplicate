@@ -43,7 +43,7 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
     //std::cout << "[ApproachingEnemyState] " << player.getName() << " distance to " << m_target->getName() << ":" << distance << std::endl;
 
-    if (distance < 50.f /* && (playerPos.x - target->getPosition().x) == 0.f*/) {
+    if (distance < 200.f /* && (playerPos.x - target->getPosition().x) == 0.f*/) {
         player.setState(std::make_unique<AttackingState>(m_target));
         return;
     }
@@ -72,4 +72,7 @@ void ApproachingEnemyState::onHandsAttack(PlayableObject& player) {
     std::cout << player.getName() << " is in [ApproachingEnemyState] and i got attacked by hands\n"
         "activating blocking state\n";
     player.setState(std::make_unique<BlockingState>());
+}
+void ApproachingEnemyState::name() {
+    std::cout << "ApproachingEnemyState" << std::endl;
 }

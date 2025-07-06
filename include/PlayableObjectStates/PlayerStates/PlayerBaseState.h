@@ -66,7 +66,7 @@ public:
     virtual ~PlayerBaseState() = default;
     //virtual void enter(Player& player) = 0;
     //virtual void update(Player& player, float dt) {};
-
+    void name() override {};
 
 protected:
     Input m_input;

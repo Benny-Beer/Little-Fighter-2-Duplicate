@@ -16,6 +16,7 @@ public:
     void onHandsAttack(PlayableObject& player) override {};
     void onStoneHit(PlayableObject& player) override {};
     void onExplosion(PlayableObject& player) override {};
+    void name();
 
 private:
     std::shared_ptr<PickableObject> m_targetItem;

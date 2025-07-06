@@ -43,7 +43,7 @@ void Rock::throwRock(int direction, float groundY, float speed)
     m_groundY = groundY;
     
     // מהירות התחלתית:
-    m_velocity.x = direction * speed;
+    m_velocity.x = direction * speed ;
     m_velocity.y = -400.f;  // לזרוק קצת למעלה (שלילי כי Y יורד למטה)
 	setAnimation(AnimationManager::getAnimation("rock_flying", getTexture()));
 

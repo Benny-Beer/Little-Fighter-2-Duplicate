@@ -12,6 +12,7 @@ public:
     void onHandsAttack(PlayableObject& player) override {};
     void onStoneHit(PlayableObject& player) override {};
     void onExplosion(PlayableObject& player) override {};
+    void name() {};
 
 private:
     // time of retreating can also be determined according to hp level, ect.

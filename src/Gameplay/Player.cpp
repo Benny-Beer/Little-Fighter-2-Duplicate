@@ -39,7 +39,8 @@ void Player::update(float dt)
     m_state->update(*this, dt);
     updateAnimation(dt);
     apllySprite();
-    
+    //m_prevPosition = getPosition();
+
 }
 
 //void Player::move(float dt)

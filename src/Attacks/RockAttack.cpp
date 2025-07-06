@@ -25,6 +25,7 @@ void RockAttack::attack()
     {
 
 		m_rock->playAttack();
+        std::cout << "                                            " << m_player->getDirection() << std::endl;
 		dynamic_cast<Rock*>(m_rock.get())->throwRock(m_player->getDirection(), m_player->getPosition().y);
 		//m_rock->playAttack();
 		m_rock = nullptr; 

@@ -13,7 +13,7 @@ public:
     void onHandsAttack(PlayableObject& player) override {};
     void onStoneHit(PlayableObject& player) override {};
     void onExplosion(PlayableObject& player) override {};
-
+    void name() {};
 private:
     float m_recoveryTime = 2.0f;  // Time lying down before recovery
     float m_elapsedTime = 0.0f;
