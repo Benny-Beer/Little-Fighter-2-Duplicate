@@ -34,6 +34,7 @@ void StandingState::enter(PlayableObject& player)
 {
 	std::cout << "enter:: StandingState\n";
 	player.setAniName("standing");
-	player.setDiraction(m_input);
+	
+	player.resetDirection();
 
 }

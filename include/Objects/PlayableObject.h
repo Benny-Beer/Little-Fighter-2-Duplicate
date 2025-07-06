@@ -19,7 +19,7 @@ public:
 	virtual void attack();
 	virtual int getDirection() const { return static_cast<int>(m_dir); }
 	virtual void setStrategyName(const std::string& name);
-
+	virtual void resetDirection(); 
 
 	virtual void takeDamage(int damageAmount);
 	virtual void update(float dt) = 0;

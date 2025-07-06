@@ -114,6 +114,14 @@ void PlayableObject::takeDamage(int damageAmount) {
         onDeath(); */
 }
 
+void PlayableObject::resetDirection()
+{
+    if (m_direction.x != 0 || m_direction.y != 0)
+    {
+        m_direction = { 0.f, 0.f };
+    }
+}
+
 void PlayableObject::updateScale()
 {
     sf::Vector2f pos = getPosition();
