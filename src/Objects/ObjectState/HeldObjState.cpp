@@ -3,6 +3,7 @@
 
 void HeldObjState::enter(PickableObject& obj)
 {
+	std::cout << "Entering HeldObjState for object: " << obj.getName() << std::endl;
 	obj.setStateName("held");
 	m_clock.restart();
 }

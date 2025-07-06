@@ -8,7 +8,7 @@
 Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
     : PlayableObject(pos, name), m_speed(speed), m_state(std::make_unique<StandingState>(RELEASE_RIGHT))
 {
-	setSize(1.2);
+	//setSize(1.2);
 	m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
     m_state->enter(*this);
 }
@@ -74,11 +74,13 @@ void Player::setDiraction(Input input)
     case PRESS_LEFT:
         m_direction.x = -1.f;
 		m_dir = Direction::LEFT;
+		std::cout << "set direction left\n";
        setScale(-1);
         break;
     case PRESS_RIGHT:
         m_direction.x = 1.f;
         m_dir = Direction::RIGHT;
+        std::cout << "set direction right\n";
         setScale(1);
         break;
     case RELEASE_LEFT:
@@ -150,10 +152,10 @@ void Player::setAttack(std::unique_ptr<AttackBehavior> attack)
 void Player::pickUpObject(PickableObject* obj)
 {
     m_heldObject = obj;
-    if (m_heldObject)
+    /*if (m_heldObject)
     {
         m_heldObject->setState(std::make_unique<HeldObjState>());
-    }
+    }*/
     //just for expirience. must do it nice
     m_strategyName = obj->getName();
     auto attack = Factory<AttackBehavior>::createAttackBehavior(m_strategyName, m_heldObject, this);

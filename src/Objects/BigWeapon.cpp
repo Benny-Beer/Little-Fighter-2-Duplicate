@@ -1,5 +1,6 @@
 #include "Objects/BigWeapon.h"
 
+
 BigWeapon::BigWeapon(const sf::Vector2f pos, const std::string& name)
 	:PickableObject(pos, name)
 {
@@ -25,6 +26,8 @@ void BigWeapon::update(float dt)
             m_velocity = { 0.f, 0.f };
             std::cout << "Rock landed!\n";
             setAnimation(AnimationManager::getAnimation("r", getTexture()));
+            
+            
         }
 
         setPosition(pos);

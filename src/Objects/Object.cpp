@@ -74,7 +74,8 @@ void Object::moveSprite(sf::Vector2f pos)
 
 void Object::setScale(int side)
 {
-	auto scaleX = m_sprite.getScale().x; // Get current scale
-	m_sprite.setScale(side*scaleX, m_sprite.getScale().y);
+	auto scale = m_sprite.getScale();
+	float absX = std::abs(scale.x);
+	m_sprite.setScale(side * absX, scale.y);
 }
 

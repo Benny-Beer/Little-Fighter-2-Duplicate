@@ -3,7 +3,7 @@
 
 
 PickableObject::PickableObject(const sf::Vector2f pos, const std::string& name)
-	:Object(pos, name), m_name(name), m_state(std::make_unique<IdleObjState>())
+	:Object(pos, name), m_name(name)
 {
 
 }
@@ -19,6 +19,17 @@ void PickableObject::move(sf::Vector2f goal)
 	setPosition(m_goalPosition + m_offset);
 	
 	
+}
+
+void PickableObject::markAsUsed()
+{
+	m_used = true;
+	std::cout << "PickableObject::markAsUsued called for " << m_name << std::endl;
+}
+
+bool PickableObject::isUsed() const
+{
+	return m_used;
 }
 
 void PickableObject::setHolder(PlayableObject* holder)

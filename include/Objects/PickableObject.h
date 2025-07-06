@@ -13,7 +13,8 @@ public:
 	virtual void move(sf::Vector2f goal);
 	virtual void playAttack() = 0;
 
-
+	void markAsUsed();
+	bool isUsed() const; 
 	void setHolder(PlayableObject* holder); 
 	PlayableObject* getHolder() const;
 	const std::string& getStateName() const { return m_stateName; }
@@ -21,14 +22,17 @@ public:
 	void setAnimationName(const std::string& animationName) { m_animationName = animationName; }
 	const std::string& getAnimationName() const { return m_animationName; }
 	void setState(std::unique_ptr<ObjectBaseState> state);
+	const std::unique_ptr<ObjectBaseState>& getState() const { return m_state; }
 protected:
 	sf::Vector2f m_offset;
 private:
-	std::unique_ptr<ObjectBaseState> m_state;
+	std::unique_ptr<ObjectBaseState> m_state = nullptr;
 	PlayableObject* m_holder = nullptr;
 
 	sf::Vector2f m_goalPosition;
 	std::string m_name;
 	std::string m_stateName ; // Default state is idle
 	std::string m_animationName; // Default animation name is idle
+
+	bool m_used = false;
 };

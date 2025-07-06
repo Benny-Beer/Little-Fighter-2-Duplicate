@@ -86,7 +86,14 @@ void Level::update(float dt)
     }
 
     for (auto& obj : m_pickables)
+    {
         obj->update(dt);
+    }
+
+    std::erase_if(m_pickables, [](const std::unique_ptr<PickableObject>& obj) {
+        return obj->isUsed();
+        });
+        
 
     
 }
