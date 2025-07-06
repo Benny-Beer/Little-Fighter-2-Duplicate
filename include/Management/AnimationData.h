@@ -22,8 +22,8 @@ inline const AnimationInfo ATTACKING_WITH_ROCK = { 560, 160, 80, 80, 2, 0.1f, fa
 inline const AnimationInfo ATTACKING = { 0, 80, 80, 80, 4, 0.1f, false };
 inline const AnimationInfo IDLE = { 195, 0, 40, 40, 0, 0.2f, false};
 inline const AnimationInfo ROCK = {295, 0, 58, 58, 0, 0.2f, false };
-inline const AnimationInfo BOX = { 295, 0, 58, 58, 0, 0.2f, false };
-inline const AnimationInfo ROCK_FLYING = { 0, 0, 58, 58, 4, 0.2f, true};
+inline const AnimationInfo BOX = { 299, 0, 58, 58, 0, 0.2f, false };
+inline const AnimationInfo ROCK_FLYING = { 2, 0, 59, 58, 4, 0.2f, true};
 
 inline const AnimationInfo ATTACKING_WITH_KNIFE = { 0, 0, 58, 58, 1, 0.2f, false };
 inline const AnimationInfo WALKING_WITH_KNIFE = { 0, 0, 58, 58, 2, 0.2f, true };

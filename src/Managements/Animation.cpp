@@ -60,8 +60,8 @@ void Animation::applyToSprite(sf::Sprite& sprite) const {
     if (!texture /*|| frameCount <= 0*/) return;
 
     sprite.setTexture(*texture);
-
-    sf::IntRect rect(x + currentFrame * width, y, width, height);
+    int frameSpacing = -2;
+    sf::IntRect rect((x + currentFrame * width) + frameSpacing , y, width, height);
     sprite.setTextureRect(rect);
 }
 
@@ -69,4 +69,10 @@ void Animation::reset() {
     currentFrame = 0;
     elapsedTime = 0.f;
     finished = false;
+}
+
+sf::Vector2f Animation::getCurrentSize() const
+{
+    auto size = sf::Vector2f(width, height);
+	return size;
 }

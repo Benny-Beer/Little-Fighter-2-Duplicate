@@ -26,6 +26,8 @@ protected:
 	void apllySprite();
 	void moveSprite(sf::Vector2f pos);
 	void setScale(int side);
+	void setOrigin(float x, float y);
+	sf::Vector2f getSize() const;
 	
 private:
 	sf::Sprite m_sprite;

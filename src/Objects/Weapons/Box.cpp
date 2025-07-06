@@ -7,8 +7,7 @@ Box::Box(const sf::Vector2f pos, const std::string& name)
 	std::cout << "in Box constructor\n";
 	std::cout << name << '\n';
 	setAnimation(AnimationManager::getAnimation(name, getTexture()));
-	sf::Vector2f offset(10.f, -43.f);
-	m_offset = offset;
+	
 }
 
 void Box::update(float dt)

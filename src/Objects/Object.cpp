@@ -22,6 +22,7 @@ const sf::Texture* Object::getTexture()
 void Object::setAnimation(const Animation& anim)
 {
 	m_animation = anim;
+	m_sprite.setOrigin(m_animation.getCurrentSize().x / 2.f, m_animation.getCurrentSize().y);
 	m_animation.reset();
 }
 
@@ -75,7 +76,18 @@ void Object::moveSprite(sf::Vector2f pos)
 void Object::setScale(int side)
 {
 	auto scale = m_sprite.getScale();
-	float absX = std::abs(scale.x);
-	m_sprite.setScale(side * absX, scale.y);
+    float absX = std::abs(scale.x);
+    m_sprite.setScale(side * absX, scale.y);
+}
+
+void Object::setOrigin(float x, float y)
+{
+	m_sprite.setOrigin(x, y);
+
+}
+
+sf::Vector2f Object::getSize() const
+{
+	return m_animation.getCurrentSize();
 }
 
