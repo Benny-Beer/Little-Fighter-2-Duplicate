@@ -2,7 +2,7 @@
 #include "Objects/PlayableObject.h"
 #include "Objects/PickableObject.h"
 
-#include "ComputerPlayerState/ComputerPlayerState.h"
+#include "PlayableObjectStates/ComputerPlayerState/ComputerPlayerState.h"
 
 class ComputerPlayer : public PlayableObject{
 public:
@@ -13,7 +13,7 @@ public:
 
     // Changes the current state
     void changeState(std::unique_ptr<ComputerPlayerState> newState);
-    ComputerPlayerState* getState() const;
+    PlayableObjectState* getState() const;
 
     void onHit();
     void onKnockedDown();
@@ -24,24 +24,25 @@ public:
     void setTargetEnemy(PlayableObject* target);
     void setTargetObject(std::shared_ptr<PickableObject> obj);
     //sf::Vector2f getPosition();
-    PlayableObject* getTarget();
-    std::shared_ptr<PickableObject> getObject();
+    PlayableObject* getTarget() override;
+    std::shared_ptr<PickableObject> getObject() override;
     void setBlocking(bool blocking);
     void setControllable(bool control);
     void performAttack(PlayableObject &target);
     void pickUp(PickableObject& pickable);
 
 protected:
-    std::unique_ptr<ComputerPlayerState> m_state;
+    //std::unique_ptr<ComputerPlayerState> m_state; -->INHERIT IT FROM PLAYABLEOBJECT 
     bool m_wasHit = false;
     bool m_wasKnockedDown = false;
     PlayableObject* m_target = nullptr;
-    std::shared_ptr<PickableObject> m_object = nullptr;
-    sf::Vector2f m_position;
+    std::shared_ptr<PickableObject> m_targetObject = nullptr;
+    //sf::Vector2f m_position;
     bool m_controllable = true;
     bool m_blocking = false;
 
 private:
     float distance(const sf::Vector2f& a, const sf::Vector2f& b);
+    void updateDirection();
 
 };

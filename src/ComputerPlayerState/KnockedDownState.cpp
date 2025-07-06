@@ -1,10 +1,10 @@
-#include "ComputerPlayerState/KnockedDownState.h"
+#include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
 #include "GamePlay/ComputerPlayer.h"
-#include "ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 
 KnockedDownState::KnockedDownState() = default;
 
-void KnockedDownState::enter(ComputerPlayer& player) {
+void KnockedDownState::enter(PlayableObject& player) {
     std::cout << "enter:: KnockedDownState\n";
 
     Animation knockedDownAnim(player.getTexture(),
@@ -17,15 +17,15 @@ void KnockedDownState::enter(ComputerPlayer& player) {
     player.setAnimation(knockedDownAnim);
     //player.setDiraction(m_input);     
     m_elapsedTime = 0.0f;
-    player.setControllable(false);
+    // need information that the player isnt controllable - ?
 }
 
-void KnockedDownState::update(ComputerPlayer& player, float deltaTime) {
+void KnockedDownState::update(PlayableObject& player, float deltaTime) {
     m_elapsedTime += deltaTime;
 
     if (m_elapsedTime >= m_recoveryTime) {
-        player.setControllable(true);
-        player.changeState(std::make_unique<IdleState>());
+        // need information that the player is controllable again - ?
+        player.setState(std::make_unique<IdleState>());
     }
 }
 

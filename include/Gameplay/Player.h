@@ -3,14 +3,14 @@
 #include "Objects/PlayableObject.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include<PlayerStates/PlayerBaseState.h>
+#include "PlayableObjectStates/PlayerStates/PlayerBaseState.h"
 #include "Objects/PickableObject.h"
 #include "Attacks/AttackBehavior.h"
 
-enum class Direction
-{
-    RIGHT = 1, LEFT = -1
-};
+//enum class Direction
+//{
+//    RIGHT = 1, LEFT = -1
+//};
 
 class Player : public PlayableObject
 {
@@ -19,8 +19,8 @@ public:
 
     void handleInput(sf::Event event);                 // Reads arrow-key state (?) m_direction
     void update(float dt);
-    void move(float dt);                                // Moves position by m_direction * speed * dt
-    void setDiraction(Input input);
+    //void move(float dt);                                // Moves position by m_direction * speed * dt
+    //void setDiraction(Input input);
                
     //void draw(sf::RenderWindow& window) override;/* Draws the sprite at current position */
     void handleCollision() override;    // Stub for future collision handling
@@ -34,26 +34,26 @@ public:
     void clampToWindow(const sf::Vector2u& windowSize);
 
     /*void setAnimation(const Animation& anim);*/
-    void setState(std::unique_ptr<PlayerBaseState> state);
+    //void setState(std::unique_ptr<PlayerBaseState> state);
     void setAttack(std::unique_ptr<AttackBehavior> attack);
-    void pickUpObject(PickableObject* obj);
+    //void pickUpObject(std::shared_ptr<PickableObject> obj);
 
     void setAniName(const std::string& name);
-    void setStrategyName(const std::string& name); 
-    void attack();
-	bool isHoldingWaepon(PickableObject* obj) const;
+    //void setStrategyName(const std::string& name); 
+    //void attack();
+	bool isHoldingWeapon(std::shared_ptr<PickableObject> obj) const;
 
-	const int getDirection() const { return static_cast<int>(m_dir); } 
-    const PlayerBaseState* getState() const { return m_state.get(); }
+	//int getDirection() const { return static_cast<int>(m_dir); } 
+    const PlayableObjectState* getState() const { return m_state.get(); }
 private:
     bool m_alive = true;
-    Direction m_dir;
-    sf::Vector2f m_direction{ 0.f,0.f };
+    //Direction m_dir;
+    //sf::Vector2f m_direction{ 0.f,0.f };
     //sf::Text m_name;
 
-    std::unique_ptr<PlayerBaseState> m_state;
-    std::unique_ptr<AttackBehavior> m_attack;
-    PickableObject* m_heldObject = nullptr;
+    //std::unique_ptr<PlayerBaseState> m_state; -->INHERIT IT FROM PLAYABLEOBJECT
+    //std::unique_ptr<AttackBehavior> m_attack;
+    //std::shared_ptr<PickableObject> m_heldObject = nullptr;
     
 
 

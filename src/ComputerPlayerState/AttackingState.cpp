@@ -1,13 +1,19 @@
-#include "ComputerPlayerState/AttackingState.h"
-#include "ComputerPlayerState/ApproachingEnemyState.h"
+#include "PlayableObjectStates/ComputerPlayerState/AttackingState.h"
+#include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
+#include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
+
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PlayableObject.h"
+#include "EventCommands/HandsAttackCommand.h"
+#include <memory>
 #include <cmath>
 
 AttackingState::AttackingState(PlayableObject* target)
-    : m_target(std::move(target)) {}
+    : m_target(std::move(target)) {
+    m_attackCooldown = 0.2f; // Start immediately
+}
 
-void AttackingState::enter(ComputerPlayer& player) {
+void AttackingState::enter(PlayableObject& player) {
     //std::cout << "enter:: AttackingState\n";
 
     //Animation attackingAnim(player.getTexture(),
@@ -17,19 +23,37 @@ void AttackingState::enter(ComputerPlayer& player) {
     //    0.2f);         // זמן בין פריימים
 
     //player.setAnimation(attackingAnim);
-
     m_target = player.getTarget();
     //sf::Vector2f attackerPos = player.getPosition();
     //sf::Vector2f targetPos = m_target->getPosition();
     //player.setPosition({ targetPos.x, targetPos.y });
     alignAttacker(player);
     player.setAniName("attacking");
-    m_target->attack();
+    if (player.getObject()) {
+        std::cout << "before attack: YES!\n";
+    }
+    else {
+        std::cout << "before attack: NO!\n";
+
+    }
+    player.attack();
+    player.wantItem();
+    
+
+    if (player.getObject()) {
+        std::cout << "after attack: YES!\n";
+    }
+    else {
+        std::cout << "after attack: NO!\n";
+
+    }
+    m_target->handleCommand(std::make_unique<HandsAttackCommand>());
     // I think we need switch-case here according to the attack
-    //player.setDiraction(m_input);     m_attackCooldown = 0.f; // Start immediately
+    //player.setDiraction(m_input);     
+    
 }
 
-void AttackingState::update(ComputerPlayer& player, float deltaTime) {
+void AttackingState::update(PlayableObject& player, float deltaTime) {
     if (!m_target)
         return;
     //std::cout << player.getName() <<" - MY TARGET NAME IS: " << m_target->getName() << std::endl;
@@ -49,30 +73,44 @@ void AttackingState::update(ComputerPlayer& player, float deltaTime) {
     const float attackRange = 150.f;
     if (distance > attackRange) {
         // Too far — switch back to approach state
-        player.changeState(std::make_unique<ApproachingEnemyState>(m_target));
+        player.setState(std::make_unique<ApproachingEnemyState>(m_target));
         return;
     }
 
 
 
     // Countdown attack cooldown
-    if (m_attackCooldown > 0.f) {
+    if (m_attackCooldown > 0) {
+        std::cout << "im NOT switching!!! " << m_attackCooldown << std::endl;
+
         m_attackCooldown -= deltaTime;
         return;
     }
+    else {
+        std::cout << "im switching!!!\n";
+        if (player.getObject()) {
+            std::cout << "YES!\n";
+        }
+        else {
+            std::cout << "NO!\n";
 
-    // Perform attack
-    player.performAttack(*m_target);
+        }
+        player.setState(std::make_unique<PickingUpItemState>(player.getObject()));
+        return;
+    }
+
+    // Perform attack - TODO the logic
+    //player.performAttack(*m_target);
 
     // Reset cooldown
-    m_attackCooldown = 1.0f; // One second between attacks
+    //m_attackCooldown = 1.0f; // One second between attacks
 }
 
 void AttackingState::exit(ComputerPlayer& player) {
     // Stop attack animation or cleanup if needed
 }
 
-void AttackingState::alignAttacker(ComputerPlayer& player)
+void AttackingState::alignAttacker(PlayableObject& player)
 {
     sf::Vector2f playerPos = player.getPosition();
     sf::Vector2f targetPos = m_target->getPosition();
@@ -86,3 +124,6 @@ void AttackingState::alignAttacker(ComputerPlayer& player)
     player.setPosition({ playerPos.x, alignedY }); // suppose to be alignedX
 }
 
+void AttackingState::name() {
+    std::cout << "AttackingState" << std::endl;
+}

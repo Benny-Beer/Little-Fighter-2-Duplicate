@@ -4,28 +4,10 @@
 #include "SFML/Graphics.hpp"
 #include"Management/ResourceManager.h"
 #include "Management/Animation.h"
-
-class Player;
-
+#include "PlayableObjectStates/PlayableObjectState.h"
 #include <SFML/Window.hpp>
 
-enum Input
-{
-    PRESS_LEFT,
-    PRESS_RIGHT,
-    RELEASE_LEFT,
-    RELEASE_RIGHT,
-    PRESS_UP,
-    PRESS_DOWN,
-    RELEASE_UP,
-    RELEASE_DOWN,
-    PRESS_JUMP,
-    PRESS_FALLING,
-    PRESS_ATTACK,
-    END_ATTACK,
-    ADD_OBJ,
-    NONE,
-};
+
 
 inline Input getEventType(const sf::Event& event)
 {
@@ -79,13 +61,12 @@ inline Input getEventType(const sf::Event& event)
 
 class Player;
 
-class PlayerBaseState {
+class PlayerBaseState : public PlayableObjectState {
 public:
     virtual ~PlayerBaseState() = default;
-    virtual std::unique_ptr<PlayerBaseState> handleInput(Input input) = 0;
-    virtual void enter(Player& player) = 0;
-    virtual void update(Player& player, float dt) {};
-
+    //virtual void enter(Player& player) = 0;
+    //virtual void update(Player& player, float dt) {};
+    void name() override {};
 
 protected:
     Input m_input;

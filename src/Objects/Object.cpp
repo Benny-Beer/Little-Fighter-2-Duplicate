@@ -36,6 +36,7 @@ void Object::update(float dt)
 {	
 	//m_animation.update(dt);
 	m_animation.applyToSprite(m_sprite);
+
 }
 
 bool Object::collide(Object& other) const

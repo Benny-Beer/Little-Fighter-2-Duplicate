@@ -1,6 +1,6 @@
 // RisingPhase.cpp
-#include "PlayerStates/JumpBasePhase/RisingPhase.h"
-#include "PlayerStates/JumpBasePhase/HangingPhase.h"
+#include "PlayableObjectStates/PlayerStates/JumpBasePhase/RisingPhase.h"
+#include "PlayableObjectStates/PlayerStates/JumpBasePhase/HangingPhase.h"
 #include "GamePlay/Player.h"
 
 RisingPhase::RisingPhase(float duration, float speed, float groundY)
@@ -8,7 +8,7 @@ RisingPhase::RisingPhase(float duration, float speed, float groundY)
     m_clock.restart();
 }
 
-std::unique_ptr<JumpPhaseBase> RisingPhase::update(Player& player, float dt) {
+std::unique_ptr<JumpPhaseBase> RisingPhase::update(PlayableObject& player, float dt) {
     /*auto pos = player.getPosition();
     pos.y -= m_speed * dt;
     player.setPosition(pos);*/
