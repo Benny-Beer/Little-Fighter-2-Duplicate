@@ -1,0 +1,5 @@
+name = deep
+description = the yellow sowrdman
+profile = resources/characters/deep_f.bmp
+icon = resources/characters/deep_s.bmp
+annimation = resources/characters/deep_0.bmp

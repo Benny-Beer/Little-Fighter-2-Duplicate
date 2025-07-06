@@ -19,15 +19,22 @@ private:
     bool m_selected = false;
     // General UI
     sf::RectangleShape m_frame;
+    sf::RectangleShape m_namePlaceholder;
+    sf::RectangleShape m_descPlaceholder;
     sf::Text m_instructionText;
-    sf::Text m_Title;
+    sf::Text m_title;
+    sf::Text m_nameLabel;
+    sf::Text m_descLabel;
     std::optional<Background> m_backGround;
     sf::Font m_font;
     float m_opacityTime = 0.f;
 
     // Character frame
     sf::RectangleShape m_profilePlaceholder;
+    sf::Texture m_placeholderTex;
+    sf::Sprite m_profileSprite;
     sf::Text m_characterName;
     sf::Text m_characterDescription;
     sf::Text m_placeholderText;
+   
 };

@@ -29,17 +29,18 @@ CharacterSelectScreen::CharacterSelectScreen(sf::RenderWindow& window, GameManag
     sf::Vector2f framePos = m_frame.getPosition();
     sf::Vector2f frameSize = m_frame.getSize();
     
-    m_Title.setFont(m_font);
-    m_Title.setString("Character Selection");
-    m_Title.setCharacterSize(38);
-    m_Title.setFillColor(sf::Color::White);
-    sf::FloatRect textBounds = m_Title.getLocalBounds();
-    m_Title.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
-    m_Title.setPosition(
+    m_title.setFont(m_font);
+    m_title.setString("Character Selection");
+    m_title.setCharacterSize(38);
+    m_title.setFillColor(sf::Color::White);
+    sf::FloatRect textBounds = m_title.getLocalBounds();
+    m_title.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
+    m_title.setPosition(
         framePos.x + frameSize.x / 2.f,
         framePos.y + 30.f // adjust vertical offset from top
     );
     
+    // Set placeholder size and position
     m_profilePlaceholder.setSize({ 300.f, 300.f });
     m_profilePlaceholder.setFillColor(sf::Color::Black);
 
@@ -47,6 +48,57 @@ CharacterSelectScreen::CharacterSelectScreen(sf::RenderWindow& window, GameManag
     m_profilePlaceholder.setPosition(
         framePos.x + (frameSize.x - placeholderSize.x) / 2.f,
         framePos.y + (frameSize.y - placeholderSize.y) / 4.f
+    );
+
+    // Set size (width same as profilePlaceholder, height 20)
+    placeholderSize = m_profilePlaceholder.getSize();
+    sf::Vector2f basePosition = m_profilePlaceholder.getPosition();
+
+    sf::Vector2f labelSize(placeholderSize.x, 40.f);
+
+    // Name Placeholder (first row under profile)
+    m_namePlaceholder.setSize(labelSize);
+    m_namePlaceholder.setFillColor(sf::Color::Black);
+    m_namePlaceholder.setPosition(
+        basePosition.x,
+        basePosition.y + placeholderSize.y + 10.f // 10px spacing below profile
+    );
+
+    // Description Placeholder (below name)
+    m_descPlaceholder.setSize(labelSize);
+    m_descPlaceholder.setFillColor(sf::Color::Black);
+    m_descPlaceholder.setPosition(
+        basePosition.x,
+        m_namePlaceholder.getPosition().y + labelSize.y + 5.f // 5px spacing between name and desc
+    );
+
+    // Common settings
+    float labelPadding = 10.f;
+    // Name Label
+    m_nameLabel.setFont(m_font);
+    m_nameLabel.setString("Name");
+    m_nameLabel.setCharacterSize(18);
+    m_nameLabel.setFillColor(sf::Color::White);
+
+    // Center vertically with placeholder
+    sf::FloatRect nameBounds = m_nameLabel.getLocalBounds();
+    m_nameLabel.setOrigin(0.f, nameBounds.height / 2.f);
+    m_nameLabel.setPosition(
+        m_namePlaceholder.getPosition().x - nameBounds.width - labelPadding,
+        m_namePlaceholder.getPosition().y + m_namePlaceholder.getSize().y / 2.f - 5.f
+    );
+
+    // Description Label
+    m_descLabel.setFont(m_font);
+    m_descLabel.setString("Description");
+    m_descLabel.setCharacterSize(18);
+    m_descLabel.setFillColor(sf::Color::White);
+
+    sf::FloatRect descBounds = m_descLabel.getLocalBounds();
+    m_descLabel.setOrigin(0.f, descBounds.height / 2.f);
+    m_descLabel.setPosition(
+        m_descPlaceholder.getPosition().x - descBounds.width - labelPadding,
+        m_descPlaceholder.getPosition().y + m_descPlaceholder.getSize().y / 2.f - 5.f
     );
 
     // Placeholder text
@@ -61,33 +113,42 @@ CharacterSelectScreen::CharacterSelectScreen(sf::RenderWindow& window, GameManag
         m_profilePlaceholder.getPosition().y + m_profilePlaceholder.getSize().y / 2.f
     );
 
-    // Name (empty for now)
+    // Name
     m_characterName.setFont(m_font);
     m_characterName.setCharacterSize(18);
     m_characterName.setFillColor(sf::Color::White);
-    m_characterName.setPosition(120.f, 390.f);
 
-    // Description (empty for now)
+    m_characterName.setPosition(
+        m_namePlaceholder.getPosition().x + 5.f, // small padding inside the placeholder
+        m_namePlaceholder.getPosition().y + (m_namePlaceholder.getSize().y - m_characterName.getCharacterSize()) / 2.f - 2.f
+    );
+
+    // Description 
     m_characterDescription.setFont(m_font);
     m_characterDescription.setCharacterSize(14);
     m_characterDescription.setFillColor(sf::Color(180, 180, 180));
-    m_characterDescription.setPosition(120.f, 420.f);
 
-    
+    m_characterDescription.setPosition(
+        m_descPlaceholder.getPosition().x + 5.f,
+        m_descPlaceholder.getPosition().y + (m_descPlaceholder.getSize().y - m_characterDescription.getCharacterSize()) / 2.f - 2.f
+    );
+
+    m_profileSprite.setPosition(m_profilePlaceholder.getPosition());
+
     sf::Texture texDavisProfile;
     sf::Texture texDavisIcon;
     sf::Texture texDavisSheet;
 
-    texDavisSheet.loadFromFile("resources/Characters/Davis/davis_0.bmp");
-    texDavisProfile.loadFromFile("resources/Characters/Davis/davis_f.bmp");
-    texDavisIcon.loadFromFile("resources/Characters/Davis/davis_s.bmp");
+    texDavisSheet.loadFromFile("resources/characters/davis_0.png");
+    texDavisProfile.loadFromFile("resources/characters/davis_f.png");
+    texDavisIcon.loadFromFile("resources/characters/davis_s.png");
     //initialize character vetcor. TODO : make this load dynamically from Loading screen
     m_characters.push_back({
-    "Davis1",
+    "Davis",
     "Balanced fighter",
-    &texDavisProfile,
-    &texDavisIcon,
-    &texDavisSheet
+    ResourceManager::instance().getTexture("characters/davis_f"),
+    texDavisIcon,
+    texDavisSheet
 });
 }
 
@@ -110,10 +171,18 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
                 std::cout << "Enter pressed - character selected" << std::endl;
                 m_selectionMode = true;
                 m_placeholderText.setString("");
+                m_profileSprite.setTexture(m_characters[currentIndex].m_profilePic);
 
-                // Show first character data
-                
-                m_profilePlaceholder.setTexture(m_characters[currentIndex].m_profilePic);
+                sf::Vector2f desiredSize = m_profilePlaceholder.getSize();
+                sf::Vector2f desiredPos = m_profilePlaceholder.getPosition();
+
+                sf::Vector2u textureSize = m_profileSprite.getTexture()->getSize();
+                m_profileSprite.setScale(
+                    desiredSize.x / textureSize.x,
+                    desiredSize.y / textureSize.y
+                );
+                m_profileSprite.setPosition(desiredPos);
+
                 m_characterName.setString(m_characters[currentIndex].m_name);
                 m_characterDescription.setString(m_characters[currentIndex].m_description);
             }
@@ -127,7 +196,7 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
             }
 
             // Update content
-            m_profilePlaceholder.setTexture(m_characters[currentIndex].m_profilePic);
+            m_profileSprite.setTexture(m_characters[currentIndex].m_profilePic);
             m_characterName.setString(m_characters[currentIndex].m_name);
             m_characterDescription.setString(m_characters[currentIndex].m_description);
         }
@@ -139,10 +208,14 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
 void CharacterSelectScreen::render()
 {
     if (m_backGround) m_backGround->draw(m_window,sf::RenderStates::Default);
-
     m_window.draw(m_frame);
-    m_window.draw(m_Title);
-    m_window.draw(m_profilePlaceholder);
+    m_window.draw(m_title);
+    if (!m_selectionMode) m_window.draw(m_profilePlaceholder);
+    else m_window.draw(m_profileSprite);
+    m_window.draw(m_namePlaceholder);
+    m_window.draw(m_descPlaceholder);
+    m_window.draw(m_nameLabel);
+    m_window.draw(m_descLabel);
     m_window.draw(m_placeholderText);
     m_window.draw(m_characterName);
     m_window.draw(m_characterDescription);

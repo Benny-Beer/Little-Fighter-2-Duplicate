@@ -1,0 +1,5 @@
+name = davis
+description = Excellent blue-energy boxer
+profile = resources/characters/davis_f.bmp
+icon = resources/characters/davis_s.bmp
+annimation = resources/characters/davis_0.bmp

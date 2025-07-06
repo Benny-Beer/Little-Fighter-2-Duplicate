@@ -10,9 +10,9 @@
 struct PlayerData {
     std::string m_name;
     std::string m_description;
-    sf::Texture* m_profilePic;
-    sf::Texture* m_chracterIcon;
-    sf::Texture* m_animationSheet;
+    sf::Texture m_profilePic;
+    sf::Texture m_chracterIcon;
+    sf::Texture m_animationSheet;
 };
 
 enum class Direction
