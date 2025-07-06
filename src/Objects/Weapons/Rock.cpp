@@ -27,6 +27,7 @@ void Rock::update(float dt)
         {
             pos.y = m_groundY;
             m_isFlying = false;  // הפסיק לעוף
+            m_status = ON_EARTH;
             m_velocity = { 0.f, 0.f };
             std::cout << "Rock landed!\n";
         }

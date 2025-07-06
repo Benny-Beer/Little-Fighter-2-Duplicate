@@ -38,6 +38,7 @@ void AttackingState::enter(PlayableObject& player) {
     }
     player.attack();
     player.wantItem();
+    
 
     if (player.getObject()) {
         std::cout << "after attack: YES!\n";

@@ -79,7 +79,9 @@ void PlayableObject::attack()
     //std::cout << m_heldObject->getName() << "\n";
     if (m_heldObject)
     {
-        std::cout << "in player attack detuch object\n";
+        m_heldObject->throwIt();
+        //std::cout << "in player attack detuch object\nobject state is: " << m_heldObject->thrown() << std::endl ;
+
         m_heldObject = nullptr;
 
         m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);

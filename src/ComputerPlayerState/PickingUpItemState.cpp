@@ -24,8 +24,9 @@ void PickingUpItemState::enter(PlayableObject& player) {
 }
 
 void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
-    if (!m_targetItem) {
+    if (!m_targetItem ||!m_targetItem->onEarth()) {
         // Item already gone – return to idle
+        m_targetItem = nullptr;
         std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
         player.setState(std::make_unique<IdleState>());
         return;
@@ -43,7 +44,7 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
         // Pick up item
         //player.pickUp(*m_targetItem);
         player.pickUpObject(m_targetItem);
-        
+        m_targetItem->pick();
         std::cout << player.getDirection() << "and " << player.getPosition().y << " picked item up\n";
         player.tookItem();
         player.setState(std::make_unique<IdleState>());

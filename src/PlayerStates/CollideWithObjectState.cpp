@@ -50,9 +50,10 @@ void CollideWithObject::enter(PlayableObject& player)
 
 void CollideWithObject::update(PlayableObject& player, float dt)
 {
-	if (m_pickupPending)
+	if (m_pickupPending && m_obj->onEarth())
 	{
 		player.pickUpObject(m_obj);
+		m_obj->pick();
 		m_pickupPending = false;
 		player.setState(std::make_unique<StandingState>(Input::NONE));
 	}

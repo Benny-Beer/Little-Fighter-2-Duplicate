@@ -43,7 +43,7 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
     //std::cout << "[ApproachingEnemyState] " << player.getName() << " distance to " << m_target->getName() << ":" << distance << std::endl;
 
-    if (distance < 200.f /* && (playerPos.x - target->getPosition().x) == 0.f*/) {
+    if (distance < 100.f /* && (playerPos.x - target->getPosition().x) == 0.f*/) {
         player.setState(std::make_unique<AttackingState>(m_target));
         return;
     }
