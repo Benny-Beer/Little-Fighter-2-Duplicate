@@ -11,6 +11,6 @@ private:
 	static bool m_registered;
 
 	//used in move()
-	sf::Vector2f m_direction;
+	sf::Vector2f m_direction{ 0.f,0.f };
 	float m_attackRange = 60.f;
 };

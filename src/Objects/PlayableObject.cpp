@@ -1,4 +1,99 @@
 #include "Objects/PlayableObject.h"
+#include "Objects/PickableObject.h"
+
+
+void PlayableObject::setState(std::unique_ptr<PlayableObjectState> newState)
+{
+    m_state = std::move(newState);
+    m_state->enter(*this);
+}
+
+void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
+{
+    command->execute(*this);
+}
+
+void PlayableObject::pickUpObject(std::shared_ptr<PickableObject> obj)
+{
+    m_heldObject = obj;
+    std::cout << obj->getName() << std::endl;
+
+    std::cout << getName() << " got here\n";
+    //just for expirience. must do it nice
+    m_strategyName = obj->getName();
+    auto attack = Factory<AttackBehavior>::createAttackBehavior(m_strategyName, m_heldObject, this);
+    if (attack)
+    {
+        m_attack = std::move(attack);
+    }
+
+
+    std::cout << m_aniName + m_strategyName << "\n";
+    std::cout << " in Player::pickUpObject\n";
+}
+
+void PlayableObject::setDiraction(Input input)
+{
+    std::cout << input << "\n";
+    switch (input)
+    {
+    case PRESS_LEFT:
+        m_direction.x = -1.f;
+        m_dir = Direction::LEFT;
+        setScale(-1);
+        break;
+    case PRESS_RIGHT:
+        m_direction.x = 1.f;
+        m_dir = Direction::RIGHT;
+        setScale(1);
+        break;
+    case RELEASE_LEFT:
+    case RELEASE_RIGHT:
+        m_direction.x = 0.f;
+        break;
+    case PRESS_JUMP:
+    case PRESS_UP:
+        m_direction.y = -1.f;
+        break;
+    case PRESS_FALLING:
+    case RELEASE_UP:
+    case RELEASE_DOWN:
+        m_direction.y = 0.f;
+        break;
+    case PRESS_DOWN:
+        m_direction.y = 1.f;
+        break;
+    default:
+        break;
+    }
+}
+
+void PlayableObject::attack()
+{
+
+    if (m_attack)
+    {
+        std::cout << "player attack\n";
+        m_attack->attack();
+    }
+    //std::cout << m_heldObject->getName() << "\n";
+    if (m_heldObject)
+    {
+        m_heldObject->throwIt();
+        //std::cout << "in player attack detuch object\nobject state is: " << m_heldObject->thrown() << std::endl ;
+
+        m_heldObject = nullptr;
+
+        m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
+    }
+
+
+}
+
+void PlayableObject::setStrategyName(const std::string& name)
+{
+    m_strategyName = name;
+}
 
 void PlayableObject::takeDamage(int damageAmount) {
   /*  // Reduce health
@@ -19,6 +114,14 @@ void PlayableObject::takeDamage(int damageAmount) {
         onDeath(); */
 }
 
+void PlayableObject::resetDirection()
+{
+    if (m_direction.x != 0 || m_direction.y != 0)
+    {
+        m_direction = { 0.f, 0.f };
+    }
+}
+
 void PlayableObject::updateScale()
 {
     sf::Vector2f pos = getPosition();
@@ -30,7 +133,10 @@ void PlayableObject::updateScale()
     else if (dx < -0.01f)
         setScale(-1); // moving left
 
-    m_prevPosition = pos;
+
+    //int dir = static_cast<int>(m_dir);
+    //dir *= -1;
+    //m_dir = static_cast<Direction>(dir);
 }
 
 float PlayableObject::getSpeed() const
@@ -40,6 +146,37 @@ float PlayableObject::getSpeed() const
 
 void PlayableObject::move(const sf::Vector2f& delta) {
     m_sprite.move(delta);
+    if (m_heldObject)
+    {
+        //std::cout << getName() << " was here!!1\n";
+        m_heldObject->move(getPosition());
+    }
+}
+
+void PlayableObject::move(float dt)
+{
+    m_prevPosition = getPosition();
+
+    sf::Vector2f velocity = m_direction;
+
+    // Normalize diagonal movement (to prevent faster diagonal movement)
+    if (velocity.x != 0.f && velocity.y != 0.f)
+    {
+        constexpr float invSqrt2 = 0.70710678118f;
+        velocity.x *= invSqrt2;
+        velocity.y *= invSqrt2;
+    }
+
+    // Apply speed and delta time
+    sf::Vector2f delta(velocity.x * m_speed * dt,
+        velocity.y * m_speed * dt);
+    moveSprite(delta);
+    if (m_heldObject)
+    {
+        //std::cout << getName() << " was here!!1\n";
+        m_heldObject->move(getPosition());
+    }
+
 }
 
 void PlayableObject::setAniName(const std::string& name)
@@ -52,20 +189,25 @@ std::string PlayableObject::getName() const
     return m_name;
 }
 
-bool PlayableObject::isAttacked() const
-{
-    return m_underAttack;
-}
+//bool PlayableObject::isAttacked() const
+//{
+//    return m_underAttack;
+//}
 
-void PlayableObject::attack()
-{
-    m_underAttack = true;
-}
+//void PlayableObject::attack()
+//{
+//    m_underAttack = true;
+//}
 
 void PlayableObject::tookItem()
 {
     m_needItem = false;
 }
+void PlayableObject::wantItem()
+{
+    m_needItem = true;
+}
+
 
 bool PlayableObject::needItem()
 {
