@@ -84,7 +84,11 @@ void Player::setDiraction(Input input)
         setScale(1);
         break;
     case RELEASE_LEFT:
+		if (m_direction.x < 0.f) 
+			m_direction.x = 0.f;
+		break;
     case RELEASE_RIGHT:
+		if (m_direction.x > 0.f) 
         m_direction.x = 0.f;
         break;
     case PRESS_JUMP:
@@ -92,8 +96,14 @@ void Player::setDiraction(Input input)
         m_direction.y = -1.f;
         break;
     case PRESS_FALLING:
+        m_direction.y = 0.f;
+        break;
     case RELEASE_UP:
+		if (m_direction.y < 0.f) 
+			m_direction.y = 0.f;
+        break;
     case RELEASE_DOWN:
+        if (m_direction.y > 0.f)
             m_direction.y = 0.f;
         break;
     case PRESS_DOWN:
