@@ -25,6 +25,17 @@ add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(resources)
 
+add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/data/data.txt
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${CMAKE_SOURCE_DIR}/data/data.txt
+            ${CMAKE_BINARY_DIR}/data/data.txt
+    DEPENDS ${CMAKE_SOURCE_DIR}/data/data.txt
+)
+
+add_custom_target(copy_data ALL
+    DEPENDS ${CMAKE_BINARY_DIR}/data/data.txt)
+
 # SFML location and setup
 set(SFML_LOCATION "C:/SFML/SFML-2.6.1")
 set(SFML_DIR "${SFML_LOCATION}/lib/cmake/SFML")

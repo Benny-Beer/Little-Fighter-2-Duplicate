@@ -2,6 +2,8 @@
 #include "IScreen.h"
 #include "UI/Background.h"
 #include "UI/Button.h"
+#include "Management/DataLoader.h"
+
 
 class LoadingScreen: public IScreen {
 public:
@@ -11,4 +13,5 @@ public:
 private:
 	std::optional<Background> m_backGround;
 	Button m_startButton;
+	DataLoader m_dataLoader;
 };
