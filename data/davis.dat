@@ -1,7 +1,7 @@
 {
-"name":"davis",
-"description":"Excellent blue-energy boxer",
-"profile":"resources/characters/davis_f.png",
-"icon":"resources/characters/davis_s.png",
-"animation":"resources/characters/davis_0.png"
+  "name": "davis",
+  "description": "Excellent blue-energy boxer",
+  "profile": "characters/davis_f",
+  "icon": "characters/davis_s",
+  "animation": "characters/davis_0"
 }

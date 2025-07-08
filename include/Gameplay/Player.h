@@ -13,6 +13,9 @@ struct PlayerData {
     sf::Texture m_profilePic;
     sf::Texture m_chracterIcon;
     sf::Texture m_animationSheet;
+    std::string toString() {
+        return "name: " + m_name + " desc: " + m_description;
+    }
 };
 
 enum class Direction

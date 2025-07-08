@@ -1,4 +1,6 @@
 #include "Management/DataLoader.h"
+#include "Gameplay/Player.h"
+#include "Management/ResourceManager.h"
 #include "json.hpp"
 #include <string>
 #include <fstream>
@@ -44,5 +46,18 @@ bool DataLoader::loadCharacterDat() const
 	std::ifstream file(path);
 	if (!file.is_open()) throw std::runtime_error("couldn't open file: " + path);
 	nlohmann::json jsonData = nlohmann::json::parse(file);
-	std::cout << jsonData << std::endl;
+
+	PlayerData p;
+	p.m_name = jsonData["name"];
+	p.m_description = jsonData["description"];
+	p.m_profilePic = ResourceManager::instance().getTexture(jsonData["profile"]);
+	p.m_chracterIcon = ResourceManager::instance().getTexture(jsonData["icon"]);
+	p.m_animationSheet = ResourceManager::instance().getTexture(jsonData["animation"]);
+
+	std::cout << p.toString() << std::endl;
+	/*
+	up until here everything works. I need to fix the texture paths and .bmp files for it to load smoothly until this stage
+	next is to forward these file to ResourceManager or find some other way for it to get to the chracter selection screen
+	then, modify the function to load all of the .dat files on update()
+	*/
 }
