@@ -154,7 +154,7 @@ float PlayableObject::getSpeed() const
 }
 
 void PlayableObject::move(const sf::Vector2f& delta) {
-    m_sprite.move(delta);
+    getSprite().move(delta);
     if (m_heldObject)
     {
         //std::cout << getName() << " was here!!1\n";

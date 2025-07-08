@@ -17,8 +17,8 @@ Controller::Controller(sf::RenderWindow& window,
 {   
     AnimationManager::loadAnimations();
     // add pickable (rock)
-    std::string objectLine = "r r r r";
-    m_level->addPickableObjects(objectLine);
+   /* std::string objectLine = "r r r r";
+    m_level->addPickableObjects(objectLine);*/
     // add enemies (one bandit)
     std::string sq = "b1";
     m_level->addSquad(sq);
