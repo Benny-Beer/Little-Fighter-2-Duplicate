@@ -14,8 +14,7 @@ void BoxAttack::attack()
 	std::cout << "in RockAttack::attack\n";
 	if (m_box)
 	{
-		dynamic_cast<Box*>(m_box)->throwMe(m_player->getDirection(), m_player->getPosition().y);
-		
+		dynamic_cast<Box*>(m_box.get())->throwMe(m_player->getDirection(), m_player->getPosition().y);
 		m_box = nullptr;
 
 	}
