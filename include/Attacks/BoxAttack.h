@@ -7,11 +7,11 @@ class Player;
 
 class BoxAttack : public AttackBehavior {
 public:
-	BoxAttack(const std::string& name, PickableObject* obj, Player* player);
+	BoxAttack(const std::string& name, std::shared_ptr<PickableObject> obj, PlayableObject* player);
 	virtual void attack() override;
 private:
-	PickableObject* m_box = nullptr;
-	Player* m_player = nullptr;
+	std::shared_ptr<PickableObject> m_box = nullptr;
+	PlayableObject* m_player = nullptr;
 	static bool m_register;
 
 };

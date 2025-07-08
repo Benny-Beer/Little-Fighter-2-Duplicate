@@ -3,7 +3,7 @@
 #include "Objects/Weapons/Box.h"
 #include "Gameplay/Player.h"
 
-BoxAttack::BoxAttack(const std::string& name, PickableObject* obj, Player* player)
+BoxAttack::BoxAttack(const std::string& name, std::shared_ptr<PickableObject> obj, PlayableObject* player)
 	: m_player(player), m_box(obj)
 {
 	std::cout << " creating attack\n";
@@ -22,7 +22,7 @@ void BoxAttack::attack()
 }
 
 bool BoxAttack::m_register = Factory<AttackBehavior>::registerAttackBehavior("b",
-	[](const std::string& name, std::shared_ptr<PickableObject> obj, Player* player) {
+	[](const std::string& name, std::shared_ptr<PickableObject> obj, PlayableObject* player) {
 		return std::make_unique<BoxAttack>(name, obj, player);
 	});
 

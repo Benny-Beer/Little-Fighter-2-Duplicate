@@ -100,6 +100,6 @@ sf::Sprite& Object::getSprite() {
 	return m_sprite;
 }
 
-const sf::Sprite& Object::getSprite() const {
-	return m_sprite;
-}
+//const sf::Sprite& Object::getSprite() const {
+//	return m_sprite;
+//}
