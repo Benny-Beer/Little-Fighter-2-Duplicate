@@ -14,6 +14,9 @@ include(cmake/CompilerSettings.cmake)
 # Create the main executable target early so subdirectories can modify it
 add_executable(${CMAKE_PROJECT_NAME})
 
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs)
+
+
 # Debug sanitizer for memory issues (use only on non-MSVC)
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE $<$<CONFIG:DEBUG>:-fsanitize=address>)
 if (NOT MSVC)
