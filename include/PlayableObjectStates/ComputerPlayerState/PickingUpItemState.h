@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Objects/Object.h"
 #include "PlayableObjectStates/ComputerPlayerState/ComputerPlayerState.h"
 #include <memory>
 
@@ -7,7 +7,7 @@ class PickableObject;
 
 class PickingUpItemState : public ComputerPlayerState {
 public:
-    explicit PickingUpItemState(std::shared_ptr<PickableObject> item);
+    explicit PickingUpItemState(std::shared_ptr<Object> item);
 
     void enter(PlayableObject& player) override;
     void update(PlayableObject& player, float deltaTime) override;
@@ -19,5 +19,7 @@ public:
     void name();
 
 private:
+    std::shared_ptr<Object> m_target;
     std::shared_ptr<PickableObject> m_targetItem;
+
 };

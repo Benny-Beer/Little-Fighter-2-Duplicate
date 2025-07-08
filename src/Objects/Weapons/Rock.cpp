@@ -3,7 +3,7 @@
 Rock::Rock(const sf::Vector2f pos, const std::string& name)
 	:Weapon(pos, name)
 {
-	
+    m_range = 200.f;
     setAnimation(AnimationManager::getAnimation(getName(), getTexture()));
     sf::Vector2f offset(10.f, -35.f);
     m_offset = offset;

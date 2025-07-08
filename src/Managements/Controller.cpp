@@ -17,7 +17,7 @@ Controller::Controller(sf::RenderWindow& window,
 {   
     AnimationManager::loadAnimations();
     // add pickable (rock)
-    std::string objectLine = "r";
+    std::string objectLine = "r r r r";
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
     std::string sq = "b1";
@@ -28,13 +28,13 @@ Controller::Controller(sf::RenderWindow& window,
     // creating user's player
     m_players.push_back(std::make_shared<Player>(sf::Vector2f(1000, 800), "davis_ani", 320.f));
     // creating ally
-  /*  auto ally = std::make_shared<Ally>(sf::Vector2f(800, 40), "davis_ani",60.f);
-    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
-    auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
+    auto ally = std::make_shared<Ally>(sf::Vector2f(800, 40), "davis_ani",60.f);
+    //auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
+    //auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
 
     m_allies.push_back(ally);
-    m_allies.push_back(allyTwo);
-    m_allies.push_back(allyThree);*/
+    //m_allies.push_back(allyTwo);
+    //m_allies.push_back(allyThree);
 
 
     updateComputerPlayerTargets();
@@ -167,7 +167,7 @@ void Controller::render()
 //    render();
 //}
 
-void Controller::updateComputerPlayerTargets() {
+/*void Controller::updateComputerPlayerTargets() {
 
     // Update targets for allies (their enemies are the enemies from Level)
     for (auto& ally : m_allies) {
@@ -188,12 +188,13 @@ void Controller::updateComputerPlayerTargets() {
                 closestDist = dist;
                 closest = enemy;
             }
-            if (/*!enemy->isAttacked() &&*/ dist < freeDist) {
+            if (/*!enemy->isAttacked() && dist < freeDist) {
                 freeDist = dist;
                 freeClosest = enemy;
             }
 
         }
+
         if (freeClosest) {
             ally->setTargetEnemy(freeClosest);
         }
@@ -242,7 +243,7 @@ void Controller::updateComputerPlayerTargets() {
                 closestDist = dist;
                 closest = ally.get();
             }
-            if (/*!ally->isAttacked() && */dist < freeDist) {
+            if (/*!ally->isAttacked() && dist < freeDist) {
                 freeDist = dist;
                 freeClosest = ally.get();
             }
@@ -255,7 +256,7 @@ void Controller::updateComputerPlayerTargets() {
                 closestDist = dist;
                 closest = player.get();
             }
-            if (/*!player->isAttacked() &&*/ dist < freeDist) {
+            if (/*!player->isAttacked() && dist < freeDist) {
                 freeDist = dist;
                 freeClosest = player.get();
             }
@@ -285,8 +286,44 @@ void Controller::updateComputerPlayerTargets() {
             enemy->setTargetObject(nullptr);
         }
     }
-}
+}*/
 
+void Controller::updateComputerPlayerTargets() {
+    for (auto& ally : m_allies) {
+        if (!ally/* || !ally->needsEnemyTracking()*/)
+            continue;
+
+        std::shared_ptr<Object> closest = nullptr;
+        float closestDistance = std::numeric_limits<float>::max();
+
+        checkClosest(m_enemies, ally->getPosition(), closestDistance, closest);
+
+        if (ally->needItem()) {
+            checkClosest(m_pickables, ally->getPosition(), closestDistance, closest);
+        }
+
+        if (closest)
+            ally->setTarget(closest);
+    }
+
+    for (auto& enemy : m_enemies) {
+        if (!enemy/* || !enemy->needsEnemyTracking()*/)
+            continue;
+
+        std::shared_ptr<Object> closest = nullptr;
+        float closestDistance = std::numeric_limits<float>::max();
+
+        checkClosest(m_allies, enemy->getPosition(), closestDistance, closest);
+        checkClosest(m_players, enemy->getPosition(), closestDistance, closest);
+
+        if (enemy->needItem()) {
+            checkClosest(m_pickables, enemy->getPosition(), closestDistance, closest);
+        }
+
+        if (closest)
+            enemy->setTarget(closest);
+    }
+}
 
 
 bool Controller::isLevelFinished() const

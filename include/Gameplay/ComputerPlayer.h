@@ -21,22 +21,22 @@ public:
     bool wasKnockedDown() const;
     bool needsEnemyTracking() const;
     void clearHitFlags();
-    void setTargetEnemy(PlayableObject* target);
-    void setTargetObject(std::shared_ptr<PickableObject> obj);
+    //void setTargetEnemy(PlayableObject* target);
+    void setTarget(std::shared_ptr<Object> obj);
     //sf::Vector2f getPosition();
-    PlayableObject* getTarget() override;
-    std::shared_ptr<PickableObject> getObject() override;
+    std::shared_ptr<Object> getTarget() override;
+    //std::shared_ptr<PickableObject> getObject() override;
     void setBlocking(bool blocking);
     void setControllable(bool control);
     void performAttack(PlayableObject &target);
     void pickUp(PickableObject& pickable);
 
+
 protected:
     //std::unique_ptr<ComputerPlayerState> m_state; -->INHERIT IT FROM PLAYABLEOBJECT 
     bool m_wasHit = false;
     bool m_wasKnockedDown = false;
-    PlayableObject* m_target = nullptr;
-    std::shared_ptr<PickableObject> m_targetObject = nullptr;
+    std::shared_ptr<Object> m_target = nullptr;
     //sf::Vector2f m_position;
     bool m_controllable = true;
     bool m_blocking = false;

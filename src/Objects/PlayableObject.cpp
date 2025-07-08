@@ -81,13 +81,22 @@ void PlayableObject::attack()
     {
         m_heldObject->throwIt();
         //std::cout << "in player attack detuch object\nobject state is: " << m_heldObject->thrown() << std::endl ;
-
+        std::cout << "MANMUNAN\nMANMUNAN\nMANMUNAN\nMANMUNAN\n";
         m_heldObject = nullptr;
 
         m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
     }
 
 
+}
+
+std::shared_ptr<PickableObject> PlayableObject::getHeldObj() const
+{
+    return m_heldObject;
+}
+
+void PlayableObject::dropHeldObj() {
+    m_heldObject = nullptr;
 }
 
 void PlayableObject::setStrategyName(const std::string& name)
@@ -212,4 +221,18 @@ void PlayableObject::wantItem()
 bool PlayableObject::needItem()
 {
     return m_needItem;
+}
+
+void PlayableObject::adjustRange(float range)
+{
+    m_attackRange = range;
+}
+
+float PlayableObject::getAttackRange() const
+{
+    return m_attackRange;
+}
+
+std::string PlayableObject::getStrategyName() {
+    return m_strategyName;
 }
