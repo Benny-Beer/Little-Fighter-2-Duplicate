@@ -16,7 +16,7 @@ LoadingScreen::LoadingScreen(sf::RenderWindow& window, GameManager& manager) : I
 	m_backGround = Background(screenSize, ResourceManager::instance().getTexture("screen_backgrounds/Loading_bg"));
 	m_startButton = Button("to character select screen", sf::Vector2f(screenSize.x / 4, screenSize.y / 4), sf::Vector2f(screenSize.x / 2, screenSize.y / 2), sf::Color::Transparent, 30);
 	std::cout << "LoadingState created, m_manager ptr: " << &m_manager << std::endl;
-	m_dataLoader.printPaths();
+	m_dataLoader.loadCharacterDat();
 }
 
 void LoadingScreen::handleEvents(sf::Event& ev) {

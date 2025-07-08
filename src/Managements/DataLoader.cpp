@@ -35,3 +35,14 @@ void DataLoader::printPaths() const
 		std::cout << "type: " << member.first << " path: " << member.second << std::endl;
 	}
 }
+
+bool DataLoader::loadCharacterDat() const
+{
+	if (m_currentIndex == m_datPaths.size()) return false;
+	std::string type = m_datPaths[m_currentIndex].first;
+	std::string path = m_datPaths[m_currentIndex].second;
+	std::ifstream file(path);
+	if (!file.is_open()) throw std::runtime_error("couldn't open file: " + path);
+	nlohmann::json jsonData = nlohmann::json::parse(file);
+	std::cout << jsonData << std::endl;
+}

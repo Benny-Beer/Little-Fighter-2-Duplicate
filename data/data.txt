@@ -1,1 +1,1 @@
-type: character file: data\davis.dat
+type: character file: data/davis.dat
