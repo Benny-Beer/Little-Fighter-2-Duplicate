@@ -17,9 +17,9 @@ void Enemy::update(float dt)
     //m_prevPosition = getPosition();
 
     ComputerPlayer::update(dt);  // זה מפעיל את ה־state
-    if (m_currentAnimationName != m_aniName) {
+    if (m_currentAnimationName != m_aniName + m_strategyName) {
         setAnimation(AnimationManager::getAnimation(m_aniName + m_strategyName, getTexture()));
-        m_currentAnimationName = m_aniName;
+        m_currentAnimationName = m_aniName + m_strategyName;
     }
     //std::cout << "my target is: " << m_target->getName() << std::endl;
     updateScale();

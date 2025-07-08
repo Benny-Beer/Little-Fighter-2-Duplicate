@@ -21,11 +21,13 @@ void IdleState::enter(PlayableObject& player) {
 }
 
 void IdleState::update(PlayableObject& player, float deltaTime) {
+    std::cout << player.getName() << "in IdleState\n";
+
     //// 1. Scan for closest enemy (pseudo code)
     //auto enemies = player.getKnownEnemies();
     //float closestDist = std::numeric_limits<float>::max(); // init to largest float number
-    PlayableObject* closestEnemy = nullptr;
-    std::shared_ptr<PickableObject> closestObject = nullptr;
+    //PlayableObject* closestEnemy = nullptr;
+    std::shared_ptr<Object> target = player.getTarget();
     //for (const auto& enemy : enemies) {
     //    float dist = distance(player.getPosition(), enemy->getPosition());
     //    if (dist < closestDist) {
@@ -33,23 +35,26 @@ void IdleState::update(PlayableObject& player, float deltaTime) {
     //        closestEnemy = enemy;
     //    //}
 
-    closestObject = player.getObject();
-    closestEnemy = player.getTarget();
-    if (closestObject)
-    {
-        player.setState(std::make_unique<PickingUpItemState>(closestObject));
-    }
+    //closestEnemy = player.getTarget();
+    player.setState(std::make_unique<PickingUpItemState>(target));
 
- /*   if (closestEnemy)
-        std::cout << player.getName() << "[IdleState] Update, target: "  << std::endl;
-    else
-        std::cout << "THERE IS NO TARGET YET\n";*/
 
-    // 2. If enemy is close enough, change to Approaching state
-    else if (closestEnemy) { // threshold distance
-        std::cout << "ENEMY FOUND!" << std::endl;
-        player.setState(std::make_unique<ApproachingEnemyState>(closestEnemy));
-    }
+ //   if (closestObject)
+ //   {
+ //       std::cout << "MANMUNAN\nMANMUNAN\nMANMUNAN\nMANMUNAN\n";
+ //       player.setState(std::make_unique<PickingUpItemState>(closestObject));
+ //   }
+
+ ///*   if (closestEnemy)
+ //       std::cout << player.getName() << "[IdleState] Update, target: "  << std::endl;
+ //   else
+ //       std::cout << "THERE IS NO TARGET YET\n";*/
+
+ //   // 2. If enemy is close enough, change to Approaching state
+ //   else if (closestEnemy) { // threshold distance
+ //       std::cout << "ENEMY FOUND!" << std::endl;
+ //       player.setState(std::make_unique<ApproachingEnemyState>(closestEnemy));
+ //   }
 
     // 3. Otherwise, stay idle
 }
@@ -59,7 +64,8 @@ void IdleState::exit(ComputerPlayer& player) {
 }
 
 void IdleState::onHandsAttack(PlayableObject& player) {
-    std::cout << "Im in IdleState and i got attacked by hands";
+    std::cout << "Im in IdleState and i got attacked by hands\n";
+    
 }
 
 void IdleState::name() {

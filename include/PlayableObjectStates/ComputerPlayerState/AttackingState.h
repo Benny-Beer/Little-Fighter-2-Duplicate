@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Objects/Object.h"
 #include "PlayableObjectStates/ComputerPlayerState/ComputerPlayerState.h"
 #include <memory>
 
@@ -7,7 +7,7 @@ class PlayableObject;
 
 class AttackingState : public ComputerPlayerState {
 public:
-    explicit AttackingState(PlayableObject* target);
+    explicit AttackingState(std::shared_ptr<Object> target);
 
     void enter(PlayableObject& player) override;
     void update(PlayableObject& player, float deltaTime) override;
@@ -18,7 +18,7 @@ public:
     void onExplosion(PlayableObject& player) override {};
     void name();
 private:
-    PlayableObject* m_target; // the target for attacking
+    std::shared_ptr<Object> m_target; // the target for attacking
     float m_attackCooldown = 0.f; // time betweeen attacks
     void alignAttacker(PlayableObject& player);
 };

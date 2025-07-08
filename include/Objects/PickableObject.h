@@ -15,7 +15,7 @@ public:
 	virtual void putBack() { m_status = ON_EARTH; }	
 	virtual void pick() { m_status = PICKED; }
 	virtual void throwIt() { m_status = THROWN; }
-
+	float getRange() const { return m_range; } ;
 
 
 
@@ -23,6 +23,7 @@ public:
 protected:
 	sf::Vector2f m_offset;
 	Status m_status = ON_EARTH;
+	float m_range;
 private:
 	sf::Vector2f m_goalPosition;
 

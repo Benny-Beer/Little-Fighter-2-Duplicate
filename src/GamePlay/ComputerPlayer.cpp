@@ -71,34 +71,34 @@ float ComputerPlayer::distance(const sf::Vector2f& a, const sf::Vector2f& b) {
     return std::sqrt(dx * dx + dy * dy);
 }
 
-void ComputerPlayer::setTargetEnemy(PlayableObject* target) {
-    m_target = target;
-}
+//void ComputerPlayer::setTargetEnemy(PlayableObject* target) {
+//    m_target = target;
+//}
 
-void ComputerPlayer::setTargetObject(std::shared_ptr<PickableObject> obj) {
-    m_targetObject = obj;
+void ComputerPlayer::setTarget(std::shared_ptr<Object> obj) {
+    m_target = obj;
 }
 //sf::Vector2f ComputerPlayer::getPosition()
 //{
 //   return m_position;
 //}
 
-PlayableObject* ComputerPlayer::getTarget()
+std::shared_ptr<Object> ComputerPlayer::getTarget()
 {
     if (!m_target)
         std::cout << "THERE IS NO TARGET!\n";
     return m_target;
 }
-std::shared_ptr<PickableObject> ComputerPlayer::getObject()
-{
-    //if (!m_targetObject)
-    //    std::cout << "THERE IS NO OBJECT!\n";
-    //else {
-    //    std::cout << "THERE IS OBJECT!\n";
-
-    //}
-    return m_targetObject;
-}
+//std::shared_ptr<PickableObject> ComputerPlayer::getObject()
+//{
+//    //if (!m_targetObject)
+//    //    std::cout << "THERE IS NO OBJECT!\n";
+//    //else {
+//    //    std::cout << "THERE IS OBJECT!\n";
+//
+//    //}
+//    return m_targetObject;
+//}
 
 void ComputerPlayer::setBlocking(bool blocking)
 {
@@ -125,6 +125,7 @@ void ComputerPlayer::pickUp(PickableObject& pickable)
 
 void ComputerPlayer::updateDirection()
 {
-    std::cout << m_prevPosition.x << " ," << getPosition().x << std::endl;
+    //std::cout << m_prevPosition.x << " ," << getPosition().x << std::endl;
     m_dir = m_prevPosition.x < getPosition().x ? Direction::RIGHT : Direction::LEFT;
 }
+
