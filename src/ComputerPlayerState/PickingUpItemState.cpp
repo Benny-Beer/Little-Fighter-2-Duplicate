@@ -2,11 +2,13 @@
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PickableObject.h"
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
+
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 
-PickingUpItemState::PickingUpItemState(std::shared_ptr<PickableObject> item)
-    : m_targetItem(std::move(item)) {}
+PickingUpItemState::PickingUpItemState(std::shared_ptr<Object> item)
+    : m_target(std::move(item)) {}
 
 void PickingUpItemState::enter(PlayableObject& player) {
     //std::cout << "enter:: PickingUpItemState\n";
@@ -24,9 +26,26 @@ void PickingUpItemState::enter(PlayableObject& player) {
 }
 
 void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
+    std::cout << "                        " << player.getStrategyName() << std::endl;
+    std::cout << player.getName() << "in PickingUpItemState\n";
+
+    if (auto object = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
+        player.setState(std::make_unique<ApproachingEnemyState>(m_target));
+        return;
+    }
+
+    m_targetItem = std::dynamic_pointer_cast<PickableObject>(m_target);
+    std::cout << "Target typeid: " << typeid(*m_target).name() << std::endl;
+    std::cout << "TargetItem typeid: " << typeid(*m_targetItem).name() << std::endl;
+    if (m_targetItem->onEarth())
+        std::cout << "OFCOURSE\n";
+    else
+        std::cout << "NAAH\n";
     if (!m_targetItem ||!m_targetItem->onEarth()) {
         // Item already gone – return to idle
         m_targetItem = nullptr;
+        player.wantItem();
+        
         std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
         player.setState(std::make_unique<IdleState>());
         return;
@@ -44,7 +63,9 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
         // Pick up item
         //player.pickUp(*m_targetItem);
         player.pickUpObject(m_targetItem);
+        player.setStrategyName(m_targetItem->getName());
         m_targetItem->pick();
+        player.adjustRange(m_targetItem->getRange());
         std::cout << player.getDirection() << "and " << player.getPosition().y << " picked item up\n";
         player.tookItem();
         player.setState(std::make_unique<IdleState>());

@@ -2,6 +2,7 @@
 #include "Objects/Object.h"
 #include "PlayableObjectStates/PlayableObjectState.h"
 #include "EventCommands/ICommand.h"
+#include <iostream>
 
 enum class Direction
 {
@@ -29,9 +30,12 @@ public:
 	virtual void setAniName(const std::string& name);
 	virtual std::string getName() const;
 	virtual void updateScale();
-	virtual PlayableObject* getTarget() { return nullptr; };
-	virtual std::shared_ptr<PickableObject> getObject() { return nullptr; };
-
+	virtual std::shared_ptr<Object> getTarget() { return nullptr; };
+	virtual std::shared_ptr<PickableObject> getObject() {
+		std::cout << "im here actually\n";
+		return nullptr; 
+	};
+	std::string getStrategyName();
 	//virtual bool isAttacked() const;
 	//virtual void attack();
 	virtual void tookItem();
@@ -41,7 +45,10 @@ public:
 
 	// in-game Events:
 	virtual void onHandsAttack() { m_state->onHandsAttack(*this); }
-
+	void adjustRange(float range);
+	float getAttackRange() const;
+	std::shared_ptr<PickableObject> getHeldObj() const;
+	void dropHeldObj();
 
 
 protected:
@@ -60,5 +67,6 @@ protected:
 	std::shared_ptr<PickableObject> m_heldObject = nullptr;
 	Direction m_dir;
 	sf::Vector2f m_direction{ 0.f,0.f };
+	float m_attackRange = 50.f;
 
 };

@@ -1,6 +1,7 @@
 #include "PlayableObjectStates/ComputerPlayerState/AttackingState.h"
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
 #include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PlayableObject.h"
@@ -8,14 +9,14 @@
 #include <memory>
 #include <cmath>
 
-AttackingState::AttackingState(PlayableObject* target)
+AttackingState::AttackingState(std::shared_ptr<Object> target)
     : m_target(std::move(target)) {
     m_attackCooldown = 0.2f; // Start immediately
 }
 
 void AttackingState::enter(PlayableObject& player) {
     //std::cout << "enter:: AttackingState\n";
-
+    auto target = std::dynamic_pointer_cast<PlayableObject>(m_target);
     //Animation attackingAnim(player.getTexture(),
     //    80, 0,          // x, y
     //    80, 80,        // width, height
@@ -23,13 +24,13 @@ void AttackingState::enter(PlayableObject& player) {
     //    0.2f);         // זמן בין פריימים
 
     //player.setAnimation(attackingAnim);
-    m_target = player.getTarget();
+    //m_target = player.getTarget();    
     //sf::Vector2f attackerPos = player.getPosition();
     //sf::Vector2f targetPos = m_target->getPosition();
     //player.setPosition({ targetPos.x, targetPos.y });
     alignAttacker(player);
     player.setAniName("attacking");
-    if (player.getObject()) {
+    if (player.getHeldObj()) {
         std::cout << "before attack: YES!\n";
     }
     else {
@@ -37,23 +38,28 @@ void AttackingState::enter(PlayableObject& player) {
 
     }
     player.attack();
+    player.adjustRange(50.f);
+    player.setStrategyName("");
+
     player.wantItem();
     
 
-    if (player.getObject()) {
+    if (player.getHeldObj()) {
         std::cout << "after attack: YES!\n";
     }
     else {
         std::cout << "after attack: NO!\n";
 
     }
-    m_target->handleCommand(std::make_unique<HandsAttackCommand>());
+    target->handleCommand(std::make_unique<HandsAttackCommand>());
     // I think we need switch-case here according to the attack
     //player.setDiraction(m_input);     
     
 }
 
 void AttackingState::update(PlayableObject& player, float deltaTime) {
+    std::cout << "                        " << player.getStrategyName() << std::endl;
+    std::cout << player.getName() << "in AttackingState\n";
     if (!m_target)
         return;
     //std::cout << player.getName() <<" - MY TARGET NAME IS: " << m_target->getName() << std::endl;
@@ -71,8 +77,9 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
 
     // Check if still in attack range
     const float attackRange = 150.f;
-    if (distance > attackRange) {
+    if (distance > player.getAttackRange()) {
         // Too far — switch back to approach state
+        std::cout << "here? range is: " << player.getAttackRange() << "\n";
         player.setState(std::make_unique<ApproachingEnemyState>(m_target));
         return;
     }
@@ -95,7 +102,11 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
             std::cout << "NO!\n";
 
         }
-        player.setState(std::make_unique<PickingUpItemState>(player.getObject()));
+        if (player.getTarget())
+            std::cout << "OFCOURSE\n";
+        else 
+            std::cout << "NAAH\n";
+        player.setState(std::make_unique<IdleState>());
         return;
     }
 

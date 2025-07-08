@@ -9,11 +9,11 @@ public:
 	void update(float dt);
 	void addEnemy(std::unique_ptr<Enemy> enemy);
 
-	std::vector<std::unique_ptr<Enemy>>& getEnemies();
+	std::vector<std::shared_ptr<Enemy>>& getEnemies();
 
 	
 private:
-	std::vector<std::unique_ptr<Enemy>> m_squad;
+	std::vector<std::shared_ptr<Enemy>> m_squad;
 
 
 };
