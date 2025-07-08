@@ -41,8 +41,12 @@ Controller::Controller(sf::RenderWindow& window,
     auto target = m_enemies[0]->getTarget();
 
     //      TODO: initialize HUD (m_stats)
-    //std::string enemiesLine = "b1 h1";
-    //m_level->addSquad(enemiesLine);
+    std::string enemiesLine = "b1 h1";
+    m_level->addSquad(enemiesLine);
+
+    std::string objectLine = "r b";
+    m_level->addPickableObjects(objectLine);
+	std::cout << "Controller created, m_level ptr: " << m_level.get() << std::endl;
 }
 
 void Controller::handleInput(sf::Event ev)
@@ -126,10 +130,6 @@ void Controller::checkLevelEndConditions()
 
 void Controller::render()
 {
-   
-    // Draw background, enemies, pickable objects, etc.
-    m_level->render(m_window);
-
     // Draw all human players
     for (const auto& player : m_players)
     {
@@ -144,6 +144,9 @@ void Controller::render()
 
         ally->draw(m_window);
     }
+    // Draw background, enemies, pickable objects, etc.
+    m_level->render(m_window);
+
 
     for (const auto& enemy : m_enemies)
     {

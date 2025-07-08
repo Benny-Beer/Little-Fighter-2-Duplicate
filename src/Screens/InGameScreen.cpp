@@ -15,10 +15,6 @@ InGameScreen::InGameScreen(sf::RenderWindow& window, GameManager& manager) : ISc
 																			std::vector<std::shared_ptr<Player>>{},
 																			std::vector<std::shared_ptr<Ally>>{})
 {
-	
-
-	std::cout << "InGameState created, m_manager ptr: " << &m_manager << std::endl;
-
 }
 
 

@@ -1,12 +1,14 @@
 #include "Objects/Weapons/Knife.h"
+#include "Objects/ObjectStates/IdleObjState.h"
 
 Knife::Knife(const sf::Vector2f pos, const std::string& name)
-	:Weapon(pos, name)
+	:SmallWeapon(pos, name)
 {
-	m_range = 80.f;
-	setScale(1.1f);
-	setAnimation(AnimationManager::getAnimation(getName(), getTexture()));
-	
+	setState(std::make_unique<IdleObjState>());
+	m_offset = sf::Vector2f(13.f, 24.f); // Adjust the offset as needed
+	setSize(1.1f);
+	std::cout << getStateName() << '\n';	
+	setAnimation(AnimationManager::getAnimation(getStateName(), getTexture()));
 }
 
 void Knife::playAttack()
@@ -14,14 +16,19 @@ void Knife::playAttack()
 	std::cout << "in Knife attack playattack\n";
 }
 
-void Knife::move(const sf::Vector2f goal)
+void Knife::update(float dt)
 {
-	for (const auto& offset : m_offsets)
+	if (getAnimationName() != /*getName() +*/ getStateName())
 	{
-		sf::Vector2f newPos = goal + offset;
-		setPosition(newPos);
+		setAnimationName(/*getName() +*/ getStateName());
+		setAnimation(AnimationManager::getAnimation(getAnimationName(), getTexture()));
 	}
+	updateAnimation(dt);
+	apllySprite();
+	
 }
+
+
 
 bool Knife::m_registered = Factory<PickableObject>::registerIt("k", [](const sf::Vector2f& pos, const std::string& name) {
 	return std::make_unique<Knife>(pos, name);

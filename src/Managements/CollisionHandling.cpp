@@ -69,6 +69,8 @@
 #include "Management/CollisionHandling.h"
 #include "GamePlay/Player.h"
 #include "Objects/Weapons/Rock.h"
+#include "Objects/Weapons/Box.h"
+
 #include "Objects/Weapons/Knife.h"
 #include "Objects/PickableObject.h"
 #include "PlayableObjectStates/PlayerStates/CollideWithObjectState.h"
@@ -118,7 +120,8 @@ HitMap initializeCollisionMap()
 
     map[{typeid(Player), typeid(Rock)}] = &playerPickableObjectWrapper<Rock>;
 	map[{typeid(Player), typeid(Knife)}] = &playerPickableObjectWrapper<Knife>;
-
+	map[{typeid(Player), typeid(Box)}] = &playerPickableObjectWrapper<Box>;
+    
     // אפשר להוסיף עוד חפצים:
     // map[{typeid(Player), typeid(Potion)}] = &playerPickableObjectWrapper<Potion>;
     // map[{typeid(Player), typeid(Sword)}] = &playerPickableObjectWrapper<Sword>;

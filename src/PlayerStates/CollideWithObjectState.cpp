@@ -6,6 +6,7 @@
 #include "PlayableObjectStates/PlayerStates/AttackState.h"
 #include "Gameplay/Player.h"
 
+class PlayableObject;
 
 CollideWithObject::CollideWithObject(Input input, std::shared_ptr<PickableObject> obj)
 	:m_obj(obj)
