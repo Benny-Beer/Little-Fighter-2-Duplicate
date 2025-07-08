@@ -22,6 +22,7 @@ void BoxAttack::attack()
 }
 
 bool BoxAttack::m_register = Factory<AttackBehavior>::registerAttackBehavior("b",
-	[](const std::string& name, PickableObject* obj, Player* player) {
+	[](const std::string& name, std::shared_ptr<PickableObject> obj, Player* player) {
 		return std::make_unique<BoxAttack>(name, obj, player);
 	});
+
