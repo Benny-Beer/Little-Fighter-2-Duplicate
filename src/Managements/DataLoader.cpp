@@ -23,15 +23,14 @@ void DataLoader::parseDataIndex()
 			else if (token == "file:") ss >> path;
 		}
 		if (type == "character" && !path.empty()) {
-			std::cout << path << std::endl;
-			m_datPaths.push_back(path);
+			m_datPaths.push_back({type, path});
 		}
 	}
 }
 
 void DataLoader::printPaths() const
 {
-	for (const std::string& path : m_datPaths) {
-		std::cout << path << std::endl;
+	for (const auto& member : m_datPaths) {
+		std::cout << "type: " << member.first << " path: " << member.second << std::endl;
 	}
 }

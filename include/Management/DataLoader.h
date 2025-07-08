@@ -8,5 +8,5 @@ public:
 	void printPaths() const;
 private:
 	std::string m_pathToIndex;
-	std::vector<std::string> m_datPaths;
+	std::vector<std::pair<std::string, std::string>> m_datPaths;
 };
