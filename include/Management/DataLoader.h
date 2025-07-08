@@ -1,5 +1,6 @@
 #include<string>
 #include<vector>
+
 class DataLoader {
 public:
 	DataLoader(std::string pathToIndex);

@@ -20,17 +20,12 @@ void DataLoader::parseDataIndex()
 		std::stringstream ss(line);
 		while (ss >> token) {
 			if (token == "type:") ss >> type;
-			std::cout << "type: " << type << std::endl;
-			if (token == "file:") ss >> path;
-			std::cout << "file: " << path << std::endl;
-			if (type == "character") {
-				m_datPaths.push_back(path);
-			}
+			else if (token == "file:") ss >> path;
 		}
-		
-		
-
-		
+		if (type == "character" && !path.empty()) {
+			std::cout << path << std::endl;
+			m_datPaths.push_back(path);
+		}
 	}
 }
 

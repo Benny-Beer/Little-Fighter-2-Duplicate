@@ -11,7 +11,6 @@ struct AssetMeta {
     enum class Type {Texture,AnimationSheet,SoundEffect,Music,Font} type;
 };
 
-
 class ResourceManager {
 public:
     // Singleton.
