@@ -32,6 +32,7 @@ void BigWeapon::update(float dt)
 
         setPosition(pos);
     }
+	std::cout << "BigWeapon update: position x=" << getPosition().x << " y=" << getPosition().y << "\n";
 	updateAnimation(dt);
     apllySprite();
 }

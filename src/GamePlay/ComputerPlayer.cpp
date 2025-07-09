@@ -16,7 +16,7 @@ void ComputerPlayer::update(float dt)
         m_state->update(*this, dt);
     }
     updateDirection();
-    m_state->name();
+    //m_state->name();
 
 }
 void ComputerPlayer::changeState(std::unique_ptr<ComputerPlayerState> newState) {

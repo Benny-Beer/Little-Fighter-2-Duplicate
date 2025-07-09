@@ -11,23 +11,12 @@ PickingUpItemState::PickingUpItemState(std::shared_ptr<Object> item)
     : m_target(std::move(item)) {}
 
 void PickingUpItemState::enter(PlayableObject& player) {
-    //std::cout << "enter:: PickingUpItemState\n";
+    
     player.setAniName("walking");
-
-    //Animation pickingUpItemAnim(player.getTexture(),
-    //    480, 0,          // x, y
-    //    80, 80,        // width, height
-    //    2,             // מספר פריימים
-    //    0.2f,
-    //    false);
-
-    //player.setAnimation(pickingUpItemAnim);
-    //player.setDiraction(m_input); 
 }
 
 void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
-    std::cout << "                        " << player.getStrategyName() << std::endl;
-    std::cout << player.getName() << "in PickingUpItemState\n";
+    
 
     if (auto object = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
         player.setState(std::make_unique<ApproachingEnemyState>(m_target));
@@ -46,7 +35,6 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
         m_targetItem = nullptr;
         player.wantItem();
         
-        std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
         player.setState(std::make_unique<IdleState>());
         return;
     }

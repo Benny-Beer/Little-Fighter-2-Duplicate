@@ -17,17 +17,7 @@ AttackingState::AttackingState(std::shared_ptr<Object> target)
 void AttackingState::enter(PlayableObject& player) {
     //std::cout << "enter:: AttackingState\n";
     auto target = std::dynamic_pointer_cast<PlayableObject>(m_target);
-    //Animation attackingAnim(player.getTexture(),
-    //    80, 0,          // x, y
-    //    80, 80,        // width, height
-    //    6,             // מספר פריימים
-    //    0.2f);         // זמן בין פריימים
-
-    //player.setAnimation(attackingAnim);
-    //m_target = player.getTarget();    
-    //sf::Vector2f attackerPos = player.getPosition();
-    //sf::Vector2f targetPos = m_target->getPosition();
-    //player.setPosition({ targetPos.x, targetPos.y });
+    
     alignAttacker(player);
     player.setAniName("attacking");
     if (player.getHeldObj()) {
@@ -58,8 +48,7 @@ void AttackingState::enter(PlayableObject& player) {
 }
 
 void AttackingState::update(PlayableObject& player, float deltaTime) {
-    std::cout << "                        " << player.getStrategyName() << std::endl;
-    std::cout << player.getName() << "in AttackingState\n";
+    
     if (!m_target)
         return;
     //std::cout << player.getName() <<" - MY TARGET NAME IS: " << m_target->getName() << std::endl;
@@ -88,18 +77,13 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
 
     // Countdown attack cooldown
     if (m_attackCooldown > 0) {
-        std::cout << "im NOT switching!!! " << m_attackCooldown << std::endl;
-
         m_attackCooldown -= deltaTime;
         return;
     }
-    else {
-        std::cout << "im switching!!!\n";
+    /*else {
         if (player.getObject()) {
-            std::cout << "YES!\n";
         }
         else {
-            std::cout << "NO!\n";
 
         }
         if (player.getTarget())
@@ -108,7 +92,7 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
             std::cout << "NAAH\n";
         player.setState(std::make_unique<IdleState>());
         return;
-    }
+    }*/
 
     // Perform attack - TODO the logic
     //player.performAttack(*m_target);
@@ -136,5 +120,5 @@ void AttackingState::alignAttacker(PlayableObject& player)
 }
 
 void AttackingState::name() {
-    std::cout << "AttackingState" << std::endl;
+    //std::cout << "AttackingState" << std::endl;
 }

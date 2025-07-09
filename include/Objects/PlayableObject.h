@@ -32,7 +32,6 @@ public:
 	virtual void updateScale();
 	virtual std::shared_ptr<Object> getTarget() { return nullptr; };
 	virtual std::shared_ptr<PickableObject> getObject() {
-		std::cout << "im here actually\n";
 		return nullptr; 
 	};
 	std::string getStrategyName();

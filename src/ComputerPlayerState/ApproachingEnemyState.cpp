@@ -14,24 +14,13 @@ ApproachingEnemyState::ApproachingEnemyState(std::shared_ptr<Object> target)
 }
 
 void ApproachingEnemyState::enter(PlayableObject& player) {
-    //std::cout << "enter:: ApproachingEnemyState\n";
     
-
-    //Animation approachingEnemyAnim(player.getTexture(),
-    //    320, 0,          // x, y
-    //    80, 80,        // width, height
-    //    4,             // מספר פריימים
-    //    0.2f);         // זמן בין פריימים
-
-    //player.setAnimation(approachingEnemyAnim);
     player.setAniName("walking");
     //player.setDiraction(m_input); 
 }
 
 void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
-    std::cout << "                        " << player.getStrategyName() << std::endl;
-    
-    std::cout << player.getName() << "in ApproachingEnemyState\n";
+  
     if (!m_target)
         return;
     if (auto object = std::dynamic_pointer_cast<PickableObject>(m_target)) {
@@ -72,7 +61,7 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
         std::cout << player.getName() << " was here!!1\n";
         player.getHeldObj()->move(player.getPosition());
     }
-    std::cout << "im at the end\n" << "because " << m_target->getPosition().x << "\n";
+   // std::cout << "im at the end\n" << "because " << m_target->getPosition().x << "\n";
 }
 
 void ApproachingEnemyState::exit(ComputerPlayer& player) {
