@@ -28,6 +28,7 @@ void AnimationManager::loadAnimations() {
     s_animationMap["boxExploiding"] = BOX_EXPLOIDING;
 }
 
+
 Animation AnimationManager::getAnimation(const std::string& aniName, const sf::Texture* texture) {
     auto it = s_animationMap.find(aniName);
     if (it == s_animationMap.end()) {

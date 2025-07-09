@@ -31,10 +31,5 @@ inline const AnimationInfo HELD = { 146, 98, 42, 46, 0, 0.7f, true };
 inline const AnimationInfo BOX_EXPLOIDING = { 58, 0, 58, 58, 2, 0.2f, false };
 inline const AnimationInfo BLOCKING = { 0, 0, 58, 58, 1, 0.2f, false };
 
-//Animation blockingAnim(player.getTexture(),
-//    480, 400,          // x, y
-//    80, 80,        // width, height
-//    2,             // מספר פריימים
-//    0.2f);
 
 
