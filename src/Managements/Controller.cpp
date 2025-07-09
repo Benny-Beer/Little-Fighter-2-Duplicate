@@ -17,14 +17,16 @@ Controller::Controller(sf::RenderWindow& window,
 {   
     AnimationManager::loadAnimations();
     // add pickable (rock)
-   /* std::string objectLine = "r r r r";
-    m_level->addPickableObjects(objectLine);*/
+    std::string objectLine = "r b";
+    m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
     std::string sq = "b1";
     m_level->addSquad(sq);
 
     m_enemies = m_level->getAllEnemies();
     m_pickables = m_level->getAllObjects();
+    std::cout << m_pickables.size() << " pickables in controller\n";
+
     // creating user's player
     m_players.push_back(std::make_shared<Player>(sf::Vector2f(1000, 800), "davis_ani", 320.f));
     // creating ally
@@ -44,9 +46,7 @@ Controller::Controller(sf::RenderWindow& window,
     std::string enemiesLine = "b1 h1";
     m_level->addSquad(enemiesLine);
 
-    std::string objectLine = "r b";
-    m_level->addPickableObjects(objectLine);
-	std::cout << "Controller created, m_level ptr: " << m_level.get() << std::endl;
+    
 }
 
 void Controller::handleInput(sf::Event ev)
@@ -76,8 +76,16 @@ void Controller::updateWorld(float deltaTime)
     }
     for (auto& obj : m_pickables)
     {
+		std::cout << m_pickables.size() << " pickables in controller\n";
         obj->update(deltaTime);
+		std::cout << typeid(*obj).name() << " updated\n";
     }
+
+    std::erase_if(m_pickables, [](const std::shared_ptr<PickableObject>& obj) {
+		std::cout << "in erase_if pickables\n"; 
+        return obj->isUsed();
+        });
+
 
     updateComputerPlayerTargets();
 

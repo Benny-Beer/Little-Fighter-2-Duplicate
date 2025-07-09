@@ -4,7 +4,7 @@
 class BigWeapon : public PickableObject {
 public:
 	BigWeapon(const sf::Vector2f pos, const std::string& name);
-	void update(float dt) override;
+	virtual void update(float dt) override;
 	void throwMe(int direction, float groundY, float speed = 200.f);
 protected:
 	bool m_isFlying = false;
