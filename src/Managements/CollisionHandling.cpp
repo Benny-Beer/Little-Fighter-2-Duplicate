@@ -74,8 +74,12 @@
 #include "PlayableObjectStates/PlayerStates/CollideWithObjectState.h"
 #include "PlayableObjectStates/PlayerStates/JumpingState.h"
 #include "PlayableObjectStates/PlayerStates/AttackState.h"
+#include "Gameplay/ComputerPlayer.h"
 #include "EventCommands/StoneHitCommand.h"
 #include "EventCommands/BoxHitCommand.h"
+#include "GamePlay/Enemy.h"
+#include "GamePlay/Ally.h"
+#include "GamePlay/Bandit.h"
 
 
 #include <iostream>
@@ -119,6 +123,12 @@ void playerPickableObjectWrapper(Object& playerObj, std::shared_ptr<PickableObje
     playerPickableObject<T>(playerObj, pickableObj);
 }
 
+void computerPlayerPickable(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
+{
+	if(pickableObj->thrown())
+		playerObj.handleCommand(pickableObj->getHitCommand());
+}
+
 //
 // initializeCollisionMap
 //
@@ -129,6 +139,14 @@ HitMap initializeCollisionMap()
     map[{typeid(Player), typeid(Rock)}] = &playerPickableObjectWrapper<Rock>;
 	map[{typeid(Player), typeid(Box)}] = &playerPickableObjectWrapper<Box>;
     map[{typeid(Rock), typeid(Player)}] = &playerPickableObjectWrapper<Rock>;
+    map[{typeid(PickableObject), { typeid(ComputerPlayer) }}] = &computerPlayerPickable;
+    map[{ typeid(ComputerPlayer), { typeid(PickableObject) }}] = &computerPlayerPickable;
+    map[{ typeid(Ally), { typeid(Box) }}] = &computerPlayerPickable;
+    map[{ typeid(Bandit), { typeid(Box) }}] = &computerPlayerPickable;
+    map[{ typeid(Ally), { typeid(Rock) }}] = &computerPlayerPickable;
+    map[{ typeid(Bandit), { typeid(Rock) }}] = &computerPlayerPickable;
+
+
 
     return map;
 }
@@ -136,7 +154,6 @@ HitMap initializeCollisionMap()
 void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
 {
     static HitMap map = initializeCollisionMap();
-
     auto it = map.find({ typeid(obj1), typeid(*obj2) });
     if (it != map.end())
     {

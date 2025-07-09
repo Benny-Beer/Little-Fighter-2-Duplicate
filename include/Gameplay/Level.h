@@ -19,7 +19,7 @@ public:
 	bool areAllEnemiesDefeated() const;
 	std::vector<std::shared_ptr<Enemy>> getAllEnemies();
 	std::vector<std::shared_ptr<PickableObject>> getAllObjects();
-	void handleCollisionsWithPlayer(Player& player);
+	void handleCollisionsWithPlayer(PlayableObject& player);
 
 	
 private:

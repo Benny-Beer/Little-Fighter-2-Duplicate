@@ -63,16 +63,20 @@ void Controller::updateWorld(float deltaTime)
     for (auto& player : m_players)
     {
         player->update(deltaTime);
+        m_level->handleCollisionsWithPlayer(*player); // currently through level, need to transfer into controller
+
     }
 
     // Update all AI-controlled allies
     for (auto& ally : m_allies)
     {
-       ally->update(deltaTime);      //TODO: update() in Ally
+       ally->update(deltaTime);
+       m_level->handleCollisionsWithPlayer(*ally);//TODO: update() in Ally
     }
     for (auto& enemy : m_enemies)
     {
         enemy->update(deltaTime);
+        m_level->handleCollisionsWithPlayer(*enemy);
     }
     for (auto& obj : m_pickables)
     {
@@ -95,7 +99,6 @@ void Controller::updateWorld(float deltaTime)
     // Update HUD/stats with current data
     //m_stats.update(m_players, m_allies, *m_level);
     //      TODO: create uptade() in HUD
-    m_level->handleCollisionsWithPlayer(*m_players.back()); // currently through level, need to transfer into controller
 
 }
 

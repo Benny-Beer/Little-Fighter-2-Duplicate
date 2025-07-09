@@ -194,10 +194,6 @@ void Player::setAniName(const std::string& name)
 //
 //}
 
-bool Player::isHoldingWeapon(std::shared_ptr<PickableObject> obj) const
-{
-	return m_heldObject != nullptr;
-}
 
 bool Player::isAlive() const {
     return m_alive;

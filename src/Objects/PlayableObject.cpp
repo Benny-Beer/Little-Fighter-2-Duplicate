@@ -138,6 +138,11 @@ void PlayableObject::updateScale()
     //m_dir = static_cast<Direction>(dir);
 }
 
+bool PlayableObject::isHoldingWeapon(std::shared_ptr<PickableObject> obj) const
+{
+    return m_heldObject != nullptr;
+}
+
 float PlayableObject::getSpeed() const
 {
     return m_speed;

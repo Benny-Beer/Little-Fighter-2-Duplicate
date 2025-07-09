@@ -30,6 +30,7 @@ public:
 	virtual void setAniName(const std::string& name);
 	virtual std::string getName() const;
 	virtual void updateScale();
+	bool isHoldingWeapon(std::shared_ptr<PickableObject> obj) const;
 	virtual std::shared_ptr<Object> getTarget() { return nullptr; };
 	virtual std::shared_ptr<PickableObject> getObject() {
 		return nullptr; 
