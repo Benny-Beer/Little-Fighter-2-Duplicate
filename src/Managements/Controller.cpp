@@ -130,6 +130,8 @@ void Controller::checkLevelEndConditions()
 
 void Controller::render()
 {
+    // Draw background, enemies, pickable objects, etc.
+    m_level->render(m_window);
     // Draw all human players
     for (const auto& player : m_players)
     {
@@ -144,8 +146,7 @@ void Controller::render()
 
         ally->draw(m_window);
     }
-    // Draw background, enemies, pickable objects, etc.
-    m_level->render(m_window);
+    
 
 
     for (const auto& enemy : m_enemies)
