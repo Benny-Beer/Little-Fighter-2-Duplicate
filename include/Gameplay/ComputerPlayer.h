@@ -32,6 +32,7 @@ public:
     void pickUp(PickableObject& pickable);
 
 
+
 protected:
     //std::unique_ptr<ComputerPlayerState> m_state; -->INHERIT IT FROM PLAYABLEOBJECT 
     bool m_wasHit = false;

@@ -2,6 +2,7 @@
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
 #include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
 
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PlayableObject.h"
@@ -137,4 +138,9 @@ void AttackingState::alignAttacker(PlayableObject& player)
 
 void AttackingState::name() {
     std::cout << "AttackingState" << std::endl;
+}
+
+void AttackingState::onHandsAttack(PlayableObject& player)
+{
+    player.setState(std::make_unique<BlockingState>());
 }

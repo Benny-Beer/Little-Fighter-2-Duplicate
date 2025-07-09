@@ -49,6 +49,8 @@ public:
 	float getAttackRange() const;
 	std::shared_ptr<PickableObject> getHeldObj() const;
 	void dropHeldObj();
+	void setSafeZone(const sf::Vector2f& zone) { m_safeZone = zone; }
+	sf::Vector2f getSafeZone() const { return m_safeZone; }
 
 
 protected:
@@ -67,6 +69,7 @@ protected:
 	std::shared_ptr<PickableObject> m_heldObject = nullptr;
 	Direction m_dir;
 	sf::Vector2f m_direction{ 0.f,0.f };
+	sf::Vector2f m_safeZone = { 0.f, 0.f };
 	float m_attackRange = 50.f;
 
 };

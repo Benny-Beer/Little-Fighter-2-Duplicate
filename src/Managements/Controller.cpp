@@ -17,7 +17,7 @@ Controller::Controller(sf::RenderWindow& window,
 {   
     AnimationManager::loadAnimations();
     // add pickable (rock)
-    std::string objectLine = "r r r r";
+    std::string objectLine = "r r r";
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
     std::string sq = "b1";
@@ -304,6 +304,8 @@ void Controller::updateComputerPlayerTargets() {
 
         if (closest)
             ally->setTarget(closest);
+
+        updateSafeZone(ally, m_enemies);
     }
 
     for (auto& enemy : m_enemies) {
@@ -322,6 +324,8 @@ void Controller::updateComputerPlayerTargets() {
 
         if (closest)
             enemy->setTarget(closest);
+
+        updateSafeZone(enemy, m_allies);
     }
 }
 
@@ -335,6 +339,7 @@ bool Controller::didWin() const
 {
     return m_playerWon;
 }
+
 
 
 // Calculates the Euclidean distance between two 2D points

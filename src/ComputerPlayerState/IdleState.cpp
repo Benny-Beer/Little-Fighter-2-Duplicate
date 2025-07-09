@@ -27,7 +27,6 @@ void IdleState::update(PlayableObject& player, float deltaTime) {
     //auto enemies = player.getKnownEnemies();
     //float closestDist = std::numeric_limits<float>::max(); // init to largest float number
     //PlayableObject* closestEnemy = nullptr;
-    std::shared_ptr<Object> target = player.getTarget();
     //for (const auto& enemy : enemies) {
     //    float dist = distance(player.getPosition(), enemy->getPosition());
     //    if (dist < closestDist) {
@@ -36,7 +35,17 @@ void IdleState::update(PlayableObject& player, float deltaTime) {
     //    //}
 
     //closestEnemy = player.getTarget();
-    player.setState(std::make_unique<PickingUpItemState>(target));
+    std::shared_ptr<Object> target = player.getTarget();
+
+    if (std::dynamic_pointer_cast<PlayableObject>(target)) {
+        player.setState(std::make_unique<ApproachingEnemyState>(target));
+        return;
+    }
+    else if (std::dynamic_pointer_cast<PickableObject>(target)) {
+        player.setState(std::make_unique<PickingUpItemState>(target));
+        return;
+    }
+    //player.setState(std::make_unique<PickingUpItemState>(target));
 
 
  //   if (closestObject)

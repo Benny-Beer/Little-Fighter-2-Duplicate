@@ -45,6 +45,7 @@ private:
     float distanceBetween(sf::Vector2f a, sf::Vector2f b);
          // Draws the full scene
     void updateComputerPlayerTargets();
+    void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<ComputerPlayer>>& enemies);
     //void updateComputerPlayerTargetsTwo();
 
     template<typename Container>
@@ -57,6 +58,40 @@ private:
                 closest = obj;
             }
         }
+    }
+    template<typename T>
+    void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<T>>& enemies) {
+        static_assert(std::is_base_of<ComputerPlayer, T>::value, "T must derive from ComputerPlayer");
+
+        const float gridSize = 100.f;
+        const sf::Vector2f mapSize = static_cast<sf::Vector2f>(m_window.getSize());
+
+        float bestScore = std::numeric_limits<float>::max();
+        sf::Vector2f bestPoint;
+
+        for (float x = 0; x < mapSize.x; x += gridSize) {
+            for (float y = 0; y < mapSize.y; y += gridSize) {
+                sf::Vector2f point(x, y);
+                float dangerScore = 0.f;
+
+                for (const auto& enemy : enemies) {
+                    if (!enemy) continue;
+
+                    float dist = distanceBetween(point, enemy->getPosition());
+                    if (dist > 1.f)
+                        dangerScore += 1.f / dist;
+                    else
+                        dangerScore += 1000.f; // very close - very dangerous
+                }
+
+                if (dangerScore < bestScore) {
+                    bestScore = dangerScore;
+                    bestPoint = point;
+                }
+            }
+        }
+
+        self->setSafeZone(bestPoint); 
     }
 
 
