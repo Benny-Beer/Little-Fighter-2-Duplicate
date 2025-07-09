@@ -70,12 +70,13 @@
 #include "GamePlay/Player.h"
 #include "Objects/Weapons/Rock.h"
 #include "Objects/Weapons/Box.h"
-
-#include "Objects/Weapons/Knife.h"
 #include "Objects/PickableObject.h"
 #include "PlayableObjectStates/PlayerStates/CollideWithObjectState.h"
 #include "PlayableObjectStates/PlayerStates/JumpingState.h"
 #include "PlayableObjectStates/PlayerStates/AttackState.h"
+#include "EventCommands/StoneHitCommand.h"
+#include "EventCommands/BoxHitCommand.h"
+
 
 #include <iostream>
 #include <typeindex>
@@ -92,13 +93,20 @@ void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pic
 {
     Player& player = static_cast<Player&>(playerObj);
     auto& object = pickableObj;
+    if (player.isHoldingWeapon(object))
+        return;
+    if(object->thrown())
+	{
+        //player.handleCommand(object->getHitCommand());
+		player.handleCommand(object->getHitCommand());
+		std::cout << "object is thrown, cannot pick it up\n"; return;
+	}
     //not so nice!!!!!
 	if (typeid(*player.getState()) == typeid(JumpingState) || typeid(*player.getState()) == typeid(AttackState))
 	{
 		return;
 	}
-    if (player.isHoldingWeapon(object))
-        return;
+    
     player.setState(std::make_unique<CollideWithObject>(Input::NONE, object));
 }
 
@@ -119,14 +127,7 @@ HitMap initializeCollisionMap()
     HitMap map;
 
     map[{typeid(Player), typeid(Rock)}] = &playerPickableObjectWrapper<Rock>;
-	map[{typeid(Player), typeid(Knife)}] = &playerPickableObjectWrapper<Knife>;
 	map[{typeid(Player), typeid(Box)}] = &playerPickableObjectWrapper<Box>;
-    
-    // אפשר להוסיף עוד חפצים:
-    // map[{typeid(Player), typeid(Potion)}] = &playerPickableObjectWrapper<Potion>;
-    // map[{typeid(Player), typeid(Sword)}] = &playerPickableObjectWrapper<Sword>;
-
-    // אפשר גם לשים את הסימטריה אם תרצה:
     map[{typeid(Rock), typeid(Player)}] = &playerPickableObjectWrapper<Rock>;
 
     return map;

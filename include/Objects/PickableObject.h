@@ -2,13 +2,14 @@
 #include "Objects/Object.h"
 #include "Objects/ObjectStates/ObjectBaseState.h"
 #include "Objects/PlayableObject.h"
+#include "EventCommands\ICommand.h"
 #include <memory>
 
 enum Status { ON_EARTH, PICKED, THROWN};
 
 class PickableObject : public Object {
 public:
-	PickableObject(const sf::Vector2f pos, const std::string& name);
+	PickableObject(const sf::Vector2f pos, const std::string& name, std::unique_ptr <ICommand> cmd);
 	virtual void handleCollision() {};
 	const std::string& getName();
 	virtual void move(sf::Vector2f goal);
@@ -20,7 +21,7 @@ public:
 	virtual void pick() { m_status = PICKED; }
 	virtual void throwIt() { m_status = THROWN; }
 	float getRange() const { return m_range; } ;
-
+	std::unique_ptr<ICommand> getHitCommand();
 
 
 
@@ -47,6 +48,6 @@ private:
 	std::string m_name;
 	std::string m_stateName ; // Default state is idle
 	std::string m_animationName; // Default animation name is idle
-
+	std::unique_ptr<ICommand> m_command = nullptr; 
 	bool m_used = false;
 };

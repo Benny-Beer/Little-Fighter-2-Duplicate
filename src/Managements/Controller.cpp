@@ -76,13 +76,12 @@ void Controller::updateWorld(float deltaTime)
     }
     for (auto& obj : m_pickables)
     {
-		std::cout << m_pickables.size() << " pickables in controller\n";
         obj->update(deltaTime);
-		std::cout << typeid(*obj).name() << " updated\n";
+		
+		
     }
 
     std::erase_if(m_pickables, [](const std::shared_ptr<PickableObject>& obj) {
-		std::cout << "in erase_if pickables\n"; 
         return obj->isUsed();
         });
 

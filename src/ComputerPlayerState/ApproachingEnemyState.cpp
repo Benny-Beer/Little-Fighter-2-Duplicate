@@ -42,6 +42,7 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     //std::cout << "[ApproachingEnemyState] " << player.getName() << " distance to " << m_target->getName() << ":" << distance << std::endl;
 
     if (distance < player.getAttackRange() /* && (playerPos.x - target->getPosition().x) == 0.f*/) {
+        std::cout << "im here\n";
         player.setState(std::make_unique<AttackingState>(m_target));
         return;
     }
@@ -57,8 +58,6 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
 
     if (player.getHeldObj())
     {
-
-        std::cout << player.getName() << " was here!!1\n";
         player.getHeldObj()->move(player.getPosition());
     }
    // std::cout << "im at the end\n" << "because " << m_target->getPosition().x << "\n";

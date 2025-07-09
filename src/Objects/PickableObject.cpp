@@ -2,8 +2,8 @@
 #include "Objects/ObjectStates/IdleObjState.h"
 
 
-PickableObject::PickableObject(const sf::Vector2f pos, const std::string& name)
-	:Object(pos, name), m_name(name)
+PickableObject::PickableObject(const sf::Vector2f pos, const std::string& name, std::unique_ptr <ICommand> cmd)
+	:Object(pos, name), m_name(name), m_command(std::move(cmd))
 {
 	sf::Vector2f offset(2.f, -62.f);
 	m_offset = offset;
@@ -22,10 +22,14 @@ void PickableObject::move(sf::Vector2f goal)
 	
 }
 
+std::unique_ptr<ICommand> PickableObject::getHitCommand()
+{
+	 return std::move(m_command);
+}
+
 void PickableObject::markAsUsed()
 {
 	m_used = true;
-	std::cout << "PickableObject::markAsUsued called for " << m_name << std::endl;
 }
 
 bool PickableObject::isUsed() const

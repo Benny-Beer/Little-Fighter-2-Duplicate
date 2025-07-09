@@ -39,7 +39,18 @@ void Object::update(float dt)
 
 bool Object::collide(Object& other) const
 {
-	return m_sprite.getGlobalBounds().intersects(other.getGlobalBounds());
+	sf::FloatRect thisBounds = m_sprite.getGlobalBounds();
+	sf::FloatRect otherBounds = other.getGlobalBounds();
+
+	// הקטנה או הגדלה של גבולות – לפי הצורך שלך
+	const float buffer = -20.f; // <0: הקטנה של הקופסה (מדויקת יותר), >0: הגדלה (רכה יותר)
+
+	thisBounds.left -= buffer;
+	thisBounds.top -= buffer;
+	thisBounds.width += 2 * buffer;
+	thisBounds.height += 2 * buffer;
+
+	return thisBounds.intersects(otherBounds);
 }
 
 sf::FloatRect Object::getGlobalBounds()

@@ -19,7 +19,7 @@ inline const AnimationInfo JUMPING = { 0, 520, 80, 80, 4, 0.1f, false };
 
 inline const AnimationInfo JUMPING_WITH_ROCK = { 0, 520, 80, 80, 4, 0.1f, false };
 inline const AnimationInfo ATTACKING_WITH_ROCK = { 560, 160, 80, 80, 2, 0.1f, false };
-inline const AnimationInfo ATTACKING = { 0, 80, 80, 80, 4, 0.1f, false };
+inline const AnimationInfo ATTACKING = { 0, 80, 80, 80, 4, 0.1f, true };
 inline const AnimationInfo IDLE = { 195, 0, 40, 40, 0, 0.2f, false};
 inline const AnimationInfo ROCK = {295, 0, 58, 58, 0, 0.2f, false };
 inline const AnimationInfo BOX = { 299, 0, 58, 58, 0, 0.2f, false };

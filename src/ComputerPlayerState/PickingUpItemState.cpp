@@ -24,12 +24,12 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
     }
 
     m_targetItem = std::dynamic_pointer_cast<PickableObject>(m_target);
-    std::cout << "Target typeid: " << typeid(*m_target).name() << std::endl;
+   /* std::cout << "Target typeid: " << typeid(*m_target).name() << std::endl;
     std::cout << "TargetItem typeid: " << typeid(*m_targetItem).name() << std::endl;
     if (m_targetItem->onEarth())
         std::cout << "OFCOURSE\n";
     else
-        std::cout << "NAAH\n";
+        std::cout << "NAAH\n";*/
     if (!m_targetItem ||!m_targetItem->onEarth()) {
         // Item already gone – return to idle
         m_targetItem = nullptr;

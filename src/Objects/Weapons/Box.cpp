@@ -1,8 +1,9 @@
 #include "Objects/Weapons/Box.h"
 #include "Objects/ObjectStates/ExplodingObjState.h"
+#include "EventCommands/BoxHitCommand.h"
 
 Box::Box(const sf::Vector2f pos, const std::string& name)
-	:BigWeapon(pos, name)
+	:BigWeapon(pos, name, std::make_unique<BoxHitCommand>())
 {
 	std::cout << "in Box constructor\n";
 	std::cout << name << '\n';

@@ -3,7 +3,7 @@
 
 class BigWeapon : public PickableObject {
 public:
-	BigWeapon(const sf::Vector2f pos, const std::string& name);
+	BigWeapon(const sf::Vector2f pos, const std::string& name, std::unique_ptr <ICommand> cmd);
 	virtual void update(float dt) override;
 	void throwMe(int direction, float groundY, float speed = 200.f);
 protected:

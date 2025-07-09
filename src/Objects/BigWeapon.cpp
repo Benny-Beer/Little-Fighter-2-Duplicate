@@ -1,8 +1,8 @@
 #include "Objects/BigWeapon.h"
 
 
-BigWeapon::BigWeapon(const sf::Vector2f pos, const std::string& name)
-	:PickableObject(pos, name)
+BigWeapon::BigWeapon(const sf::Vector2f pos, const std::string& name, std::unique_ptr <ICommand> cmd)
+	:PickableObject(pos, name, std::move(cmd))
 {
 }
 
