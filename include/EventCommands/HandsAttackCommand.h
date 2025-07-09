@@ -4,5 +4,6 @@
 class HandsAttackCommand : public ICommand {
 public:
     HandsAttackCommand() = default;
-    void execute(PlayableObject& player) override { player.onHandsAttack(); };
+    void execute(PlayableObject& player) override ;
 };
+

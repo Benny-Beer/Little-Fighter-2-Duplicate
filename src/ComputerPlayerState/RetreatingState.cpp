@@ -31,7 +31,7 @@ void RetreatingState::update(PlayableObject& player, float deltaTime) {
     float length = std::sqrt(retreatDirection.x * retreatDirection.x + retreatDirection.y * retreatDirection.y);
     if (length != 0) {
         retreatDirection /= length;
-        retreatDirection *= 2.f;
+        retreatDirection *= 3.f;
     }
     player.move(retreatDirection * player.getSpeed() * deltaTime);
 

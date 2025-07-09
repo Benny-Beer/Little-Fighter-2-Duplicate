@@ -17,10 +17,10 @@ Controller::Controller(sf::RenderWindow& window,
 {   
     AnimationManager::loadAnimations();
     // add pickable (rock)
-    std::string objectLine = "r r r";
+    std::string objectLine = "r r r r";
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
-    std::string sq = "b1";
+    std::string sq = "b3";
     m_level->addSquad(sq);
 
     m_enemies = m_level->getAllEnemies();
@@ -29,12 +29,12 @@ Controller::Controller(sf::RenderWindow& window,
     m_players.push_back(std::make_shared<Player>(sf::Vector2f(1000, 800), "davis_ani", 320.f));
     // creating ally
     auto ally = std::make_shared<Ally>(sf::Vector2f(800, 40), "davis_ani",60.f);
-    //auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
-    //auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
+    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
+    auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
 
     m_allies.push_back(ally);
-    //m_allies.push_back(allyTwo);
-    //m_allies.push_back(allyThree);
+    m_allies.push_back(allyTwo);
+    m_allies.push_back(allyThree);
 
 
     updateComputerPlayerTargets();
@@ -74,8 +74,20 @@ void Controller::updateWorld(float deltaTime)
     {
         obj->update(deltaTime);
     }
-
+    for (auto& dead : m_deads)
+    {
+        dead->update(deltaTime);
+    }
     updateComputerPlayerTargets();
+    for (int i = 0; i < m_players.size(); i++) {
+        std::shared_ptr<Player> player = m_players[i];
+        if (!player/* || !enemy->needsEnemyTracking()*/)
+            continue;
+        if (player->getHp() == 0) {
+            handleDeath(player, m_players);
+            i--;
+        }
+    }
 
     // Update the level itself (enemies, objects, etc.)
      //m_level->update(deltaTime);
@@ -84,7 +96,8 @@ void Controller::updateWorld(float deltaTime)
     // Update HUD/stats with current data
     //m_stats.update(m_players, m_allies, *m_level);
     //      TODO: create uptade() in HUD
-    m_level->handleCollisionsWithPlayer(*m_players.back()); // currently through level, need to transfer into controller
+    if(m_players.size())
+        m_level->handleCollisionsWithPlayer(*m_players.back()); // currently through level, need to transfer into controller
 
 }
 
@@ -143,17 +156,24 @@ void Controller::render()
         //m_window.draw(*ally);        TODO: draw() in Ally
 
         ally->draw(m_window);
+        printHp(ally->getHp(), { 10.f, 10.f });
+        printHp(ally->getPotentialHp(), { 10.f, 30.f });
+
     }
 
     for (const auto& enemy : m_enemies)
     {
-
         enemy->draw(m_window);
+        printHp(enemy->getHp(), { 930.f, 10.f });
+        printHp(enemy->getPotentialHp(), { 930.f, 30.f });
     }
     // Draw HUD
     //m_window.draw(m_stats);        TODO: draw() in HUD
-    
-    
+    for (const auto& dead : m_deads)
+    {
+        dead->draw(m_window);
+    }
+            
 }
 
 //void Controller::updateAndRender(float deltaTime)
@@ -167,129 +187,11 @@ void Controller::render()
 //    render();
 //}
 
-/*void Controller::updateComputerPlayerTargets() {
 
-    // Update targets for allies (their enemies are the enemies from Level)
-    for (auto& ally : m_allies) {
-        if (!ally || !ally->needsEnemyTracking())
-            continue;
-
-        Enemy* closest = nullptr;
-        Enemy* freeClosest = nullptr;
-        float closestDist = std::numeric_limits<float>::max();
-        float freeDist = closestDist;
-
-        for (Enemy* enemy : m_enemies) {
-            //std::cout << "ally " << ally->getPosition().x << "," << ally->getPosition().y << std::endl;
-            //std::cout << "enemy " << enemy->getPosition().x << "," << enemy->getPosition().y << std::endl;
-
-            float dist = distanceBetween(ally->getPosition(), enemy->getPosition());
-            if (dist < closestDist) {
-                closestDist = dist;
-                closest = enemy;
-            }
-            if (/*!enemy->isAttacked() && dist < freeDist) {
-                freeDist = dist;
-                freeClosest = enemy;
-            }
-
-        }
-
-        if (freeClosest) {
-            ally->setTargetEnemy(freeClosest);
-        }
-        else if (closest)
-            ally->setTargetEnemy(closest);
-        if (ally->needItem()) {
-
-            std::shared_ptr<PickableObject> closestObj = nullptr;
-            closestDist = std::numeric_limits<float>::max();
-
-            for (std::shared_ptr<PickableObject> obj : m_pickables) {
-                if(obj->onEarth()) {
-                    float dist = distanceBetween(ally->getPosition(), obj->getPosition());
-                    if (dist < closestDist) {
-                        closestDist = dist;
-                        closestObj = obj;
-                    }
-                }
-            }
-            if (closest)
-                ally->setTargetObject(closestObj);
-        } else {
-            ally->setTargetObject(nullptr);
-        }
-    }
-
-    // Update targets for enemies (their enemies are players and allies)
-    for (Enemy* enemy : m_enemies) {
-        if (!enemy || !enemy->needsEnemyTracking())
-            continue;
-
-        PlayableObject* closest = nullptr;
-        PlayableObject* freeClosest = nullptr;
-        float closestDist = std::numeric_limits<float>::max();
-        float freeDist = closestDist;
-
-
-        //std::cout << "m_allies size: " << m_allies.size() << std::endl;
-
-        // Check all allies
-        for (auto& ally : m_allies) {
-            float dist = distanceBetween(enemy->getPosition(), ally->getPosition());
-            //std::cout << "[DEBUG] candidate ally, dist: " << dist << std::endl;
-
-            if (dist < closestDist) {
-                closestDist = dist;
-                closest = ally.get();
-            }
-            if (/*!ally->isAttacked() && dist < freeDist) {
-                freeDist = dist;
-                freeClosest = ally.get();
-            }
-        }
-
-        // Check all players
-        for (auto& player : m_players) {
-            float dist = distanceBetween(enemy->getPosition(), player->getPosition());
-            if (dist < closestDist) {
-                closestDist = dist;
-                closest = player.get();
-            }
-            if (/*!player->isAttacked() && dist < freeDist) {
-                freeDist = dist;
-                freeClosest = player.get();
-            }
-        }
-        if (freeClosest) {
-            enemy->setTargetEnemy(freeClosest);
-        }
-        else if (closest)
-            enemy->setTargetEnemy(closest);
-        if (enemy->needItem()) {
-            std::shared_ptr<PickableObject> closestObj = nullptr;
-            closestDist = std::numeric_limits<float>::max();
-
-            for (std::shared_ptr<PickableObject> obj : m_pickables) {
-                if (obj->onEarth()) {
-                    float dist = distanceBetween(enemy->getPosition(), obj->getPosition());
-                    if (dist < closestDist) {
-                        closestDist = dist;
-                        closestObj = obj;
-                    }
-                }
-            }
-            if (closest)
-                enemy->setTargetObject(closestObj);
-        } 
-        else {
-            enemy->setTargetObject(nullptr);
-        }
-    }
-}*/
 
 void Controller::updateComputerPlayerTargets() {
-    for (auto& ally : m_allies) {
+    for (int i = 0; i < m_allies.size(); i++) {
+        std::shared_ptr<Ally> ally = m_allies[i];
         if (!ally/* || !ally->needsEnemyTracking()*/)
             continue;
 
@@ -304,12 +206,21 @@ void Controller::updateComputerPlayerTargets() {
 
         if (closest)
             ally->setTarget(closest);
-
-        updateSafeZone(ally, m_enemies);
+        if (!enemyExist()) // there is ONLY objects on screen
+        {
+            ally->setTarget(nullptr);
+        }
+        if (ally->getHp() == 0) {
+            handleDeath(ally, m_allies);
+        }
+        else {
+            updateSafeZone(ally, m_enemies);
+        }
     }
 
-    for (auto& enemy : m_enemies) {
-        if (!enemy/* || !enemy->needsEnemyTracking()*/)
+    for (int i = 0; i < m_enemies.size(); i++) {
+        std::shared_ptr<Enemy> enemy = m_enemies[i];
+        if (!enemy /* || !enemy->needsEnemyTracking()*/)
             continue;
 
         std::shared_ptr<Object> closest = nullptr;
@@ -324,8 +235,18 @@ void Controller::updateComputerPlayerTargets() {
 
         if (closest)
             enemy->setTarget(closest);
+        if (!alliesExist()) // there is ONLY objects on screen
+        {
+            enemy->setTarget(nullptr);
+        }
+        if (enemy->getHp() == 0) {
+            handleDeath(enemy, m_enemies);
+            i--;
+        }
+        else {
+            updateSafeZone(enemy, m_allies);
 
-        updateSafeZone(enemy, m_allies);
+        }
     }
 }
 
@@ -347,5 +268,25 @@ float Controller::distanceBetween(sf::Vector2f a, sf::Vector2f b) {
     float dx = a.x - b.x;
     float dy = a.y - b.y;
     return std::sqrt(dx * dx + dy * dy);
+}
+
+void Controller::printHp(int hp, const sf::Vector2f& position)
+{
+    static sf::Font font;
+    static bool loaded = false;
+    if (!loaded) {
+        if (!font.loadFromFile("resources/Fonts/lesterbold.ttf")) // ודא שהקובץ נמצא בתיקיה
+            return;
+        loaded = true;
+    }
+
+    sf::Text text;
+    text.setFont(font);
+    text.setString("HP: " + std::to_string(hp));
+    text.setCharacterSize(15);
+    text.setFillColor(sf::Color::Red);
+    text.setPosition(position);
+
+    m_window.draw(text);
 }
 

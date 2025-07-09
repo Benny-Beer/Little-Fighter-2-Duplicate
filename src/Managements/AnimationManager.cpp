@@ -23,6 +23,8 @@ void AnimationManager::loadAnimations() {
 
     s_animationMap["r"] = ROCK;
 	s_animationMap["rock_flying"] = ROCK_FLYING;
+    s_animationMap["dead"] = DEAD;
+
 
 
 

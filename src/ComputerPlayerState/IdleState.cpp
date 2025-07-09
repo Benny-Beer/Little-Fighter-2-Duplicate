@@ -36,7 +36,10 @@ void IdleState::update(PlayableObject& player, float deltaTime) {
 
     //closestEnemy = player.getTarget();
     std::shared_ptr<Object> target = player.getTarget();
-
+    if (!target)
+    {
+        return;
+    }
     if (std::dynamic_pointer_cast<PlayableObject>(target)) {
         player.setState(std::make_unique<ApproachingEnemyState>(target));
         return;

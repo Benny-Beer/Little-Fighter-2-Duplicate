@@ -44,17 +44,24 @@ public:
 	virtual bool needItem();
 
 	// in-game Events:
-	virtual void onHandsAttack() { m_state->onHandsAttack(*this); }
+	virtual void onHandsAttack();
 	void adjustRange(float range);
 	float getAttackRange() const;
 	std::shared_ptr<PickableObject> getHeldObj() const;
 	void dropHeldObj();
 	void setSafeZone(const sf::Vector2f& zone) { m_safeZone = zone; }
 	sf::Vector2f getSafeZone() const { return m_safeZone; }
+	void reduceHp(int amountToReduce);
+	int getHp() { return m_hp; }
+	int getPotentialHp() { return m_potentialHp; }
+	void updateHp();
+
 
 
 protected:
 	int m_hp;
+	int m_potentialHp;
+	int m_hpClock = 0;
 	int m_energy;
 	float m_speed;
 	std::string m_aniName;

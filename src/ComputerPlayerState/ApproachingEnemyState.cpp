@@ -1,6 +1,7 @@
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
 #include "PlayableObjectStates/ComputerPlayerState/AttackingState.h"
 #include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 
 #include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
 #include "GamePlay/ComputerPlayer.h"
@@ -34,6 +35,10 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     std::cout << player.getName() << "in ApproachingEnemyState\n";
     if (!m_target)
         return;
+    if (!player.getTarget()) {
+        player.setState(std::make_unique<IdleState>());
+        return;
+    }
     if (auto object = std::dynamic_pointer_cast<PickableObject>(m_target)) {
         player.setState(std::make_unique<PickingUpItemState>(object));
         return;

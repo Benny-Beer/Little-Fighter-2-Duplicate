@@ -52,6 +52,7 @@ void AttackingState::enter(PlayableObject& player) {
         std::cout << "after attack: NO!\n";
 
     }
+
     target->handleCommand(std::make_unique<HandsAttackCommand>());
     // I think we need switch-case here according to the attack
     //player.setDiraction(m_input);     
@@ -62,7 +63,13 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
     std::cout << "                        " << player.getStrategyName() << std::endl;
     std::cout << player.getName() << "in AttackingState\n";
     if (!m_target)
+
         return;
+    if (!player.getTarget()) {
+        player.setState(std::make_unique<IdleState>());
+        return;
+    }
+
     //std::cout << player.getName() <<" - MY TARGET NAME IS: " << m_target->getName() << std::endl;
     player.setAniName("attacking");
 

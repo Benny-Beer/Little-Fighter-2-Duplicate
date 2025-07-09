@@ -15,6 +15,7 @@ void ComputerPlayer::update(float dt)
 
         m_state->update(*this, dt);
     }
+    updateHp();
     updateDirection();
     //m_state->name();
 

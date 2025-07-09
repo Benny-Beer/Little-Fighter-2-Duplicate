@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
+#include <iostream>
 #include "Gameplay/Level.h"
 #include "Gameplay/Player.h"
 #include "Gameplay/Ally.h"
@@ -37,13 +38,19 @@ private:
     std::vector<std::shared_ptr<Ally>> m_allies;  // computer-controlled
     std::vector<std::shared_ptr<Enemy>> m_enemies; // Non-owning pointers to current squad
     std::vector<std::shared_ptr<PickableObject>> m_pickables;
+    std::vector<std::shared_ptr<PlayableObject>> m_deads;
+
 
     // ========== Internal state ==========
     HeadsUpDisplay m_stats;
     bool m_levelFinished = false;
     bool m_playerWon = false;
+    void printHp(int hp, const sf::Vector2f& position);
+    void handleDeath(std::shared_ptr<ComputerPlayer> deadOne, std::vector<std::shared_ptr<ComputerPlayer>> livePlayers);
     float distanceBetween(sf::Vector2f a, sf::Vector2f b);
-         // Draws the full scene
+    bool enemyExist() { return m_enemies.size(); }
+    bool alliesExist() { return m_allies.size() + m_players.size(); }
+
     void updateComputerPlayerTargets();
     void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<ComputerPlayer>>& enemies);
     //void updateComputerPlayerTargetsTwo();
@@ -52,6 +59,10 @@ private:
     void checkClosest(const Container& container, const sf::Vector2f& enemyPos,
         float& closestDistance, std::shared_ptr<Object>& closest) {
         for (auto& obj : container) {
+            if (auto pickable = std::dynamic_pointer_cast<PickableObject>(obj)) {
+                if (!pickable->onEarth())
+                    continue;
+            }
             float dist = distanceBetween(enemyPos, obj->getPosition());
             if (dist < closestDistance) {
                 closestDistance = dist;
@@ -59,6 +70,7 @@ private:
             }
         }
     }
+
     template<typename T>
     void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<T>>& enemies) {
         static_assert(std::is_base_of<ComputerPlayer, T>::value, "T must derive from ComputerPlayer");
@@ -94,5 +106,16 @@ private:
         self->setSafeZone(bestPoint); 
     }
 
+    template<typename T>
+    void handleDeath(std::shared_ptr<T> deadOne, std::vector<std::shared_ptr<T>>& livePlayers) {
 
+        auto it = std::find(livePlayers.begin(), livePlayers.end(), deadOne);
+        if (it != livePlayers.end()) {
+            m_deads.push_back(*it);
+            std::cout << m_deads.size() << std::endl;
+            livePlayers.erase(it);
+            
+        }
+
+    }
 };
