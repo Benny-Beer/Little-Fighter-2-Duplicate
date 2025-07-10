@@ -38,9 +38,21 @@ void RetreatingState::update(PlayableObject& player, float deltaTime) {
     if (m_elapsedTime >= m_retreatDuration) {
         // Done retreating — return to idle (or other smart decision)
         player.setState(std::make_unique<IdleState>());
+        return;
     }
 }
 
 void RetreatingState::exit(ComputerPlayer& player) {
     // Cleanup if needed
+}
+
+void RetreatingState::onHandsAttack(PlayableObject& player) {
+
+}
+
+void RetreatingState::onStoneHit(PlayableObject& player) {
+
+}
+void RetreatingState::onExplosion(PlayableObject& player) {
+
 }

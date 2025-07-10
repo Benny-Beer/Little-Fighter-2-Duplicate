@@ -84,3 +84,14 @@ void PickingUpItemState::exit(ComputerPlayer& player) {
 void PickingUpItemState::name() {
     std::cout << "PickingUpItemState" << std::endl;
 }
+
+void PickingUpItemState::onHandsAttack(PlayableObject& player) {
+
+}
+
+void PickingUpItemState::onStoneHit(PlayableObject& player) {
+
+}
+void PickingUpItemState::onExplosion(PlayableObject& player) {
+
+}

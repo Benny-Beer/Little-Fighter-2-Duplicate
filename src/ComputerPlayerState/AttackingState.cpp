@@ -3,6 +3,8 @@
 #include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 #include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
+#include "PlayableObjectStates/ComputerPlayerState/RetreatingState.h"
+
 
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PlayableObject.h"
@@ -62,9 +64,10 @@ void AttackingState::enter(PlayableObject& player) {
 void AttackingState::update(PlayableObject& player, float deltaTime) {
     std::cout << "                        " << player.getStrategyName() << std::endl;
     std::cout << player.getName() << "in AttackingState\n";
-    if (!m_target)
 
+    if (!m_target)
         return;
+
     if (!player.getTarget()) {
         player.setState(std::make_unique<IdleState>());
         return;
@@ -150,4 +153,10 @@ void AttackingState::name() {
 void AttackingState::onHandsAttack(PlayableObject& player)
 {
     player.setState(std::make_unique<BlockingState>());
+}
+void AttackingState::onStoneHit(PlayableObject& player) {
+
+}
+void AttackingState::onExplosion(PlayableObject& player) {
+
 }

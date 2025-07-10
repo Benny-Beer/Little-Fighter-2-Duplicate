@@ -32,3 +32,14 @@ void KnockedDownState::update(PlayableObject& player, float deltaTime) {
 void KnockedDownState::exit(ComputerPlayer& player) {
     player.setControllable(true); // Restore control in any case
 }
+
+void KnockedDownState::onHandsAttack(PlayableObject& player) {
+
+}
+
+void KnockedDownState::onStoneHit(PlayableObject& player) {
+
+}
+void KnockedDownState::onExplosion(PlayableObject& player) {
+
+}

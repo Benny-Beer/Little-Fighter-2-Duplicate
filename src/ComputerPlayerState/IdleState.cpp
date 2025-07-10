@@ -3,6 +3,8 @@
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h" // the next state
 #include <cmath> // distance calculation
 #include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
+#include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
+
 
 void IdleState::enter(PlayableObject& player) {
     // Optional: reset animation or internal timer
@@ -78,6 +80,14 @@ void IdleState::exit(ComputerPlayer& player) {
 void IdleState::onHandsAttack(PlayableObject& player) {
     std::cout << "Im in IdleState and i got attacked by hands\n";
     
+}
+
+void IdleState::onStoneHit(PlayableObject& player) {
+
+}
+void IdleState::onExplosion(PlayableObject& player) {
+    player.setState(std::make_unique<KnockedDownState>());
+
 }
 
 void IdleState::name() {

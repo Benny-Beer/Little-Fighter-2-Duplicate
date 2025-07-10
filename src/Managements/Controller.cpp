@@ -22,7 +22,7 @@ Controller::Controller(sf::RenderWindow& window,
     std::string objectLine = "";
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
-    std::string sq = "b1";
+    std::string sq = "b3";
     m_level->addSquad(sq);
     // ============================================================
 
@@ -32,12 +32,12 @@ Controller::Controller(sf::RenderWindow& window,
     // creating user's player
     m_players.push_back(std::make_shared<Player>(sf::Vector2f(1000, 800), "davis_ani", 320.f));
     // creating ally
-    auto ally = std::make_shared<Ally>(sf::Vector2f(800, 40), "davis_ani",60.f);
-    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
+    auto ally = std::make_shared<Ally>(sf::Vector2f(800, 100), "davis_ani",60.f);
+    //auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
     //auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
 
     m_allies.push_back(ally);
-    m_allies.push_back(allyTwo);
+    //m_allies.push_back(allyTwo);
     //m_allies.push_back(allyThree);
     //========================================================================
 
@@ -85,8 +85,8 @@ void Controller::updateWorld(float deltaTime)
         std::shared_ptr<Player> player = m_players[i];
         if (!player)
             continue;
-        if (player->getHp() == 0) {
-            handleDeath(player, m_players);
+        if (!player->getState()->isAccessible()/*player->getHp() <= 0*/) {
+            removeAccess(player, m_players);
             i--;
         }
     }
@@ -196,66 +196,10 @@ void Controller::render()
 // Responsibile for target & safe zone assignment, death handling. 
 // (for each of the computer players)
 void Controller::updateComputerPlayerStats() {
-    for (int i = 0; i < m_allies.size(); i++) {
-        std::shared_ptr<Ally> ally = m_allies[i];
-        if (!ally)
-            continue;
 
-        std::shared_ptr<Object> closest = nullptr;
-        float closestDistance = std::numeric_limits<float>::max();
+    updateStats(m_allies, m_enemies);
+    updateStats(m_enemies, m_allies, m_players);
 
-        if (ally->needItem()) {
-            checkClosest(m_pickables, ally->getPosition(), closestDistance, closest);
-        }
-
-        if (enemyExist()) 
-        {
-            checkClosest(m_enemies, ally->getPosition(), closestDistance, closest);
-            ally->setTarget(closest);
-
-        } else {
-            ally->setTarget(nullptr);
-        }
-
-        if (ally->getHp() == 0) {
-            handleDeath(ally, m_allies);
-        }
-        else {
-            updateSafeZone(ally, m_enemies);
-        }
-    }
-
-    for (int i = 0; i < m_enemies.size(); i++) {
-        std::shared_ptr<Enemy> enemy = m_enemies[i];
-        if (!enemy)
-            continue;
-
-        std::shared_ptr<Object> closest = nullptr;
-        float closestDistance = std::numeric_limits<float>::max();
-
-
-        if (enemy->needItem()) {
-            checkClosest(m_pickables, enemy->getPosition(), closestDistance, closest);
-        }
-
-        if (alliesExist())
-        {
-            checkClosest(m_allies, enemy->getPosition(), closestDistance, closest);
-            checkClosest(m_players, enemy->getPosition(), closestDistance, closest);
-            enemy->setTarget(closest);
-
-        } else {
-            enemy->setTarget(nullptr);
-        }
-
-        if (enemy->getHp() == 0) {
-            handleDeath(enemy, m_enemies);
-        }
-        else {
-            updateSafeZone(enemy, m_allies);
-
-        }
-    }
 }
 
 //======================================

@@ -71,6 +71,46 @@ private:
         }
     }
 
+    // T1 - player's team
+    // T2 - opponent team
+    // T3 - another opponent team (optional)
+    template<typename T1, typename T2, typename T3 = Object>
+    void updateStats(std::vector<std::shared_ptr<T1>>& vec1, std::vector<std::shared_ptr<T2>>& vec2, std::vector<std::shared_ptr<T3>> vec3 = {}) {
+        for (int i = 0; i < vec1.size(); i++) {
+            std::shared_ptr<T1> player = vec1[i];
+            if (!player)
+                continue;
+
+            std::shared_ptr<Object> closest = nullptr;
+            float closestDistance = std::numeric_limits<float>::max();
+
+            if (player->needItem()) {
+                checkClosest(m_pickables, player->getPosition(), closestDistance, closest);
+            }
+
+            if (vec2.size() + vec3.size()) // there is at least 1 opponent
+            {
+                checkClosest(vec2, player->getPosition(), closestDistance, closest);
+                if (!vec3.empty())
+                    checkClosest(vec3, player->getPosition(), closestDistance, closest);
+
+                player->setTarget(closest);
+
+            }
+            else {
+                player->setTarget(nullptr);
+            }
+
+            if (!player->getState()->isAccessible()/*player->getHp() <= 0*/) {
+                removeAccess(player, vec1);
+            }
+            else {
+                updateSafeZone(player, vec2);
+            }
+        }
+    }
+
+
     template<typename T>
     void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<T>>& enemies) {
         static_assert(std::is_base_of<ComputerPlayer, T>::value, "T must derive from ComputerPlayer");
@@ -107,13 +147,17 @@ private:
     }
 
     template<typename T>
-    void handleDeath(std::shared_ptr<T> deadOne, std::vector<std::shared_ptr<T>>& livePlayers) {
+    void removeAccess(std::shared_ptr<T> deadOne, std::vector<std::shared_ptr<T>>& livePlayers) {
 
         auto it = std::find(livePlayers.begin(), livePlayers.end(), deadOne);
         if (it != livePlayers.end()) {
             m_deads.push_back(*it);
-            std::cout << m_deads.size() << std::endl;
+            std::cout << "\n\n Live size is: " << livePlayers.size() << "\n" << std::endl;
+
+            std::cout << "\n\n m_deads size is: " << m_deads.size() << "\n" << std::endl;
             livePlayers.erase(it);
+            std::cout << "\n\n Live size is: " << livePlayers.size() << "\n" << std::endl;
+
             
         }
 

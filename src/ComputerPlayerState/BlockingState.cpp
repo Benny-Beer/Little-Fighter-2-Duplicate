@@ -40,3 +40,13 @@ void BlockingState::exit(ComputerPlayer& player) {
 void BlockingState::name() {
     std::cout << "BlockingState" << std::endl;
 }
+void BlockingState::onHandsAttack(PlayableObject& player) {
+   
+}
+
+void BlockingState::onStoneHit(PlayableObject& player) {
+
+}
+void BlockingState::onExplosion(PlayableObject& player) {
+
+}
