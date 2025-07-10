@@ -4,8 +4,8 @@
 
 class DeadState : public ComputerPlayerState {
 public:
-    void enter(PlayableObject& player) override { player.setAniName("dead"); };
-    void update(PlayableObject& player, float deltaTime) override {};
+    void enter(PlayableObject& player) override; 
+    void update(PlayableObject& player, float deltaTime) override { };
     void exit(ComputerPlayer& player) override {};
 
     void onHandsAttack(PlayableObject& player) override {};

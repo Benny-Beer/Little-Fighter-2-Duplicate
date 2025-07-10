@@ -11,7 +11,9 @@ Enemy::Enemy(const sf::Vector2f pos, const std::string& name, float speed)
     // Starts with IdleState
     changeState(std::make_unique<IdleState>());
     m_name = "enemy";
+
 }
+
 
 
 void Enemy::update(float dt)

@@ -7,14 +7,15 @@ KnockedDownState::KnockedDownState() = default;
 void KnockedDownState::enter(PlayableObject& player) {
     std::cout << "enter:: KnockedDownState\n";
 
-    Animation knockedDownAnim(player.getTexture(),
-        240, 0,          // x, y
-        80, 80,        // width, height
-        5,             // מספר פריימים
-        0.2f,
-        false);         
+    //Animation knockedDownAnim(player.getTexture(),
+    //    240, 0,          // x, y
+    //    80, 80,        // width, height
+    //    5,             // מספר פריימים
+    //    0.2f,
+    //    false);         
 
-    player.setAnimation(knockedDownAnim);
+    //player.setAnimation(knockedDownAnim);
+    player.setAniName("dead");
     //player.setDiraction(m_input);     
     m_elapsedTime = 0.0f;
     // need information that the player isnt controllable - ?

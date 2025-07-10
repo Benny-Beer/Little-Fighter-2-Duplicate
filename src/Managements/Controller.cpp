@@ -4,6 +4,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window.hpp>
 #include <utility>
+#include <memory>
 #include <iostream>
 
 Controller::Controller(sf::RenderWindow& window,
@@ -19,7 +20,7 @@ Controller::Controller(sf::RenderWindow& window,
     //=============================================================
     // === this section is hard coded. need to be done in Level ===
     // add pickable (rock)
-    std::string objectLine = "";
+    std::string objectLine = "r r r";
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
     std::string sq = "b3";
@@ -33,12 +34,12 @@ Controller::Controller(sf::RenderWindow& window,
     m_players.push_back(std::make_shared<Player>(sf::Vector2f(1000, 800), "davis_ani", 320.f));
     // creating ally
     auto ally = std::make_shared<Ally>(sf::Vector2f(800, 100), "davis_ani",60.f);
-    //auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
-    //auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
+    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
+    auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
 
     m_allies.push_back(ally);
-    //m_allies.push_back(allyTwo);
-    //m_allies.push_back(allyThree);
+    m_allies.push_back(allyTwo);
+    m_allies.push_back(allyThree);
     //========================================================================
 
     m_enemies = m_level->getAllEnemies();
@@ -58,6 +59,7 @@ void Controller::handleInput(sf::Event ev)
 
 void Controller::updateWorld(float deltaTime)
 {
+
     for (auto& player : m_players)
     {
         player->update(deltaTime);
@@ -79,6 +81,7 @@ void Controller::updateWorld(float deltaTime)
     {
         dead->update(deltaTime);
     }
+
     updateComputerPlayerStats();
 
     for (int i = 0; i < m_players.size(); i++) {
@@ -141,16 +144,24 @@ void Controller::checkLevelEndConditions()
 
 void Controller::render()
 {
-   
     // Draw background, enemies, pickable objects, etc.
     m_level->render(m_window);
 
-    for (const auto& player : m_players)
+    for (const auto& dead : m_deads)
     {
-        player->draw(m_window);
+        dead->draw(m_window);
     }
 
     float i = 0.f;
+    for (const auto& player : m_players)
+    {
+        player->draw(m_window);
+        printHp(player->getHp(), { 480.f, 10.f + i }, false);
+        printHp(player->getPotentialHp(), { 480.f, 30.f + i }, true);
+        i += 40.f;
+    }
+
+    i = 0.f;
     for (const auto& ally : m_allies)
     {
 
@@ -174,10 +185,7 @@ void Controller::render()
     // Draw HUD
     //m_window.draw(m_stats);        TODO: draw() in HUD
 
-    for (const auto& dead : m_deads)
-    {
-        dead->draw(m_window);
-    }
+
             
 }
 
@@ -199,6 +207,8 @@ void Controller::updateComputerPlayerStats() {
 
     updateStats(m_allies, m_enemies);
     updateStats(m_enemies, m_allies, m_players);
+    restoreKnockedAccess();
+
 
 }
 
@@ -247,4 +257,36 @@ void Controller::printHp(int hp, const sf::Vector2f& position, bool potential)
 
     m_window.draw(text);
 }
+
+void Controller::restoreKnockedAccess() {
+    auto it = m_deads.begin();
+    while (it != m_deads.end()) {
+        auto& disabled = *it;
+        if (disabled->getState()->isAccessible()) {
+            bool restored = false;
+
+            if (auto enemy = std::dynamic_pointer_cast<Enemy>(disabled)) {
+                m_enemies.push_back(enemy);
+                restored = true;
+            }
+            else if (auto player = std::dynamic_pointer_cast<Player>(disabled)) {
+                m_players.push_back(player);
+                restored = true;
+            }
+            else if (auto ally = std::dynamic_pointer_cast<Ally>(disabled)) {
+                m_allies.push_back(ally);
+                restored = true;
+            }
+
+            if (restored) {
+                it = m_deads.erase(it);
+                continue;
+            }
+        }
+
+        ++it; 
+    }
+}
+
+
 

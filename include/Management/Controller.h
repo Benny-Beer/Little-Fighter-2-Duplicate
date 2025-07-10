@@ -52,6 +52,7 @@ private:
     bool alliesExist() { return m_allies.size() + m_players.size(); }
 
     void updateComputerPlayerStats();
+    void restoreKnockedAccess();
     //void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<ComputerPlayer>>& enemies);
     //void updateComputerPlayerTargetsTwo();
 
@@ -152,6 +153,7 @@ private:
         auto it = std::find(livePlayers.begin(), livePlayers.end(), deadOne);
         if (it != livePlayers.end()) {
             m_deads.push_back(*it);
+            std::cout << m_deads[0]->getName() << std::endl;
             std::cout << "\n\n Live size is: " << livePlayers.size() << "\n" << std::endl;
 
             std::cout << "\n\n m_deads size is: " << m_deads.size() << "\n" << std::endl;
