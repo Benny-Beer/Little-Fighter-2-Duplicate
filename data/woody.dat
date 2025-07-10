@@ -1,5 +1,7 @@
-name = woody
-description = Gritty veteran who can teleport (??)
-profile = resources/characters/woody_f.bmp
-icon = resources/characters/woody_s.bmp
-annimation = resources/characters/woody_0.bmp
+{
+"name":"woody",
+"description":"Gritty veteran who can teleport (??)",
+"profile":"resources/characters/woody_f.png",
+"icon":"resources/characters/woody_s.png",
+"animation":"resources/characters/woody_0.png"
+}
