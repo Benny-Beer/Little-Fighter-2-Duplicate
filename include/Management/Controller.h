@@ -45,14 +45,14 @@ private:
     HeadsUpDisplay m_stats;
     bool m_levelFinished = false;
     bool m_playerWon = false;
-    void printHp(int hp, const sf::Vector2f& position);
-    void handleDeath(std::shared_ptr<ComputerPlayer> deadOne, std::vector<std::shared_ptr<ComputerPlayer>> livePlayers);
+    void printHp(int hp, const sf::Vector2f& position, bool potential);
+    //void handleDeath(std::shared_ptr<ComputerPlayer> deadOne, std::vector<std::shared_ptr<ComputerPlayer>> livePlayers);
     float distanceBetween(sf::Vector2f a, sf::Vector2f b);
     bool enemyExist() { return m_enemies.size(); }
     bool alliesExist() { return m_allies.size() + m_players.size(); }
 
-    void updateComputerPlayerTargets();
-    void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<ComputerPlayer>>& enemies);
+    void updateComputerPlayerStats();
+    //void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<ComputerPlayer>>& enemies);
     //void updateComputerPlayerTargetsTwo();
 
     template<typename Container>
