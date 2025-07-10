@@ -1,9 +1,13 @@
 #include "Screens/CharacterSelectScreen.h"
 #include "Screens/IScreen.h"
+#include "Screens/InGameScreen.h"
 #include "Management/ResourceManager.h"
+#include "Management/GameManager.h"
 #include "Gameplay/Player.h"
 #include <cmath> // for std::sin
 #include <iostream>
+
+
 
 CharacterSelectScreen::CharacterSelectScreen(sf::RenderWindow& window, GameManager& manager)
     : IScreen(window,manager)
@@ -151,41 +155,47 @@ void CharacterSelectScreen::update(sf::Time deltaTime)
 
 void CharacterSelectScreen::handleEvents(sf::Event& ev)
 {
-    int currentIndex = 0;
     if (ev.type == sf::Event::KeyPressed) {
-        if (ev.key.code == sf::Keyboard::Enter) {
-            if (!m_selectionMode) {
-                std::cout << "Enter pressed - character selected" << std::endl;
-                m_selectionMode = true;
-                m_placeholderText.setString("");
-                m_profileSprite.setTexture(*m_characters[currentIndex].second->m_profilePic);
+        if (ev.key.code == sf::Keyboard::Enter && !m_selectionMode) { 
+            std::cout << "Enter pressed - character selected" << std::endl;
+            m_selectionMode = true;
+            m_placeholderText.setString("");
+            m_profileSprite.setTexture(*m_characters[m_currentIndex].second->m_profilePic);
 
-                sf::Vector2f desiredSize = m_profilePlaceholder.getSize();
-                sf::Vector2f desiredPos = m_profilePlaceholder.getPosition();
+            sf::Vector2f desiredSize = m_profilePlaceholder.getSize();
+            sf::Vector2f desiredPos = m_profilePlaceholder.getPosition();
 
-                sf::Vector2u textureSize = m_profileSprite.getTexture()->getSize();
-                m_profileSprite.setScale(
-                    desiredSize.x / textureSize.x,
-                    desiredSize.y / textureSize.y
-                );
-                m_profileSprite.setPosition(desiredPos);
+            sf::Vector2u textureSize = m_profileSprite.getTexture()->getSize();
+            m_profileSprite.setScale(
+               desiredSize.x / textureSize.x,
+               desiredSize.y / textureSize.y
+            );
+            m_profileSprite.setPosition(desiredPos);
 
-                m_characterName.setString(m_characters[currentIndex].second->m_name);
-                m_characterDescription.setString(m_characters[currentIndex].second->m_description);
-            }
+            m_characterName.setString(m_characters[m_currentIndex].second->m_name);
+            m_characterDescription.setString(m_characters[m_currentIndex].second->m_description);
+        
         }
         else if (m_selectionMode) {
+            std::cout << "Index: " << m_currentIndex << " / " << m_characters.size() << "\n";
             if (ev.key.code == sf::Keyboard::Right) {
-                currentIndex = (currentIndex + 1) % m_characters.size();
+                m_currentIndex = (m_currentIndex + 1) % m_characters.size();
             }
             else if (ev.key.code == sf::Keyboard::Left) {
-                currentIndex = (currentIndex + m_characters.size() - 1) % m_characters.size();
+                m_currentIndex = (m_currentIndex + m_characters.size() - 1) % m_characters.size();
             }
 
             // Update content
-            m_profileSprite.setTexture(*m_characters[currentIndex].second->m_profilePic);
-            m_characterName.setString(m_characters[currentIndex].second->m_name);
-            m_characterDescription.setString(m_characters[currentIndex].second->m_description);
+            m_profileSprite.setTexture(*m_characters[m_currentIndex].second->m_profilePic);
+            m_characterName.setString(m_characters[m_currentIndex].second->m_name);
+            m_characterDescription.setString(m_characters[m_currentIndex].second->m_description);
+
+            //add here another enter event to pass the data to inGameState and switchState
+            if (ev.key.code == sf::Keyboard::Enter) {
+                std::cout << "enter pressed in selection mode " << std::endl;
+                //add PlayerData struct in InGameString constructor
+                m_manager.switchScreen(std::make_unique<InGameScreen>(m_window, m_manager));
+            }
         }
     }
 }
