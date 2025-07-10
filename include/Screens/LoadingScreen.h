@@ -8,6 +8,7 @@
 class LoadingScreen: public IScreen {
 public:
 	LoadingScreen(sf::RenderWindow& window, GameManager& manager);
+	void update(sf::Time deltaTime) override;
 	void handleEvents(sf::Event& ev) override;
 	void render() override;
 private:

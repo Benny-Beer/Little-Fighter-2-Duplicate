@@ -1,11 +1,14 @@
 #include "Screens/CharacterSelectScreen.h"
 #include "Screens/IScreen.h"
 #include "Management/ResourceManager.h"
+#include "Gameplay/Player.h"
 #include <cmath> // for std::sin
+#include <iostream>
 
 CharacterSelectScreen::CharacterSelectScreen(sf::RenderWindow& window, GameManager& manager)
     : IScreen(window,manager)
 {
+    m_characters = ResourceManager::instance().getCharacters();
     // Load font
     if (m_font.getInfo().family.empty()) {
         if (!m_font.loadFromFile("C:/Windows/Fonts/arialbd.ttf")) {
@@ -134,22 +137,6 @@ CharacterSelectScreen::CharacterSelectScreen(sf::RenderWindow& window, GameManag
     );
 
     m_profileSprite.setPosition(m_profilePlaceholder.getPosition());
-
-    sf::Texture texDavisProfile;
-    sf::Texture texDavisIcon;
-    sf::Texture texDavisSheet;
-
-    texDavisSheet.loadFromFile("resources/characters/davis_0.png");
-    texDavisProfile.loadFromFile("resources/characters/davis_f.png");
-    texDavisIcon.loadFromFile("resources/characters/davis_s.png");
-    //initialize character vetcor. TODO : make this load dynamically from Loading screen
-    m_characters.push_back({
-    "Davis",
-    "Balanced fighter",
-    ResourceManager::instance().getTexture("characters/davis_f"),
-    texDavisIcon,
-    texDavisSheet
-});
 }
 
 void CharacterSelectScreen::update(sf::Time deltaTime)
@@ -171,7 +158,7 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
                 std::cout << "Enter pressed - character selected" << std::endl;
                 m_selectionMode = true;
                 m_placeholderText.setString("");
-                m_profileSprite.setTexture(m_characters[currentIndex].m_profilePic);
+                m_profileSprite.setTexture(*m_characters[currentIndex].second->m_profilePic);
 
                 sf::Vector2f desiredSize = m_profilePlaceholder.getSize();
                 sf::Vector2f desiredPos = m_profilePlaceholder.getPosition();
@@ -183,8 +170,8 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
                 );
                 m_profileSprite.setPosition(desiredPos);
 
-                m_characterName.setString(m_characters[currentIndex].m_name);
-                m_characterDescription.setString(m_characters[currentIndex].m_description);
+                m_characterName.setString(m_characters[currentIndex].second->m_name);
+                m_characterDescription.setString(m_characters[currentIndex].second->m_description);
             }
         }
         else if (m_selectionMode) {
@@ -196,9 +183,9 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
             }
 
             // Update content
-            m_profileSprite.setTexture(m_characters[currentIndex].m_profilePic);
-            m_characterName.setString(m_characters[currentIndex].m_name);
-            m_characterDescription.setString(m_characters[currentIndex].m_description);
+            m_profileSprite.setTexture(*m_characters[currentIndex].second->m_profilePic);
+            m_characterName.setString(m_characters[currentIndex].second->m_name);
+            m_characterDescription.setString(m_characters[currentIndex].second->m_description);
         }
     }
 }

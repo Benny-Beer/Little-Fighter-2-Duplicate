@@ -6,7 +6,8 @@ public:
 	DataLoader(std::string pathToIndex);
 	void parseDataIndex();
 	void printPaths() const;
-	bool loadCharacterDat() const;
+	bool loadCharacterDat();
+	std::string getCurrentlyLoadingFile() const;
 private:
 	int m_currentIndex = 0;
 	std::string m_currentFile;

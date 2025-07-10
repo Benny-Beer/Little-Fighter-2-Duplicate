@@ -38,26 +38,40 @@ void DataLoader::printPaths() const
 	}
 }
 
-bool DataLoader::loadCharacterDat() const
+bool DataLoader::loadCharacterDat()
 {
 	if (m_currentIndex == m_datPaths.size()) return false;
 	std::string type = m_datPaths[m_currentIndex].first;
 	std::string path = m_datPaths[m_currentIndex].second;
+	m_currentFile = path;
 	std::ifstream file(path);
 	if (!file.is_open()) throw std::runtime_error("couldn't open file: " + path);
 	nlohmann::json jsonData = nlohmann::json::parse(file);
 
-	PlayerData p;
-	p.m_name = jsonData["name"];
-	p.m_description = jsonData["description"];
-	p.m_profilePic = ResourceManager::instance().getTexture(jsonData["profile"]);
-	p.m_chracterIcon = ResourceManager::instance().getTexture(jsonData["icon"]);
-	p.m_animationSheet = ResourceManager::instance().getTexture(jsonData["animation"]);
+	if (!jsonData.contains("name") || !jsonData["name"].is_string()) {
+		throw std::runtime_error("Missing or invalid 'name' in: " + path);
+	}
+	if (!jsonData.contains("description") || !jsonData["description"].is_string()) {
+		throw std::runtime_error("Missing or invalid 'description' in: " + path);
+	}
 
-	std::cout << p.toString() << std::endl;
-	/*
-	up until here everything works. I need to fix the texture paths and .bmp files for it to load smoothly until this stage
-	next is to forward these file to ResourceManager or find some other way for it to get to the chracter selection screen
-	then, modify the function to load all of the .dat files on update()
-	*/
+	auto p = std::make_shared<PlayerData>();
+	p->m_name = jsonData["name"].get<std::string>();
+	p->m_description = jsonData["description"].get<std::string>();
+
+	// Correct: do NOT store raw pointers if you're not 100% sure of lifetime
+	p->m_profilePic = std::make_shared<sf::Texture>(ResourceManager::instance().getTexture(jsonData["profile"]));
+	p->m_chracterIcon = std::make_shared<sf::Texture>(ResourceManager::instance().getTexture(jsonData["icon"]));
+	p->m_animationSheet = std::make_shared<sf::Texture>(ResourceManager::instance().getTexture(jsonData["animation"]));
+
+	ResourceManager::instance().loadCharacterData(p);
+
+	std::cout << p->toString() << std::endl;
+	++m_currentIndex;
+	return true;
+}
+
+std::string DataLoader::getCurrentlyLoadingFile() const
+{
+	return m_currentFile;
 }

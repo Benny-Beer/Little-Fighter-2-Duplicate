@@ -10,9 +10,9 @@
 struct PlayerData {
     std::string m_name;
     std::string m_description;
-    sf::Texture m_profilePic;
-    sf::Texture m_chracterIcon;
-    sf::Texture m_animationSheet;
+    std::shared_ptr<sf::Texture> m_profilePic;
+    std::shared_ptr<sf::Texture> m_chracterIcon;
+    std::shared_ptr<sf::Texture> m_animationSheet;
     std::string toString() {
         return "name: " + m_name + " desc: " + m_description;
     }

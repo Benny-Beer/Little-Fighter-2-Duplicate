@@ -1,5 +1,5 @@
 #include "Management/ResourceManager.h"
-
+#include "Gameplay/Player.h"
 /* static */ ResourceManager& ResourceManager::instance()
 {
     static ResourceManager s_instance;   // Constructed on first use, destroyed on exit.
@@ -50,6 +50,23 @@ const sf::Font& ResourceManager::getFont(const std::string& name) {
     if (!loadFont(name))
         throw std::runtime_error("Failed to load font: " + name);
     return *m_fonts.at(name);
+}
+
+const std::shared_ptr<PlayerData> ResourceManager::getPlayerData(const std::string& name) const {
+    for (const auto& p : m_characters) {
+        if (p.first == name) return p.second;
+    }
+    throw std::runtime_error("Player not found: " + name);
+}
+
+const std::vector<std::pair<std::string, std::shared_ptr<PlayerData>>>& ResourceManager::getCharacters() const
+{
+    return m_characters;
+}
+
+void ResourceManager::loadCharacterData(const std::shared_ptr<PlayerData> p)
+{
+    m_characters.push_back({p->m_name, p});
 }
 
 bool ResourceManager::loadTexture(const std::string& name) {

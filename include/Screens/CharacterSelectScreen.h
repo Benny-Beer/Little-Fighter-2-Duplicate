@@ -4,7 +4,9 @@
 #include <optional>
 #include "IScreen.h"
 #include "UI/Background.h"
-#include "Gameplay/Player.h"
+
+
+struct PlayerData;//forward declaration
 
 class CharacterSelectScreen : public IScreen {
 public:
@@ -14,7 +16,7 @@ public:
     void render() override;
 
 private:
-    std::vector<PlayerData> m_characters;
+    std::vector<std::pair<std::string, std::shared_ptr<PlayerData>>> m_characters;
     bool m_selectionMode = false;
     bool m_selected = false;
     // General UI
