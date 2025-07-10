@@ -2,7 +2,7 @@
 #include "Objects/ObjectStates/IdleObjState.h"
 
 
-PickableObject::PickableObject(const sf::Vector2f pos, const std::string& name, std::unique_ptr <ICommand> cmd)
+PickableObject::PickableObject(const sf::Vector2f pos, const std::string& name, std::unique_ptr<ICommand> cmd)
 	:Object(pos, name), m_name(name), m_command(std::move(cmd))
 {
 	sf::Vector2f offset(2.f, -62.f);
@@ -24,6 +24,8 @@ void PickableObject::move(sf::Vector2f goal)
 
 std::unique_ptr<ICommand> PickableObject::getHitCommand()
 {
+	 std::cout << "PickableObject::getHitCommand() called\n";
+	 std::cout << typeid(*m_command).name() << std::endl;
 	 return std::move(m_command);
 }
 

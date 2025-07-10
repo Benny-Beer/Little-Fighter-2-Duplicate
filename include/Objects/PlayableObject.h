@@ -45,6 +45,7 @@ public:
 
 	// in-game Events:
 	virtual void onHandsAttack() { m_state->onHandsAttack(*this); }
+	virtual void onStoneHit() { m_state->onStoneHit(*this); }
 	void adjustRange(float range);
 	float getAttackRange() const;
 	std::shared_ptr<PickableObject> getHeldObj() const;

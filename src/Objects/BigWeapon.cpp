@@ -1,7 +1,7 @@
 #include "Objects/BigWeapon.h"
 
 
-BigWeapon::BigWeapon(const sf::Vector2f pos, const std::string& name, std::unique_ptr <ICommand> cmd)
+BigWeapon::BigWeapon(const sf::Vector2f pos, const std::string& name, std::unique_ptr<ICommand> cmd)
 	:PickableObject(pos, name, std::move(cmd))
 {
 }
@@ -24,6 +24,7 @@ void BigWeapon::update(float dt)
             pos.y = m_groundY;
             m_isFlying = false;  // הפסיק לעוף
             m_velocity = { 0.f, 0.f };
+			m_status = ON_EARTH; // Change status to ON_EARTH
             std::cout << "Rock landed!\n";
             setAnimation(AnimationManager::getAnimation("r", getTexture()));
             

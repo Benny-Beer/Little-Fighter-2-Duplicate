@@ -11,7 +11,7 @@ public:
 	virtual void update(PlayableObject& player, float dt) override;
 
 	void onHandsAttack(PlayableObject& player) override {};
-	void onStoneHit(PlayableObject& player) override {};
+	void onStoneHit(PlayableObject& player) override { std::cout << " attacingState::onstonHit\n"; };
 	void onExplosion(PlayableObject& player) override {};
 private:
 	sf::Clock m_clock;

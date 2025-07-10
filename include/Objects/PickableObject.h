@@ -9,7 +9,7 @@ enum Status { ON_EARTH, PICKED, THROWN};
 
 class PickableObject : public Object {
 public:
-	PickableObject(const sf::Vector2f pos, const std::string& name, std::unique_ptr <ICommand> cmd);
+	PickableObject(const sf::Vector2f pos, const std::string& name, std::unique_ptr<ICommand> cmd);
 	virtual void handleCollision() {};
 	const std::string& getName();
 	virtual void move(sf::Vector2f goal);
@@ -40,6 +40,7 @@ protected:
 	sf::Vector2f m_offset;
 	Status m_status = ON_EARTH;
 	float m_range;
+	std::unique_ptr<ICommand> m_command = nullptr;
 private:
 	std::unique_ptr<ObjectBaseState> m_state = nullptr;
 	PlayableObject* m_holder = nullptr;
@@ -48,6 +49,5 @@ private:
 	std::string m_name;
 	std::string m_stateName ; // Default state is idle
 	std::string m_animationName; // Default animation name is idle
-	std::unique_ptr<ICommand> m_command = nullptr; 
 	bool m_used = false;
 };

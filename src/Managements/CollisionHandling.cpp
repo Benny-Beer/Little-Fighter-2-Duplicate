@@ -95,13 +95,15 @@ using HitMap = std::map<std::pair<std::type_index, std::type_index>, CollisionFu
 template <typename T>
 void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
+	std::cout << "in playerPickableObject\n";
     Player& player = static_cast<Player&>(playerObj);
     auto& object = pickableObj;
     if (player.isHoldingWeapon(object))
         return;
     if(object->thrown())
 	{
-        //player.handleCommand(object->getHitCommand());
+        object->putBack();
+        std::cout << "in playerPickableObject before handle command\n"; return;
 		player.handleCommand(object->getHitCommand());
 		std::cout << "object is thrown, cannot pick it up\n"; return;
 	}
@@ -125,9 +127,22 @@ void playerPickableObjectWrapper(Object& playerObj, std::shared_ptr<PickableObje
 
 void computerPlayerPickable(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
+	Enemy& player = static_cast<Enemy&>(playerObj);
 	if(pickableObj->thrown())
-		playerObj.handleCommand(pickableObj->getHitCommand());
+
+    {
+		std::cout << "in computerPlayerPickable before handle command\n";
+        player.handleCommand((pickableObj->getHitCommand()));
+    }
+    
 }
+
+void handleAttack(Player& attacker, PickableObject& obj, Enemy& attacked)
+{
+	std::cout << "Player attacking with rock\n";
+	attacked.handleCommand(obj.getHitCommand());
+}
+
 
 //
 // initializeCollisionMap
@@ -139,15 +154,10 @@ HitMap initializeCollisionMap()
     map[{typeid(Player), typeid(Rock)}] = &playerPickableObjectWrapper<Rock>;
 	map[{typeid(Player), typeid(Box)}] = &playerPickableObjectWrapper<Box>;
     map[{typeid(Rock), typeid(Player)}] = &playerPickableObjectWrapper<Rock>;
-    map[{typeid(PickableObject), { typeid(ComputerPlayer) }}] = &computerPlayerPickable;
-    map[{ typeid(ComputerPlayer), { typeid(PickableObject) }}] = &computerPlayerPickable;
     map[{ typeid(Ally), { typeid(Box) }}] = &computerPlayerPickable;
     map[{ typeid(Bandit), { typeid(Box) }}] = &computerPlayerPickable;
     map[{ typeid(Ally), { typeid(Rock) }}] = &computerPlayerPickable;
     map[{ typeid(Bandit), { typeid(Rock) }}] = &computerPlayerPickable;
-
-
-
     return map;
 }
 

@@ -17,7 +17,7 @@ Controller::Controller(sf::RenderWindow& window,
 {   
     AnimationManager::loadAnimations();
     // add pickable (rock)
-    std::string objectLine = "r b";
+    std::string objectLine = "r";
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
     std::string sq = "b1";
@@ -30,13 +30,9 @@ Controller::Controller(sf::RenderWindow& window,
     // creating user's player
     m_players.push_back(std::make_shared<Player>(sf::Vector2f(1000, 800), "davis_ani", 320.f));
     // creating ally
-    auto ally = std::make_shared<Ally>(sf::Vector2f(800, 40), "davis_ani",60.f);
-    //auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
-    //auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
-
-    m_allies.push_back(ally);
-    //m_allies.push_back(allyTwo);
-    //m_allies.push_back(allyThree);
+    /*auto ally = std::make_shared<Ally>(sf::Vector2f(800, 40), "davis_ani",60.f);
+    m_allies.push_back(ally);*/
+    
 
 
     updateComputerPlayerTargets();
