@@ -20,10 +20,6 @@ struct PlayerData {
     }
 };
 
-enum class Direction
-{
-    RIGHT = 1, LEFT = -1
-};
 
 
 class Player : public PlayableObject
