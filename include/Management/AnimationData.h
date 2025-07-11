@@ -27,6 +27,14 @@ inline const AnimationInfo ROCK_FLYING = { 0, 0, 58, 58, 4, 0.2f, true};
 inline const AnimationInfo ATTACKING_WITH_KNIFE = { 0, 0, 58, 58, 1, 0.2f, false };
 inline const AnimationInfo BLOCKING = { 0, 0, 58, 58, 1, 0.2f, false };
 
+inline const AnimationInfo RUNNING = { 0, 160, 80, 80, 4, 0.1f, true };
+inline const AnimationInfo RUNNING_WITH_ROCK = { 320, 160, 80, 80, 4, 0.1f, true };
+
+inline const AnimationInfo DEAD = { 0, 240, 80, 80, 5, 0.1f, false }; 
+inline const AnimationInfo DEAD_WITH_ROCK = { 0, 240, 80, 80, 5, 0.1f, false }; // for debug porpuses, dont let it stay
+
+
+
 //Animation blockingAnim(player.getTexture(),
 //    480, 400,          // x, y
 //    80, 80,        // width, height

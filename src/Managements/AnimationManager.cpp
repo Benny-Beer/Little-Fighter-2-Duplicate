@@ -14,12 +14,19 @@ void AnimationManager::loadAnimations() {
     s_animationMap["k"] = KNIFE;
     s_animationMap["standingk"] = STANDING;
     s_animationMap["jumpingk"] = JUMPING;
+    s_animationMap["running"] = RUNNING;
+    s_animationMap["runningr"] = RUNNING_WITH_ROCK;
+
 
     s_animationMap["walkingk"] = WALKING;
     s_animationMap["attackingk"] = ATTACKING_WITH_KNIFE;
 
     s_animationMap["r"] = ROCK;
 	s_animationMap["rock_flying"] = ROCK_FLYING;
+    s_animationMap["dead"] = DEAD;
+    s_animationMap["deadr"] = DEAD_WITH_ROCK; // for debug porpuses, dont let it stay
+
+
 
 
 

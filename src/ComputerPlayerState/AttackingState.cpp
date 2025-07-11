@@ -2,6 +2,9 @@
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
 #include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
+#include "PlayableObjectStates/ComputerPlayerState/RetreatingState.h"
+
 
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PlayableObject.h"
@@ -16,7 +19,6 @@ AttackingState::AttackingState(std::shared_ptr<Object> target)
 
 void AttackingState::enter(PlayableObject& player) {
     //std::cout << "enter:: AttackingState\n";
-    auto target = std::dynamic_pointer_cast<PlayableObject>(m_target);
     //Animation attackingAnim(player.getTexture(),
     //    80, 0,          // x, y
     //    80, 80,        // width, height
@@ -51,7 +53,8 @@ void AttackingState::enter(PlayableObject& player) {
         std::cout << "after attack: NO!\n";
 
     }
-    target->handleCommand(std::make_unique<HandsAttackCommand>());
+    if (auto target = std::dynamic_pointer_cast<PlayableObject>(m_target))
+        target->handleCommand(std::make_unique<HandsAttackCommand>());
     // I think we need switch-case here according to the attack
     //player.setDiraction(m_input);     
     
@@ -60,8 +63,22 @@ void AttackingState::enter(PlayableObject& player) {
 void AttackingState::update(PlayableObject& player, float deltaTime) {
     std::cout << "                        " << player.getStrategyName() << std::endl;
     std::cout << player.getName() << "in AttackingState\n";
+
     if (!m_target)
         return;
+
+    if (!player.getTarget()) {
+        player.setState(std::make_unique<IdleState>());
+        return;
+    }
+    if (auto enemy = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
+        if (!enemy->getState()->isAccessible()) {
+            std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\im hehreeeee\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+            m_target = player.getTarget();
+        }
+    }
+    std::cout << 95 << "\n";
+
     //std::cout << player.getName() <<" - MY TARGET NAME IS: " << m_target->getName() << std::endl;
     player.setAniName("attacking");
 
@@ -137,4 +154,15 @@ void AttackingState::alignAttacker(PlayableObject& player)
 
 void AttackingState::name() {
     std::cout << "AttackingState" << std::endl;
+}
+
+void AttackingState::onHandsAttack(PlayableObject& player)
+{
+    player.setState(std::make_unique<BlockingState>());
+}
+void AttackingState::onStoneHit(PlayableObject& player) {
+
+}
+void AttackingState::onExplosion(PlayableObject& player) {
+
 }

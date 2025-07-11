@@ -4,6 +4,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window.hpp>
 #include <utility>
+#include <memory>
 #include <iostream>
 
 Controller::Controller(sf::RenderWindow& window,
@@ -16,33 +17,36 @@ Controller::Controller(sf::RenderWindow& window,
     m_allies(std::move(allies))
 {   
     AnimationManager::loadAnimations();
+    //=============================================================
+    // === this section is hard coded. need to be done in Level ===
     // add pickable (rock)
-    std::string objectLine = "r r r r";
+    std::string objectLine = "r r r";
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
-    std::string sq = "b1";
+    std::string sq = "b3";
     m_level->addSquad(sq);
+    // ============================================================
 
-    m_enemies = m_level->getAllEnemies();
-    m_pickables = m_level->getAllObjects();
+    //========================================================================
+    // === this section is hard coded. need to be done in InGameScreem (?) === 
+    // (The vectors will NOT be empty at first place) ========================
     // creating user's player
     m_players.push_back(std::make_shared<Player>(sf::Vector2f(1000, 800), "davis_ani", 320.f));
     // creating ally
-    auto ally = std::make_shared<Ally>(sf::Vector2f(800, 40), "davis_ani",60.f);
-    //auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
-    //auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
+    auto ally = std::make_shared<Ally>(sf::Vector2f(800, 100), "davis_ani",60.f);
+    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
+    auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
 
     m_allies.push_back(ally);
-    //m_allies.push_back(allyTwo);
-    //m_allies.push_back(allyThree);
+    m_allies.push_back(allyTwo);
+    m_allies.push_back(allyThree);
+    //========================================================================
 
+    m_enemies = m_level->getAllEnemies();
+    m_pickables = m_level->getAllObjects();
+    updateComputerPlayerStats();
 
-    updateComputerPlayerTargets();
-    auto target = m_enemies[0]->getTarget();
-
-    //      TODO: initialize HUD (m_stats)
-    //std::string enemiesLine = "b1 h1";
-    //m_level->addSquad(enemiesLine);
+    // TODO: initialize HUD (m_stats)
 }
 
 void Controller::handleInput(sf::Event ev)
@@ -55,16 +59,15 @@ void Controller::handleInput(sf::Event ev)
 
 void Controller::updateWorld(float deltaTime)
 {
-    // Update all human-controlled players
+
     for (auto& player : m_players)
     {
         player->update(deltaTime);
     }
 
-    // Update all AI-controlled allies
     for (auto& ally : m_allies)
     {
-       ally->update(deltaTime);      //TODO: update() in Ally
+       ally->update(deltaTime);     
     }
     for (auto& enemy : m_enemies)
     {
@@ -74,8 +77,22 @@ void Controller::updateWorld(float deltaTime)
     {
         obj->update(deltaTime);
     }
+    for (auto& dead : m_deads)
+    {
+        dead->update(deltaTime);
+    }
 
-    updateComputerPlayerTargets();
+    updateComputerPlayerStats();
+
+    for (int i = 0; i < m_players.size(); i++) {
+        std::shared_ptr<Player> player = m_players[i];
+        if (!player)
+            continue;
+        if (!player->getState()->isAccessible()/*player->getHp() <= 0*/) {
+            removeAccess(player, m_players);
+            i--;
+        }
+    }
 
     // Update the level itself (enemies, objects, etc.)
      //m_level->update(deltaTime);
@@ -84,7 +101,8 @@ void Controller::updateWorld(float deltaTime)
     // Update HUD/stats with current data
     //m_stats.update(m_players, m_allies, *m_level);
     //      TODO: create uptade() in HUD
-    m_level->handleCollisionsWithPlayer(*m_players.back()); // currently through level, need to transfer into controller
+    if(m_players.size())
+        m_level->handleCollisionsWithPlayer(*m_players.back()); // currently through level, need to transfer into controller
 
 }
 
@@ -126,34 +144,49 @@ void Controller::checkLevelEndConditions()
 
 void Controller::render()
 {
-   
     // Draw background, enemies, pickable objects, etc.
     m_level->render(m_window);
 
-    // Draw all human players
+    for (const auto& dead : m_deads)
+    {
+        dead->draw(m_window);
+    }
+
+    float i = 0.f;
     for (const auto& player : m_players)
     {
-        //m_window.draw(*player);     TODO: draw() in Player
         player->draw(m_window);
+        printHp(player->getHp(), { 480.f, 10.f + i }, false);
+        printHp(player->getPotentialHp(), { 480.f, 30.f + i }, true);
+        i += 40.f;
     }
 
-    // Draw AI allies
+    i = 0.f;
     for (const auto& ally : m_allies)
     {
-        //m_window.draw(*ally);        TODO: draw() in Ally
 
         ally->draw(m_window);
+        // until we'll have HUD
+        printHp(ally->getHp(), { 10.f, 10.f + i}, false);
+        printHp(ally->getPotentialHp(), { 10.f, 30.f+i }, true);
+        i += 40.f;
     }
 
+    i = 0.f;
     for (const auto& enemy : m_enemies)
     {
-
         enemy->draw(m_window);
+        // until we'll have HUD
+        printHp(enemy->getHp(), { 930.f, 10.f + i}, false);
+        printHp(enemy->getPotentialHp(), { 930.f, 30.f + i}, true);
+        i += 40.f;
     }
+
     // Draw HUD
     //m_window.draw(m_stats);        TODO: draw() in HUD
-    
-    
+
+
+            
 }
 
 //void Controller::updateAndRender(float deltaTime)
@@ -167,165 +200,20 @@ void Controller::render()
 //    render();
 //}
 
-/*void Controller::updateComputerPlayerTargets() {
 
-    // Update targets for allies (their enemies are the enemies from Level)
-    for (auto& ally : m_allies) {
-        if (!ally || !ally->needsEnemyTracking())
-            continue;
+// Responsibile for target & safe zone assignment, death handling. 
+// (for each of the computer players)
+void Controller::updateComputerPlayerStats() {
 
-        Enemy* closest = nullptr;
-        Enemy* freeClosest = nullptr;
-        float closestDist = std::numeric_limits<float>::max();
-        float freeDist = closestDist;
-
-        for (Enemy* enemy : m_enemies) {
-            //std::cout << "ally " << ally->getPosition().x << "," << ally->getPosition().y << std::endl;
-            //std::cout << "enemy " << enemy->getPosition().x << "," << enemy->getPosition().y << std::endl;
-
-            float dist = distanceBetween(ally->getPosition(), enemy->getPosition());
-            if (dist < closestDist) {
-                closestDist = dist;
-                closest = enemy;
-            }
-            if (/*!enemy->isAttacked() && dist < freeDist) {
-                freeDist = dist;
-                freeClosest = enemy;
-            }
-
-        }
-
-        if (freeClosest) {
-            ally->setTargetEnemy(freeClosest);
-        }
-        else if (closest)
-            ally->setTargetEnemy(closest);
-        if (ally->needItem()) {
-
-            std::shared_ptr<PickableObject> closestObj = nullptr;
-            closestDist = std::numeric_limits<float>::max();
-
-            for (std::shared_ptr<PickableObject> obj : m_pickables) {
-                if(obj->onEarth()) {
-                    float dist = distanceBetween(ally->getPosition(), obj->getPosition());
-                    if (dist < closestDist) {
-                        closestDist = dist;
-                        closestObj = obj;
-                    }
-                }
-            }
-            if (closest)
-                ally->setTargetObject(closestObj);
-        } else {
-            ally->setTargetObject(nullptr);
-        }
-    }
-
-    // Update targets for enemies (their enemies are players and allies)
-    for (Enemy* enemy : m_enemies) {
-        if (!enemy || !enemy->needsEnemyTracking())
-            continue;
-
-        PlayableObject* closest = nullptr;
-        PlayableObject* freeClosest = nullptr;
-        float closestDist = std::numeric_limits<float>::max();
-        float freeDist = closestDist;
+    updateStats(m_allies, m_enemies);
+    updateStats(m_enemies, m_allies, m_players);
+    restoreKnockedAccess();
 
 
-        //std::cout << "m_allies size: " << m_allies.size() << std::endl;
-
-        // Check all allies
-        for (auto& ally : m_allies) {
-            float dist = distanceBetween(enemy->getPosition(), ally->getPosition());
-            //std::cout << "[DEBUG] candidate ally, dist: " << dist << std::endl;
-
-            if (dist < closestDist) {
-                closestDist = dist;
-                closest = ally.get();
-            }
-            if (/*!ally->isAttacked() && dist < freeDist) {
-                freeDist = dist;
-                freeClosest = ally.get();
-            }
-        }
-
-        // Check all players
-        for (auto& player : m_players) {
-            float dist = distanceBetween(enemy->getPosition(), player->getPosition());
-            if (dist < closestDist) {
-                closestDist = dist;
-                closest = player.get();
-            }
-            if (/*!player->isAttacked() && dist < freeDist) {
-                freeDist = dist;
-                freeClosest = player.get();
-            }
-        }
-        if (freeClosest) {
-            enemy->setTargetEnemy(freeClosest);
-        }
-        else if (closest)
-            enemy->setTargetEnemy(closest);
-        if (enemy->needItem()) {
-            std::shared_ptr<PickableObject> closestObj = nullptr;
-            closestDist = std::numeric_limits<float>::max();
-
-            for (std::shared_ptr<PickableObject> obj : m_pickables) {
-                if (obj->onEarth()) {
-                    float dist = distanceBetween(enemy->getPosition(), obj->getPosition());
-                    if (dist < closestDist) {
-                        closestDist = dist;
-                        closestObj = obj;
-                    }
-                }
-            }
-            if (closest)
-                enemy->setTargetObject(closestObj);
-        } 
-        else {
-            enemy->setTargetObject(nullptr);
-        }
-    }
-}*/
-
-void Controller::updateComputerPlayerTargets() {
-    for (auto& ally : m_allies) {
-        if (!ally/* || !ally->needsEnemyTracking()*/)
-            continue;
-
-        std::shared_ptr<Object> closest = nullptr;
-        float closestDistance = std::numeric_limits<float>::max();
-
-        checkClosest(m_enemies, ally->getPosition(), closestDistance, closest);
-
-        if (ally->needItem()) {
-            checkClosest(m_pickables, ally->getPosition(), closestDistance, closest);
-        }
-
-        if (closest)
-            ally->setTarget(closest);
-    }
-
-    for (auto& enemy : m_enemies) {
-        if (!enemy/* || !enemy->needsEnemyTracking()*/)
-            continue;
-
-        std::shared_ptr<Object> closest = nullptr;
-        float closestDistance = std::numeric_limits<float>::max();
-
-        checkClosest(m_allies, enemy->getPosition(), closestDistance, closest);
-        checkClosest(m_players, enemy->getPosition(), closestDistance, closest);
-
-        if (enemy->needItem()) {
-            checkClosest(m_pickables, enemy->getPosition(), closestDistance, closest);
-        }
-
-        if (closest)
-            enemy->setTarget(closest);
-    }
 }
 
-
+//======================================
+//======= NOT SURE IF NEEDED ===========
 bool Controller::isLevelFinished() const
 {
     return m_levelFinished;
@@ -335,6 +223,7 @@ bool Controller::didWin() const
 {
     return m_playerWon;
 }
+//======================================
 
 
 // Calculates the Euclidean distance between two 2D points
@@ -343,4 +232,61 @@ float Controller::distanceBetween(sf::Vector2f a, sf::Vector2f b) {
     float dy = a.y - b.y;
     return std::sqrt(dx * dx + dy * dy);
 }
+
+
+// until we'll have HUD
+void Controller::printHp(int hp, const sf::Vector2f& position, bool potential)
+{
+    static sf::Font font;
+    static bool loaded = false;
+    if (!loaded) {
+        if (!font.loadFromFile("resources/Fonts/lesterbold.ttf")) 
+            return;
+        loaded = true;
+    }
+
+    sf::Text text;
+    text.setFont(font);
+    if(potential)
+        text.setString("P-HP: " + std::to_string(hp));
+    else
+        text.setString("HP: " + std::to_string(hp));
+    text.setCharacterSize(15);
+    text.setFillColor(sf::Color::Red);
+    text.setPosition(position);
+
+    m_window.draw(text);
+}
+
+void Controller::restoreKnockedAccess() {
+    auto it = m_deads.begin();
+    while (it != m_deads.end()) {
+        auto& disabled = *it;
+        if (disabled->getState()->isAccessible()) {
+            bool restored = false;
+
+            if (auto enemy = std::dynamic_pointer_cast<Enemy>(disabled)) {
+                m_enemies.push_back(enemy);
+                restored = true;
+            }
+            else if (auto player = std::dynamic_pointer_cast<Player>(disabled)) {
+                m_players.push_back(player);
+                restored = true;
+            }
+            else if (auto ally = std::dynamic_pointer_cast<Ally>(disabled)) {
+                m_allies.push_back(ally);
+                restored = true;
+            }
+
+            if (restored) {
+                it = m_deads.erase(it);
+                continue;
+            }
+        }
+
+        ++it; 
+    }
+}
+
+
 

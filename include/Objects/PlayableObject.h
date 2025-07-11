@@ -21,6 +21,7 @@ public:
 	virtual int getDirection() const { return static_cast<int>(m_dir); }
 	virtual void setStrategyName(const std::string& name);
 	virtual void resetDirection(); 
+	const PlayableObjectState* getState() const { return m_state.get(); }
 
 	virtual void takeDamage(int damageAmount);
 	virtual void update(float dt) = 0;
@@ -44,15 +45,24 @@ public:
 	virtual bool needItem();
 
 	// in-game Events:
-	virtual void onHandsAttack() { m_state->onHandsAttack(*this); }
+	virtual void onHandsAttack();
 	void adjustRange(float range);
 	float getAttackRange() const;
 	std::shared_ptr<PickableObject> getHeldObj() const;
 	void dropHeldObj();
+	void setSafeZone(const sf::Vector2f& zone) { m_safeZone = zone; }
+	sf::Vector2f getSafeZone() const { return m_safeZone; }
+	void reduceHp(int amountToReduce);
+	int getHp() { return m_hp; }
+	int getPotentialHp() { return m_potentialHp; }
+	void updateHp();
+
 
 
 protected:
 	int m_hp;
+	int m_potentialHp;
+	int m_hpClock = 0;
 	int m_energy;
 	float m_speed;
 	std::string m_aniName;
@@ -67,6 +77,7 @@ protected:
 	std::shared_ptr<PickableObject> m_heldObject = nullptr;
 	Direction m_dir;
 	sf::Vector2f m_direction{ 0.f,0.f };
+	sf::Vector2f m_safeZone = { 0.f, 0.f };
 	float m_attackRange = 50.f;
 
 };

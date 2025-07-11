@@ -5,11 +5,15 @@
 Enemy::Enemy(const sf::Vector2f pos, const std::string& name, float speed)
     : ComputerPlayer(pos, name)
 {
+    m_hp = 100;
+    m_potentialHp = 100;
     m_speed = speed;
     // Starts with IdleState
     changeState(std::make_unique<IdleState>());
     m_name = "enemy";
+
 }
+
 
 
 void Enemy::update(float dt)

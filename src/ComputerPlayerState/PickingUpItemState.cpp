@@ -29,10 +29,6 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
     std::cout << "                        " << player.getStrategyName() << std::endl;
     std::cout << player.getName() << "in PickingUpItemState\n";
 
-    if (auto object = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
-        player.setState(std::make_unique<ApproachingEnemyState>(m_target));
-        return;
-    }
 
     m_targetItem = std::dynamic_pointer_cast<PickableObject>(m_target);
     std::cout << "Target typeid: " << typeid(*m_target).name() << std::endl;
@@ -87,4 +83,15 @@ void PickingUpItemState::exit(ComputerPlayer& player) {
 
 void PickingUpItemState::name() {
     std::cout << "PickingUpItemState" << std::endl;
+}
+
+void PickingUpItemState::onHandsAttack(PlayableObject& player) {
+
+}
+
+void PickingUpItemState::onStoneHit(PlayableObject& player) {
+
+}
+void PickingUpItemState::onExplosion(PlayableObject& player) {
+
 }
