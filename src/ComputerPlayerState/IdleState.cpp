@@ -3,6 +3,8 @@
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h" // the next state
 #include <cmath> // distance calculation
 #include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
+#include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
+
 
 void IdleState::enter(PlayableObject& player) {
     // Optional: reset animation or internal timer
@@ -27,7 +29,6 @@ void IdleState::update(PlayableObject& player, float deltaTime) {
     //auto enemies = player.getKnownEnemies();
     //float closestDist = std::numeric_limits<float>::max(); // init to largest float number
     //PlayableObject* closestEnemy = nullptr;
-    std::shared_ptr<Object> target = player.getTarget();
     //for (const auto& enemy : enemies) {
     //    float dist = distance(player.getPosition(), enemy->getPosition());
     //    if (dist < closestDist) {
@@ -36,7 +37,20 @@ void IdleState::update(PlayableObject& player, float deltaTime) {
     //    //}
 
     //closestEnemy = player.getTarget();
-    player.setState(std::make_unique<PickingUpItemState>(target));
+    std::shared_ptr<Object> target = player.getTarget();
+    if (!target)
+    {
+        return;
+    }
+    if (std::dynamic_pointer_cast<PlayableObject>(target)) {
+        player.setState(std::make_unique<ApproachingEnemyState>(target));
+        return;
+    }
+    else if (std::dynamic_pointer_cast<PickableObject>(target)) {
+        player.setState(std::make_unique<PickingUpItemState>(target));
+        return;
+    }
+    //player.setState(std::make_unique<PickingUpItemState>(target));
 
 
  //   if (closestObject)
@@ -66,6 +80,14 @@ void IdleState::exit(ComputerPlayer& player) {
 void IdleState::onHandsAttack(PlayableObject& player) {
     std::cout << "Im in IdleState and i got attacked by hands\n";
     
+}
+
+void IdleState::onStoneHit(PlayableObject& player) {
+
+}
+void IdleState::onExplosion(PlayableObject& player) {
+    player.setState(std::make_unique<KnockedDownState>());
+
 }
 
 void IdleState::name() {

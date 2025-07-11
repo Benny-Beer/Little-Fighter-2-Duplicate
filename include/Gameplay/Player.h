@@ -1,16 +1,30 @@
-
 #pragma once
 #include "Objects/PlayableObject.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
+
+#include <string>
 #include "PlayableObjectStates/PlayerStates/PlayerBaseState.h"
+
 #include "Objects/PickableObject.h"
 #include "Attacks/AttackBehavior.h"
 
-//enum class Direction
-//{
-//    RIGHT = 1, LEFT = -1
-//};
+struct PlayerData {
+    std::string m_name;
+    std::string m_description;
+    std::shared_ptr<sf::Texture> m_profilePic;
+    std::shared_ptr<sf::Texture> m_chracterIcon;
+    std::shared_ptr<sf::Texture> m_animationSheet;
+    std::string toString() {
+        return "name: " + m_name + " desc: " + m_description;
+    }
+};
+
+enum class Direction
+{
+    RIGHT = 1, LEFT = -1
+};
+
 
 class Player : public PlayableObject
 {

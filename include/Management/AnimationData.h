@@ -35,4 +35,14 @@ inline const AnimationInfo KNOCKEDDOWN = { 240, 240, 80, 80, 2, 0.2f, false };
 
 
 
+inline const AnimationInfo RUNNING = { 0, 160, 80, 80, 4, 0.1f, true };
+inline const AnimationInfo RUNNING_WITH_ROCK = { 320, 160, 80, 80, 4, 0.1f, true };
+
+inline const AnimationInfo DEAD = { 0, 240, 80, 80, 5, 0.1f, false }; 
+inline const AnimationInfo DEAD_WITH_ROCK = { 0, 240, 80, 80, 5, 0.1f, false }; // for debug porpuses, dont let it stay
+
+
+
+
+
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/System/Vector2.hpp>
 
 #include "PlayableObjectStates/ComputerPlayerState/ComputerPlayerState.h"
 
@@ -9,13 +10,14 @@ public:
     void update(PlayableObject& player, float deltaTime) override;
     void exit(ComputerPlayer& player) override;
 
-    void onHandsAttack(PlayableObject& player) override {};
-    void onStoneHit(PlayableObject& player) override {};
-    void onExplosion(PlayableObject& player) override {};
+    void onHandsAttack(PlayableObject& player) override;
+    void onStoneHit(PlayableObject& player) override;
+    void onExplosion(PlayableObject& player) override;
     void name() {};
 
 private:
     // time of retreating can also be determined according to hp level, ect.
     float m_retreatDuration = 2.0f; // Duration of retreating
     float m_elapsedTime = 0.0f;
+    sf::Vector2f m_safeZone;
 };

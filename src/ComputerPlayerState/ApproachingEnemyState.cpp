@@ -1,6 +1,8 @@
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
 #include "PlayableObjectStates/ComputerPlayerState/AttackingState.h"
 #include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
 
 #include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
 #include "GamePlay/ComputerPlayer.h"
@@ -23,9 +25,19 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
   
     if (!m_target)
         return;
+    if (!player.getTarget()) {
+        player.setState(std::make_unique<IdleState>());
+        return;
+    }
     if (auto object = std::dynamic_pointer_cast<PickableObject>(m_target)) {
         player.setState(std::make_unique<PickingUpItemState>(object));
         return;
+    }
+    if (auto enemy = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
+        if (!enemy->getState()->isAccessible()) {
+            std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\im hehr\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+            m_target = player.getTarget();
+        }
     }
     // std::cout << player.getName() << " - MY TARGET NAME IS: " << m_target->getName() << std::endl;
 
@@ -70,7 +82,16 @@ void ApproachingEnemyState::exit(ComputerPlayer& player) {
 void ApproachingEnemyState::onHandsAttack(PlayableObject& player) {
     std::cout << player.getName() << " is in [ApproachingEnemyState] and i got attacked by hands\n"
         "activating blocking state\n";
-    player.setState(std::make_unique<BlockingState>());
+    player.setState(std::make_unique<KnockedDownState>());
+
+    //player.setState(std::make_unique<BlockingState>());
+}
+
+void ApproachingEnemyState::onStoneHit(PlayableObject& player) {
+
+}
+void ApproachingEnemyState::onExplosion(PlayableObject& player) {
+
 }
 void ApproachingEnemyState::name() {
     std::cout << "ApproachingEnemyState" << std::endl;
