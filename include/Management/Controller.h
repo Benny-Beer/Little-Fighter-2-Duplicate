@@ -35,7 +35,7 @@ private:
     std::unique_ptr<Level> m_level;
     std::vector<std::shared_ptr<Player>> m_players; // human-controlled
     std::vector<std::shared_ptr<Ally>> m_allies;  // computer-controlled
-    std::vector<Enemy*> m_enemies; // Non-owning pointers to current squad
+    std::vector<std::shared_ptr<Enemy>> m_enemies; // Non-owning pointers to current squad
     std::vector<std::shared_ptr<PickableObject>> m_pickables;
 
     // ========== Internal state ==========
@@ -45,5 +45,19 @@ private:
     float distanceBetween(sf::Vector2f a, sf::Vector2f b);
          // Draws the full scene
     void updateComputerPlayerTargets();
+    //void updateComputerPlayerTargetsTwo();
+
+    template<typename Container>
+    void checkClosest(const Container& container, const sf::Vector2f& enemyPos,
+        float& closestDistance, std::shared_ptr<Object>& closest) {
+        for (auto& obj : container) {
+            float dist = distanceBetween(enemyPos, obj->getPosition());
+            if (dist < closestDistance) {
+                closestDistance = dist;
+                closest = obj;
+            }
+        }
+    }
+
 
 };

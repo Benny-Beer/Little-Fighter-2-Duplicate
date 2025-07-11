@@ -71,41 +71,40 @@
 #include "Objects/Weapons/Rock.h"
 #include "Objects/Weapons/Knife.h"
 #include "Objects/PickableObject.h"
-#include "PlayerStates/CollideWithObjectState.h"
-#include "PlayerStates/JumpingState.h"
-#include "PlayerStates/AttackState.h"
+#include "PlayableObjectStates/PlayerStates/CollideWithObjectState.h"
+#include "PlayableObjectStates/PlayerStates/JumpingState.h"
+#include "PlayableObjectStates/PlayerStates/AttackState.h"
 
 #include <iostream>
 #include <typeindex>
 #include <map>
 
-using CollisionFunc = void(*)(Object&, Object&);
+using CollisionFunc = void(*)(Object&, std::shared_ptr<PickableObject>);
 using HitMap = std::map<std::pair<std::type_index, std::type_index>, CollisionFunc>;
 
 //
 // פונקציה גנרית — template — לאיסוף חפץ
 //
 template <typename T>
-void playerPickableObject(Object& playerObj, Object& pickableObj)
+void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
-    auto& player = static_cast<Player&>(playerObj);
-    auto& object = static_cast<T&>(pickableObj);
+    Player& player = static_cast<Player&>(playerObj);
+    auto& object = pickableObj;
     //not so nice!!!!!
 	if (typeid(*player.getState()) == typeid(JumpingState) || typeid(*player.getState()) == typeid(AttackState))
 	{
 		return;
 	}
-    if (player.isHoldingWaepon(&object))
+    if (player.isHoldingWeapon(object))
         return;
-    
-    player.setState(std::make_unique<CollideWithObject>(Input::NONE, &object));
+    player.setState(std::make_unique<CollideWithObject>(Input::NONE, object));
 }
 
 //
 // wrapper בשביל להכניס למפה
 //
 template <typename T>
-void playerPickableObjectWrapper(Object& playerObj, Object& pickableObj)
+void playerPickableObjectWrapper(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
     playerPickableObject<T>(playerObj, pickableObj);
 }
@@ -130,11 +129,11 @@ HitMap initializeCollisionMap()
     return map;
 }
 
-void processCollision(Object& obj1, Object& obj2)
+void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
 {
     static HitMap map = initializeCollisionMap();
 
-    auto it = map.find({ typeid(obj1), typeid(obj2) });
+    auto it = map.find({ typeid(obj1), typeid(*obj2) });
     if (it != map.end())
     {
         it->second(obj1, obj2);

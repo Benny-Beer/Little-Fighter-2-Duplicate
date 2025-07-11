@@ -93,13 +93,13 @@ void Level::update(float dt)
     
 }
 
-std::vector<Enemy*> Level::getAllEnemies() {
-    std::vector<Enemy*> enemies;
+std::vector<std::shared_ptr<Enemy>> Level::getAllEnemies() {
+    std::vector<std::shared_ptr<Enemy>> enemies;
 
     Squad& curSquad = m_enemies[(int)m_phase];
         for (auto& enemyPtr : curSquad.getEnemies()) {
             if (enemyPtr) {
-                enemies.push_back(enemyPtr.get()); // Convert unique_ptr to raw pointer
+                enemies.push_back(enemyPtr); // Convert unique_ptr to raw pointer
             }
         }
 
@@ -130,7 +130,8 @@ void Level::handleCollisionsWithPlayer(Player& player)
     {
         if (player.collide(*obj)) {
             
-            processCollision(player, *obj);
+            processCollision(player, obj);
+            std::cout << "im here\n";
             
         }
     }

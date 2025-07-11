@@ -2,7 +2,7 @@
 #include "Objects/PlayableObject.h"
 #include "SFML/Graphics.hpp"
 #include "Gameplay/ComputerPlayer.h"
-#include "ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 
 
 

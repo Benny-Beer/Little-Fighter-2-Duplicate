@@ -1,10 +1,10 @@
-#include "ComputerPlayerState/IdleState.h"
-#include "GamePlay/ComputerPlayer.h"
-#include "ComputerPlayerState/ApproachingEnemyState.h" // the next state
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
+#include "GamePlay/ComputerPlayer.h"  
+#include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h" // the next state
 #include <cmath> // distance calculation
-#include "ComputerPlayerState/PickingUpItemState.h"
+#include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
 
-void IdleState::enter(ComputerPlayer& player) {
+void IdleState::enter(PlayableObject& player) {
     // Optional: reset animation or internal timer
     // player.setAnimation("Idle");
    // std::cout << player.getName() << "enter:: IdleState\n";
@@ -20,12 +20,14 @@ void IdleState::enter(ComputerPlayer& player) {
     //player.setDiraction(m_input); 
 }
 
-void IdleState::update(ComputerPlayer& player, float deltaTime) {
+void IdleState::update(PlayableObject& player, float deltaTime) {
+    std::cout << player.getName() << "in IdleState\n";
+
     //// 1. Scan for closest enemy (pseudo code)
     //auto enemies = player.getKnownEnemies();
     //float closestDist = std::numeric_limits<float>::max(); // init to largest float number
-    PlayableObject* closestEnemy = nullptr;
-    std::shared_ptr<PickableObject> closestObject = nullptr;
+    //PlayableObject* closestEnemy = nullptr;
+    std::shared_ptr<Object> target = player.getTarget();
     //for (const auto& enemy : enemies) {
     //    float dist = distance(player.getPosition(), enemy->getPosition());
     //    if (dist < closestDist) {
@@ -33,28 +35,39 @@ void IdleState::update(ComputerPlayer& player, float deltaTime) {
     //        closestEnemy = enemy;
     //    //}
 
-    closestObject = player.getObject();
-    closestEnemy = player.getTarget();
-    if (closestObject)
-    {
-        player.changeState(std::make_unique<PickingUpItemState>(closestObject));
-    }
+    //closestEnemy = player.getTarget();
+    player.setState(std::make_unique<PickingUpItemState>(target));
 
- /*   if (closestEnemy)
-        std::cout << player.getName() << "[IdleState] Update, target: "  << std::endl;
-    else
-        std::cout << "THERE IS NO TARGET YET\n";*/
 
-    // 2. If enemy is close enough, change to Approaching state
-    else if (closestEnemy) { // threshold distance
-        std::cout << "ENEMY FOUND!" << std::endl;
+ //   if (closestObject)
+ //   {
+ //       std::cout << "MANMUNAN\nMANMUNAN\nMANMUNAN\nMANMUNAN\n";
+ //       player.setState(std::make_unique<PickingUpItemState>(closestObject));
+ //   }
 
-        player.changeState(std::make_unique<ApproachingEnemyState>(closestEnemy));
-    }
+ ///*   if (closestEnemy)
+ //       std::cout << player.getName() << "[IdleState] Update, target: "  << std::endl;
+ //   else
+ //       std::cout << "THERE IS NO TARGET YET\n";*/
+
+ //   // 2. If enemy is close enough, change to Approaching state
+ //   else if (closestEnemy) { // threshold distance
+ //       std::cout << "ENEMY FOUND!" << std::endl;
+ //       player.setState(std::make_unique<ApproachingEnemyState>(closestEnemy));
+ //   }
 
     // 3. Otherwise, stay idle
 }
 
 void IdleState::exit(ComputerPlayer& player) {
     // Optional: stop idle animation, log transition, etc.
+}
+
+void IdleState::onHandsAttack(PlayableObject& player) {
+    std::cout << "Im in IdleState and i got attacked by hands\n";
+    
+}
+
+void IdleState::name() {
+    std::cout << "IdleState" << std::endl;
 }

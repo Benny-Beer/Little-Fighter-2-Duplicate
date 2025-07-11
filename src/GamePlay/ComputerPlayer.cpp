@@ -1,6 +1,6 @@
 #include "GamePlay/ComputerPlayer.h"
-#include "ComputerPlayerState/IdleState.h"
-#include "ComputerPlayerState/ApproachingEnemyState.h"
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
 #include <iostream>
 
 ComputerPlayer::ComputerPlayer(const sf::Vector2f pos, const std::string& name) : PlayableObject(pos, name)
@@ -10,15 +10,16 @@ ComputerPlayer::ComputerPlayer(const sf::Vector2f pos, const std::string& name) 
 }
 void ComputerPlayer::update(float dt)
 {
-
+    m_prevPosition = getPosition();
     if (m_state) {
 
         m_state->update(*this, dt);
     }
+    updateDirection();
+    m_state->name();
+
 }
 void ComputerPlayer::changeState(std::unique_ptr<ComputerPlayerState> newState) {
-    if (m_state)
-        m_state->exit(*this);
 
     m_state = std::move(newState);
 
@@ -27,7 +28,7 @@ void ComputerPlayer::changeState(std::unique_ptr<ComputerPlayerState> newState) 
 }
 
 // Returns current state
-ComputerPlayerState* ComputerPlayer::getState() const {
+PlayableObjectState* ComputerPlayer::getState() const {
     return m_state.get();
 }
 
@@ -70,30 +71,34 @@ float ComputerPlayer::distance(const sf::Vector2f& a, const sf::Vector2f& b) {
     return std::sqrt(dx * dx + dy * dy);
 }
 
-void ComputerPlayer::setTargetEnemy(PlayableObject* target) {
-    m_target = target;
-}
+//void ComputerPlayer::setTargetEnemy(PlayableObject* target) {
+//    m_target = target;
+//}
 
-void ComputerPlayer::setTargetObject(std::shared_ptr<PickableObject> obj) {
-    m_object = obj;
+void ComputerPlayer::setTarget(std::shared_ptr<Object> obj) {
+    m_target = obj;
 }
 //sf::Vector2f ComputerPlayer::getPosition()
 //{
 //   return m_position;
 //}
 
-PlayableObject* ComputerPlayer::getTarget()
+std::shared_ptr<Object> ComputerPlayer::getTarget()
 {
     if (!m_target)
         std::cout << "THERE IS NO TARGET!\n";
     return m_target;
 }
-std::shared_ptr<PickableObject> ComputerPlayer::getObject()
-{
-    if (!m_object)
-        std::cout << "THERE IS NO OBJECT!\n";
-    return m_object;
-}
+//std::shared_ptr<PickableObject> ComputerPlayer::getObject()
+//{
+//    //if (!m_targetObject)
+//    //    std::cout << "THERE IS NO OBJECT!\n";
+//    //else {
+//    //    std::cout << "THERE IS OBJECT!\n";
+//
+//    //}
+//    return m_targetObject;
+//}
 
 void ComputerPlayer::setBlocking(bool blocking)
 {
@@ -117,3 +122,10 @@ void ComputerPlayer::pickUp(PickableObject& pickable)
     std::cout << "picking up the item now" << std::endl;
 
 }
+
+void ComputerPlayer::updateDirection()
+{
+    //std::cout << m_prevPosition.x << " ," << getPosition().x << std::endl;
+    m_dir = m_prevPosition.x < getPosition().x ? Direction::RIGHT : Direction::LEFT;
+}
+

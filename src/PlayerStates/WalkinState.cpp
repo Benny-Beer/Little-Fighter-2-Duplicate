@@ -1,7 +1,7 @@
-#include "PlayerStates/WalkingState.h"
-#include "PlayerStates/StandingState.h"
+#include "PlayableObjectStates/PlayerStates/WalkingState.h"
+#include "PlayableObjectStates/PlayerStates/StandingState.h"
 
-#include"Gameplay/Player.h"
+#include "Gameplay/Player.h"
 
 
 WalkingState::WalkingState(Input input)
@@ -9,7 +9,7 @@ WalkingState::WalkingState(Input input)
 	m_input = input;
 }
 
-std::unique_ptr<PlayerBaseState> WalkingState::handleInput(Input input)
+std::unique_ptr<PlayableObjectState> WalkingState::handleInput(Input input)
 {
 	switch (input)
 	{
@@ -31,7 +31,7 @@ std::unique_ptr<PlayerBaseState> WalkingState::handleInput(Input input)
 	return nullptr;
 }
 
-void WalkingState::enter(Player& player)
+void WalkingState::enter(PlayableObject& player)
 {
 	std::cout << "enter:: WalkingState\n";
 	player.setAniName("walking");
