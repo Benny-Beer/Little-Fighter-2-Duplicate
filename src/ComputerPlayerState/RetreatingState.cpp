@@ -1,11 +1,11 @@
-#include "ComputerPlayerState/RetreatingState.h"
+#include "PlayableObjectStates/ComputerPlayerState/RetreatingState.h"
 #include "GamePlay/ComputerPlayer.h"
-#include "ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 #include <SFML/System/Vector2.hpp>
 
 RetreatingState::RetreatingState() = default;
 
-void RetreatingState::enter(ComputerPlayer& player) {
+void RetreatingState::enter(PlayableObject& player) {
     std::cout << "enter:: RetreatingState\n";
 
     Animation retreatingAnim(player.getTexture(),
@@ -18,7 +18,7 @@ void RetreatingState::enter(ComputerPlayer& player) {
     //player.setDiraction(m_input);     m_elapsedTime = 0.f;
 }
 
-void RetreatingState::update(ComputerPlayer& player, float deltaTime) {
+void RetreatingState::update(PlayableObject& player, float deltaTime) {
     m_elapsedTime += deltaTime;
 
     // Move away from nearest visible threat (for now just move left/up)
@@ -28,7 +28,7 @@ void RetreatingState::update(ComputerPlayer& player, float deltaTime) {
 
     if (m_elapsedTime >= m_retreatDuration) {
         // Done retreating — return to idle (or other smart decision)
-        player.changeState(std::make_unique<IdleState>());
+        player.setState(std::make_unique<IdleState>());
     }
 }
 

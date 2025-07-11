@@ -17,7 +17,7 @@ public:
 	void render(sf::RenderWindow& window);
 	void update(float dt);
 	bool areAllEnemiesDefeated() const;
-	std::vector<Enemy*> getAllEnemies();
+	std::vector<std::shared_ptr<Enemy>> getAllEnemies();
 	std::vector<std::shared_ptr<PickableObject>> getAllObjects();
 	void handleCollisionsWithPlayer(Player& player);
 

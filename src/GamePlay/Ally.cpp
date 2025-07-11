@@ -14,14 +14,19 @@ Ally::Ally(const sf::Vector2f pos, const std::string& name, float speed)
 
 
 void Ally::update(float dt) {
+
+    //m_prevPosition = getPosition();
+
     ComputerPlayer::update(dt);  // זה מפעיל את ה־state
-    if (m_currentAnimationName != m_aniName) {
+    if (m_currentAnimationName != m_aniName + m_strategyName) {
         setAnimation(AnimationManager::getAnimation(m_aniName + m_strategyName, getTexture()));
-        m_currentAnimationName = m_aniName;
+        m_currentAnimationName = m_aniName + m_strategyName;
     }
     updateScale();
     updateAnimation(dt);
     apllySprite();
+    //m_prevPosition = getPosition();
+
 }
 
 void Ally::handleCollision() {

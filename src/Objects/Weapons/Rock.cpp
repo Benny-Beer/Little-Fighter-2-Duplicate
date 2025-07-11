@@ -3,7 +3,7 @@
 Rock::Rock(const sf::Vector2f pos, const std::string& name)
 	:Weapon(pos, name)
 {
-	
+    m_range = 200.f;
     setAnimation(AnimationManager::getAnimation(getName(), getTexture()));
     sf::Vector2f offset(10.f, -35.f);
     m_offset = offset;
@@ -27,6 +27,7 @@ void Rock::update(float dt)
         {
             pos.y = m_groundY;
             m_isFlying = false;  // הפסיק לעוף
+            m_status = ON_EARTH;
             m_velocity = { 0.f, 0.f };
             std::cout << "Rock landed!\n";
         }
@@ -41,9 +42,9 @@ void Rock::throwRock(int direction, float groundY, float speed)
 {
     m_isFlying = true;
     m_groundY = groundY;
-
+    
     // מהירות התחלתית:
-    m_velocity.x = direction * speed;
+    m_velocity.x = direction * speed ;
     m_velocity.y = -400.f;  // לזרוק קצת למעלה (שלילי כי Y יורד למטה)
 	setAnimation(AnimationManager::getAnimation("rock_flying", getTexture()));
 
