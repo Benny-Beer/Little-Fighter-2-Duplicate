@@ -50,21 +50,6 @@ void Rock::update(float dt)
     apllySprite();
 }
 
-//need to get the direction and groundY from the player
-// void Rock::throwRock(int direction, float groundY, float speed)
-// {
-//     m_isFlying = true;
-//     m_groundY = groundY;
-    
-//     // îäéøåú äúçìúéú:
-//     m_velocity.x = direction * speed * 0.5 ;
-//     m_velocity.y = -400.f;  // ìæøå÷ ÷öú ìîòìä (ùìéìé ëé Y éåøã ìîèä)
-// 	setAnimation(AnimationManager::getAnimation("rock_flying", getTexture()));
-
-//     std::cout << "Rock thrown! Velocity x=" << m_velocity.x << " y=" << m_velocity.y << " groundY=" << m_groundY << "\n";
-
-// }
-
 bool Rock::m_registered = Factory<PickableObject>::registerIt("r", [](const sf::Vector2f& pos, const std::string& name) {
     return std::make_unique<Rock>(pos, name);
     });
