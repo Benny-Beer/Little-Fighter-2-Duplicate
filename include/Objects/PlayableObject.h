@@ -31,9 +31,9 @@ public:
 	virtual void setAniName(const std::string& name);
 	virtual std::string getName() const;
 	virtual void updateScale();
+	bool isHoldingWeapon(std::shared_ptr<PickableObject> obj) const;
 	virtual std::shared_ptr<Object> getTarget() { return nullptr; };
 	virtual std::shared_ptr<PickableObject> getObject() {
-		std::cout << "im here actually\n";
 		return nullptr; 
 	};
 	std::string getStrategyName();
@@ -45,7 +45,11 @@ public:
 	virtual bool needItem();
 
 	// in-game Events:
+
+	virtual void onStoneHit() { m_state->onStoneHit(*this); }
+
 	virtual void onHandsAttack();
+
 	void adjustRange(float range);
 	float getAttackRange() const;
 	std::shared_ptr<PickableObject> getHeldObj() const;

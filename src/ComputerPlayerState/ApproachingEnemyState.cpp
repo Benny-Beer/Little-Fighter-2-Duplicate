@@ -16,24 +16,13 @@ ApproachingEnemyState::ApproachingEnemyState(std::shared_ptr<Object> target)
 }
 
 void ApproachingEnemyState::enter(PlayableObject& player) {
-    //std::cout << "enter:: ApproachingEnemyState\n";
     
-
-    //Animation approachingEnemyAnim(player.getTexture(),
-    //    320, 0,          // x, y
-    //    80, 80,        // width, height
-    //    4,             // מספר פריימים
-    //    0.2f);         // זמן בין פריימים
-
-    //player.setAnimation(approachingEnemyAnim);
     player.setAniName("walking");
     //player.setDiraction(m_input); 
 }
 
 void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
-    std::cout << "                        " << player.getStrategyName() << std::endl;
-    
-    std::cout << player.getName() << "in ApproachingEnemyState\n";
+  
     if (!m_target)
         return;
     if (!player.getTarget()) {
@@ -65,6 +54,7 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     //std::cout << "[ApproachingEnemyState] " << player.getName() << " distance to " << m_target->getName() << ":" << distance << std::endl;
 
     if (distance < player.getAttackRange() /* && (playerPos.x - target->getPosition().x) == 0.f*/) {
+        std::cout << "im here\n";
         player.setState(std::make_unique<AttackingState>(m_target));
         return;
     }
@@ -80,11 +70,9 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
 
     if (player.getHeldObj())
     {
-
-        std::cout << player.getName() << " was here!!1\n";
         player.getHeldObj()->move(player.getPosition());
     }
-    std::cout << "im at the end\n" << "because " << m_target->getPosition().x << "\n";
+   // std::cout << "im at the end\n" << "because " << m_target->getPosition().x << "\n";
 }
 
 void ApproachingEnemyState::exit(ComputerPlayer& player) {

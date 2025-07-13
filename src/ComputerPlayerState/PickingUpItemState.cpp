@@ -11,38 +11,26 @@ PickingUpItemState::PickingUpItemState(std::shared_ptr<Object> item)
     : m_target(std::move(item)) {}
 
 void PickingUpItemState::enter(PlayableObject& player) {
-    //std::cout << "enter:: PickingUpItemState\n";
+    
     player.setAniName("walking");
-
-    //Animation pickingUpItemAnim(player.getTexture(),
-    //    480, 0,          // x, y
-    //    80, 80,        // width, height
-    //    2,             // מספר פריימים
-    //    0.2f,
-    //    false);
-
-    //player.setAnimation(pickingUpItemAnim);
-    //player.setDiraction(m_input); 
 }
 
 void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
-    std::cout << "                        " << player.getStrategyName() << std::endl;
-    std::cout << player.getName() << "in PickingUpItemState\n";
+    
 
 
     m_targetItem = std::dynamic_pointer_cast<PickableObject>(m_target);
-    std::cout << "Target typeid: " << typeid(*m_target).name() << std::endl;
+   /* std::cout << "Target typeid: " << typeid(*m_target).name() << std::endl;
     std::cout << "TargetItem typeid: " << typeid(*m_targetItem).name() << std::endl;
     if (m_targetItem->onEarth())
         std::cout << "OFCOURSE\n";
     else
-        std::cout << "NAAH\n";
+        std::cout << "NAAH\n";*/
     if (!m_targetItem ||!m_targetItem->onEarth()) {
         // Item already gone – return to idle
         m_targetItem = nullptr;
         player.wantItem();
         
-        std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
         player.setState(std::make_unique<IdleState>());
         return;
     }

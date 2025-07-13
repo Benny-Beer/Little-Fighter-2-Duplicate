@@ -19,17 +19,10 @@ AttackingState::AttackingState(std::shared_ptr<Object> target)
 
 void AttackingState::enter(PlayableObject& player) {
     //std::cout << "enter:: AttackingState\n";
-    //Animation attackingAnim(player.getTexture(),
-    //    80, 0,          // x, y
-    //    80, 80,        // width, height
-    //    6,             // îñôø ôøééîéí
-    //    0.2f);         // æîï áéï ôøééîéí
 
-    //player.setAnimation(attackingAnim);
-    //m_target = player.getTarget();    
-    //sf::Vector2f attackerPos = player.getPosition();
-    //sf::Vector2f targetPos = m_target->getPosition();
-    //player.setPosition({ targetPos.x, targetPos.y });
+    //auto target = std::dynamic_pointer_cast<PlayableObject>(m_target);
+    
+
     alignAttacker(player);
     player.setAniName("attacking");
     if (player.getHeldObj()) {
@@ -61,8 +54,6 @@ void AttackingState::enter(PlayableObject& player) {
 }
 
 void AttackingState::update(PlayableObject& player, float deltaTime) {
-    std::cout << "                        " << player.getStrategyName() << std::endl;
-    std::cout << player.getName() << "in AttackingState\n";
 
     if (!m_target)
         return;
@@ -95,7 +86,7 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
     // Check if still in attack range
     const float attackRange = 150.f;
     if (distance > player.getAttackRange()) {
-        // Too far — switch back to approach state
+        // Too far â€” switch back to approach state
         std::cout << "here? range is: " << player.getAttackRange() << "\n";
         player.setState(std::make_unique<ApproachingEnemyState>(m_target));
         return;
@@ -105,18 +96,13 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
 
     // Countdown attack cooldown
     if (m_attackCooldown > 0) {
-        std::cout << "im NOT switching!!! " << m_attackCooldown << std::endl;
-
         m_attackCooldown -= deltaTime;
         return;
     }
-    else {
-        std::cout << "im switching!!!\n";
+    /*else {
         if (player.getObject()) {
-            std::cout << "YES!\n";
         }
         else {
-            std::cout << "NO!\n";
 
         }
         if (player.getTarget())
@@ -125,7 +111,7 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
             std::cout << "NAAH\n";
         player.setState(std::make_unique<IdleState>());
         return;
-    }
+    }*/
 
     // Perform attack - TODO the logic
     //player.performAttack(*m_target);
@@ -143,11 +129,11 @@ void AttackingState::alignAttacker(PlayableObject& player)
     sf::Vector2f playerPos = player.getPosition();
     sf::Vector2f targetPos = m_target->getPosition();
 
-    // ùåîøéí òì àåúå X, îééùøéí ìÎY, áîøç÷ attackRange îäéøéá
+    // Ã¹Ã¥Ã®Ã¸Ã©Ã­ Ã²Ã¬ Ã Ã¥ÃºÃ¥ X, Ã®Ã©Ã©Ã¹Ã¸Ã©Ã­ Ã¬ÃŽY, Ã¡Ã®Ã¸Ã§Ã· attackRange Ã®Ã¤Ã©Ã¸Ã©Ã¡
     float dx = playerPos.x - targetPos.x;
-    float sign = (dx >= 0) ? -1.f : 1.f; // àéæä öã ùì äîåú÷ó?
+    float sign = (dx >= 0) ? -1.f : 1.f; // Ã Ã©Ã¦Ã¤ Ã¶Ã£ Ã¹Ã¬ Ã¤Ã®Ã¥ÃºÃ·Ã³?
     // float alignedX = targetPos.x + sign * 80.f; --> MAKING PROBLEM OF ATTACK AMINATION TO THE WRONG SIDE
-    float alignedY = targetPos.y; // ééùåø îãåé÷, àå áúåê èåìøðñ ÷èï
+    float alignedY = targetPos.y; // Ã©Ã©Ã¹Ã¥Ã¸ Ã®Ã£Ã¥Ã©Ã·, Ã Ã¥ Ã¡ÃºÃ¥Ãª Ã¨Ã¥Ã¬Ã¸Ã°Ã± Ã·Ã¨Ã¯
 
     player.setPosition({ playerPos.x, alignedY }); // suppose to be alignedX
 }
@@ -164,5 +150,6 @@ void AttackingState::onStoneHit(PlayableObject& player) {
 
 }
 void AttackingState::onExplosion(PlayableObject& player) {
+
 
 }

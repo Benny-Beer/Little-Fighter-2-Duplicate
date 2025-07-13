@@ -55,7 +55,7 @@ void Level::addPickableObjects(const std::string& objectLine)
         auto obj = Factory<PickableObject>::create(std::string(1, type), sf::Vector2f(250.f*i, 500.f));
         if (obj)
         {
-            std::cout << "in Level::addPickableObjects if (obj)\n";
+            std::cout << "in Level::addPickableObjects if (obj) " << i <<  "\n";
             m_pickables.push_back(std::move(obj));
         }
         i++;
@@ -88,7 +88,14 @@ void Level::update(float dt)
     }
 
     for (auto& obj : m_pickables)
+    {
         obj->update(dt);
+    }
+
+    std::erase_if(m_pickables, [](const std::shared_ptr<PickableObject>& obj) {
+        return obj->isUsed();
+        });
+        
 
     
 }
@@ -124,15 +131,12 @@ bool Level::areAllEnemiesDefeated() const
     return false; // TODO: create logic to know if there is still living enemies
 }
 
-void Level::handleCollisionsWithPlayer(Player& player)
+void Level::handleCollisionsWithPlayer(PlayableObject& player)
 {
     for (const auto& obj : m_pickables)
     {
         if (player.collide(*obj)) {
-            
             processCollision(player, obj);
-            std::cout << "im here\n";
-            
         }
     }
 }

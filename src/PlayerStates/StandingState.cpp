@@ -38,3 +38,10 @@ void StandingState::enter(PlayableObject& player)
 	player.resetDirection();
 
 }
+
+void StandingState::onStoneHit(PlayableObject& player)
+{
+	std::cout << player.getName() << " got  hit by stone\n";
+	player.setAniName("knockedDown");
+	//player.setState(std::make_unique<knockedDownState>());
+}

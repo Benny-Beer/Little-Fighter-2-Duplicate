@@ -11,15 +11,15 @@ void PlayableObject::setState(std::unique_ptr<PlayableObjectState> newState)
 
 void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
 {
+	std::cout << getName() << " is handling command\n";
+	std::cout << typeid(*command).name() << std::endl;
     command->execute(*this);
 }
 
 void PlayableObject::pickUpObject(std::shared_ptr<PickableObject> obj)
 {
     m_heldObject = obj;
-    std::cout << obj->getName() << std::endl;
 
-    std::cout << getName() << " got here\n";
     //just for expirience. must do it nice
     m_strategyName = obj->getName();
     auto attack = Factory<AttackBehavior>::createAttackBehavior(m_strategyName, m_heldObject, this);
@@ -27,15 +27,10 @@ void PlayableObject::pickUpObject(std::shared_ptr<PickableObject> obj)
     {
         m_attack = std::move(attack);
     }
-
-
-    std::cout << m_aniName + m_strategyName << "\n";
-    std::cout << " in Player::pickUpObject\n";
 }
 
 void PlayableObject::setDiraction(Input input)
 {
-    std::cout << input << "\n";
     switch (input)
     {
     case PRESS_LEFT:
@@ -74,15 +69,12 @@ void PlayableObject::attack()
 
     if (m_attack)
     {
-        std::cout << "player attack\n";
         m_attack->attack();
     }
-    //std::cout << m_heldObject->getName() << "\n";
+    
     if (m_heldObject)
     {
         m_heldObject->throwIt();
-        //std::cout << "in player attack detuch object\nobject state is: " << m_heldObject->thrown() << std::endl ;
-        std::cout << "MANMUNAN\nMANMUNAN\nMANMUNAN\nMANMUNAN\n";
         m_heldObject = nullptr;
 
         m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
@@ -149,16 +141,20 @@ void PlayableObject::updateScale()
     //m_dir = static_cast<Direction>(dir);
 }
 
+bool PlayableObject::isHoldingWeapon(std::shared_ptr<PickableObject> obj) const
+{
+    return m_heldObject != nullptr;
+}
+
 float PlayableObject::getSpeed() const
 {
     return m_speed;
 }
 
 void PlayableObject::move(const sf::Vector2f& delta) {
-    m_sprite.move(delta);
+    getSprite().move(delta);
     if (m_heldObject)
     {
-        //std::cout << getName() << " was here!!1\n";
         m_heldObject->move(getPosition());
     }
 }
@@ -183,7 +179,6 @@ void PlayableObject::move(float dt)
     moveSprite(delta);
     if (m_heldObject)
     {
-        //std::cout << getName() << " was here!!1\n";
         m_heldObject->move(getPosition());
     }
 

@@ -14,6 +14,6 @@ public:
 	virtual void enter(PlayableObject& player) override;
 	
 	void onHandsAttack(PlayableObject& player) override {};
-	void onStoneHit(PlayableObject& player) override {};
+	void onStoneHit(PlayableObject& player) override;
 	void onExplosion(PlayableObject& player) override {};
 };

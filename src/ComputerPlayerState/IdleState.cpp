@@ -23,7 +23,7 @@ void IdleState::enter(PlayableObject& player) {
 }
 
 void IdleState::update(PlayableObject& player, float deltaTime) {
-    std::cout << player.getName() << "in IdleState\n";
+    //std::cout << player.getName() << "in IdleState\n";
 
     //// 1. Scan for closest enemy (pseudo code)
     //auto enemies = player.getKnownEnemies();

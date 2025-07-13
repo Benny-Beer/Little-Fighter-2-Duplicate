@@ -3,12 +3,18 @@
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include "PlayableObjectStates/PlayerStates/PlayerBaseState.h"
 #include "Management/AnimationManager.h"
+#include "Objects/ObjectStates/HeldObjState.h"
 
 Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
     : PlayableObject(pos, name)
 {
+
+    this->setState(std::make_unique<StandingState>(RELEASE_RIGHT));
+	//setSize(1.2);
+
     m_hp = 500;
     m_potentialHp = 500;
+
 	m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
     m_speed = speed;
     m_name = "player";
@@ -196,10 +202,6 @@ void Player::setAniName(const std::string& name)
 //
 //}
 
-bool Player::isHoldingWeapon(std::shared_ptr<PickableObject> obj) const
-{
-	return m_heldObject != nullptr;
-}
 
 bool Player::isAlive() const {
     return m_alive;
