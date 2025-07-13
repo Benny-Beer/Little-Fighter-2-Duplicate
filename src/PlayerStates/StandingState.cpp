@@ -36,6 +36,7 @@ void StandingState::enter(PlayableObject& player)
 	player.setAniName("standing");
 	
 	player.resetDirection();
+	
 
 }
 
