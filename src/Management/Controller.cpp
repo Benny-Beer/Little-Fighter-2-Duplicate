@@ -21,7 +21,7 @@ Controller::Controller(sf::RenderWindow& window,
     // === this section is hard coded. need to be done in Level ===
     // add pickable (rock)
 
-    std::string objectLine = "r r r";
+    std::string objectLine = "r r b";
 
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
