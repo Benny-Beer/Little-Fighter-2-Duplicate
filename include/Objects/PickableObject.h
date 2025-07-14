@@ -29,8 +29,8 @@ public:
 
 	void markAsUsed();
 	bool isUsed() const; 
-	void setHolder(PlayableObject* holder); 
-	PlayableObject* getHolder() const;
+	void setHolder(PlayableObject* holder);
+	PlayableObject*  getHolder() const;
 	const std::string& getStateName() const { return m_stateName; }
 	void setStateName(const std::string& state) { m_stateName = state; }
 	void setAnimationName(const std::string& animationName) { m_animationName = animationName; }

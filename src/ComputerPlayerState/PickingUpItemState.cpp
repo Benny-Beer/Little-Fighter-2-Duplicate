@@ -3,6 +3,7 @@
 #include "Objects/PickableObject.h"
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
+#include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
 
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
@@ -73,7 +74,8 @@ void PickingUpItemState::onHandsAttack(PlayableObject& player) {
 }
 
 void PickingUpItemState::onStoneHit(PlayableObject& player) {
-
+    std::cout << "inPickingUpItemState::onStoneHit\n";
+    player.setState(std::make_unique<KnockedDownState>());
 }
 void PickingUpItemState::onExplosion(PlayableObject& player) {
 
