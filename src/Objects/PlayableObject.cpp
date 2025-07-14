@@ -12,7 +12,6 @@ void PlayableObject::setState(std::unique_ptr<PlayableObjectState> newState)
 void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
 {
 	std::cout << getName() << " is handling command\n";
-	std::cout << typeid(*command).name() << std::endl;
     command->execute(*this);
 }
 
