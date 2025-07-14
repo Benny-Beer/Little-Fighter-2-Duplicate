@@ -15,10 +15,10 @@ Rock::Rock(const sf::Vector2f pos, const std::string& name)
 
 void Rock::update(float dt)
 {
-    if (!m_command)
+    /*if (!m_command)
     {
         m_command = std::make_unique<StoneHitCommand>();
-    }
+    }*/
 
     if (m_isFlying)
     {

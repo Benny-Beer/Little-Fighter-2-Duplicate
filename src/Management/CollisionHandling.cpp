@@ -37,7 +37,7 @@ void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pic
 	{
         object->putBack();
         std::cout << "in playerPickableObject before handle command\n"; return;
-		player.handleCommand(object->getHitCommand());
+        player.handleCommand(object->getHitCommand());
 		std::cout << "object is thrown, cannot pick it up\n"; return;
 	}
     //not so nice!!!!!

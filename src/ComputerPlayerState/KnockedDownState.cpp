@@ -5,7 +5,7 @@
 KnockedDownState::KnockedDownState() = default;
 
 void KnockedDownState::enter(PlayableObject& player) {
-    std::cout << "enter:: KnockedDownState\n";
+    std::cout << player.getName() << " enter:: KnockedDownState\n";
     player.dropHeldObj();
 
     //Animation knockedDownAnim(player.getTexture(),

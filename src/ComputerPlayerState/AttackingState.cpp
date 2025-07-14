@@ -135,7 +135,7 @@ void AttackingState::onHandsAttack(PlayableObject& player)
     player.setState(std::make_unique<GotHitState>());
 }
 void AttackingState::onStoneHit(PlayableObject& player) {
-    std::cout << "inAttackingState::onStoneHit\n";
+    std::cout << player.getName() << " inAttackingState::onStoneHit\n";
 	player.setState(std::make_unique<KnockedDownState>());
 
 }
