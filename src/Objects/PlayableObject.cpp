@@ -17,11 +17,9 @@ void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
 void PlayableObject::pickUpObject(std::shared_ptr<PickableObject> obj)
 {
     m_heldObject = obj;
-    std::cout << obj->getName() << std::endl;
-
-    std::cout << getName() << " got here\n";
-    //just for expirience. must do it nice
+    m_attackRange = obj->getRange();
     m_strategyName = obj->getName();
+    obj->pick();
     auto attack = Factory<AttackBehavior>::createAttackBehavior(m_strategyName, m_heldObject, this);
     if (attack)
     {
@@ -97,7 +95,18 @@ std::shared_ptr<PickableObject> PlayableObject::getHeldObj() const
 }
 
 void PlayableObject::dropHeldObj() {
-    m_heldObject = nullptr;
+    std::cout << "\nin dropHeldObj \n\n";
+;    if (m_heldObject) {
+        m_attackRange = 50.f;
+        m_strategyName = "";
+        m_heldObject->putBack();
+        m_heldObject = nullptr;
+    }
+    auto attack = Factory<AttackBehavior>::createAttackBehavior(m_strategyName, m_heldObject, this);
+    if (attack)
+    {
+        m_attack = std::move(attack);
+    }
 }
 
 void PlayableObject::setStrategyName(const std::string& name)

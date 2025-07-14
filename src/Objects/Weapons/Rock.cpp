@@ -14,6 +14,8 @@ void Rock::update(float dt)
 {
     if (m_isFlying)
     {
+        std::cout << "\n\n in m_isFlying condition\n\n";
+
         // עדכון מיקום:
         sf::Vector2f pos = getPosition();
         pos.x += m_velocity.x * dt;
@@ -25,14 +27,21 @@ void Rock::update(float dt)
         // האם נחתנו?
         if (pos.y >= m_groundY)
         {
+            std::cout << "now here\n";
+
             pos.y = m_groundY;
             m_isFlying = false;  // הפסיק לעוף
             m_status = ON_EARTH;
             m_velocity = { 0.f, 0.f };
             std::cout << "Rock landed!\n";
         }
-
+        std::cout << "i was here before\n";
         setPosition(pos);
+    }
+    if (m_justDropped)
+    {
+        std::cout << "\n\n in m_justDropped condition\n\n";
+        drop(dt);
     }
 	apllySprite();
 }
@@ -40,6 +49,7 @@ void Rock::update(float dt)
 //need to get the direction and groundY from the player
 void Rock::throwRock(int direction, float groundY, float speed)
 {
+    std::cout << "Speed is: " << speed << "\n";
     m_isFlying = true;
     m_groundY = groundY;
     

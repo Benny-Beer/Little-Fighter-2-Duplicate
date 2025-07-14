@@ -18,4 +18,5 @@ private:
 	sf::Text m_chienese;
 	sf::Font m_font;
 	DataLoader m_dataLoader;
+	bool m_canSwitchScreen = false;
 };

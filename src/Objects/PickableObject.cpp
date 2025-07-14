@@ -17,3 +17,62 @@ void PickableObject::move(sf::Vector2f goal)
 	
 	
 }
+
+void PickableObject::putBack()
+{
+    m_status = ON_EARTH;
+    m_justDropped = true;
+    m_dropTarget = getPosition() - (m_offset + m_offset);
+}
+
+//void PickableObject::drop(float dt)
+//{
+//    // 1. חישוב יעד
+//    std::cout << "\n\nin PickableObject::drop\n\n";
+//
+//    sf::Vector2f target = getPosition() - m_offset;
+//    std::cout << target.x << "," << target.y << std::endl;
+//    // 2. חישוב וקטור תזוזה (נורמליזציה)
+//    sf::Vector2f dir = target - getPosition();
+//    float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+//    
+//    // הגדרת מהירות קבועה (פיקסלים לשנייה)
+//    const float SPEED = 80.f;
+//    float moveDist = SPEED * dt;
+//
+//    if (distance <= moveDist || distance == 0.f) {
+//        // הגעת ליעד או עברת אותו — מעדכן למיקום הסופי ומפעיל אנימציה
+//        setPosition(target);
+//        m_justDropped = false;
+//        //playHitGroundAnimation();
+//    }
+//    else {
+//        // תזוזה רגילה לעבר היעד
+//        std::cout << "\n\nin else condition\n\n";
+//
+//        sf::Vector2f step = dir / distance * moveDist;
+//        setPosition(getPosition() + step);
+//    }
+//    apllySprite();
+//    
+//}
+
+void PickableObject::drop(float dt)
+{
+    sf::Vector2f dir = m_dropTarget - getPosition();
+    float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+    const float SPEED = 400.f;
+    float moveDist = SPEED * dt;
+
+    if (distance <= moveDist || distance == 0.f) {
+        // מזיז ישר ליעד וסוגר תנועה
+        setPosition(m_dropTarget);
+        m_justDropped = false;
+        //playHitGroundAnimation();
+    }
+    else {
+        // תנועה רגילה
+        sf::Vector2f step = dir / distance * moveDist;
+        setPosition(getPosition() + step);
+    }
+}
