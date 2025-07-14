@@ -144,7 +144,7 @@ void AttackingState::name() {
 
 void AttackingState::onHandsAttack(PlayableObject& player)
 {
-    player.setState(std::make_unique<BlockingState>());
+    player.setState(std::make_unique<RetreatingState>());
 }
 void AttackingState::onStoneHit(PlayableObject& player) {
 

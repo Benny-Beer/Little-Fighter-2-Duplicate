@@ -54,12 +54,15 @@ void LoadingScreen::update(sf::Time deltaTime) {
 	if (m_dataLoader.loadCharacterDat()) {
 		m_currentlyLoading.setString(m_dataLoader.getCurrentlyLoadingFile());
 	}
+	else {
+		m_canSwitchScreen = true;
+	}
 }
 
 void LoadingScreen::handleEvents(sf::Event& ev) {
 	
 if (ev.type == sf::Event::MouseButtonPressed && 
-	ev.mouseButton.button == sf::Mouse::Button::Left) {
+	ev.mouseButton.button == sf::Mouse::Button::Left && m_canSwitchScreen) {
 		auto mousePos = sf::Vector2f(ev.mouseButton.x, ev.mouseButton.y);
 		if (m_startButton.isClicked(mousePos)) {
 			m_manager.switchScreen(std::make_unique<CharacterSelectScreen>(m_window, m_manager));

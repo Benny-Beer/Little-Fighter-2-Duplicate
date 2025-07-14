@@ -6,6 +6,7 @@ KnockedDownState::KnockedDownState() = default;
 
 void KnockedDownState::enter(PlayableObject& player) {
     std::cout << "enter:: KnockedDownState\n";
+    player.dropHeldObj();
 
     //Animation knockedDownAnim(player.getTexture(),
     //    240, 0,          // x, y
@@ -13,15 +14,15 @@ void KnockedDownState::enter(PlayableObject& player) {
     //    5,             // מספר פריימים
     //    0.2f,
     //    false);         
-
     //player.setAnimation(knockedDownAnim);
-    player.setAniName("dead");
+    player.setAniName("knocked");
     //player.setDiraction(m_input);     
     m_elapsedTime = 0.0f;
     // need information that the player isnt controllable - ?
 }
 
 void KnockedDownState::update(PlayableObject& player, float deltaTime) {
+
     m_elapsedTime += deltaTime;
 
     if (m_elapsedTime >= m_recoveryTime) {

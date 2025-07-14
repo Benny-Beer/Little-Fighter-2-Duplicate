@@ -7,6 +7,7 @@ RetreatingState::RetreatingState() = default;
 
 void RetreatingState::enter(PlayableObject& player) {
     std::cout << "enter:: RetreatingState\n";
+    player.dropHeldObj();
 
     //Animation retreatingAnim(player.getTexture(),
     //    0, 0,          // x, y

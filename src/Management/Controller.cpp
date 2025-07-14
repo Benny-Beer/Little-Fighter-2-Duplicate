@@ -43,6 +43,8 @@ Controller::Controller(sf::RenderWindow& window,
     m_allies.push_back(ally);
     /*m_allies.push_back(allyTwo);
     m_allies.push_back(allyThree);*/
+
+
     //========================================================================
 
 

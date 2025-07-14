@@ -22,7 +22,9 @@ void Rock::update(float dt)
 
     if (m_isFlying)
     {
-        // òãëåï îé÷åí:
+        std::cout << "\n\n in m_isFlying condition\n\n";
+
+        // עדכון מיקום:
         sf::Vector2f pos = getPosition();
         pos.x += m_velocity.x * dt;
         pos.y += m_velocity.y * dt;
@@ -33,6 +35,8 @@ void Rock::update(float dt)
         // äàí ðçúðå?
         if (pos.y >= m_groundY)
         {
+            std::cout << "now here\n";
+
             pos.y = m_groundY;
             m_isFlying = false;  // äôñé÷ ìòåó
             m_velocity = { 0.f, 0.f };
@@ -42,13 +46,20 @@ void Rock::update(float dt)
 
 
         }
-
+        std::cout << "i was here before\n";
         setPosition(pos);
     }
+    if (m_justDropped)
+    {
+        std::cout << "\n\n in m_justDropped condition\n\n";
+        drop(dt);
+    }
+	
 
     updateAnimation(dt);
     apllySprite();
 }
+
 
 bool Rock::m_registered = Factory<PickableObject>::registerIt("r", [](const sf::Vector2f& pos, const std::string& name) {
     return std::make_unique<Rock>(pos, name);
