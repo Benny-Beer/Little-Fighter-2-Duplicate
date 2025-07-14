@@ -36,7 +36,7 @@ void Rock::update(float dt)
         if (pos.y >= m_groundY)
         {
             std::cout << "now here\n";
-
+            setHolder(nullptr);
             pos.y = m_groundY;
             m_isFlying = false;  // äôñé÷ ìòåó
             m_velocity = { 0.f, 0.f };
