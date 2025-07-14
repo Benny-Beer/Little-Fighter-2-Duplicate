@@ -61,7 +61,6 @@ void Rock::update(float dt)
 }
 
 
-
 bool Rock::m_registered = Factory<PickableObject>::registerIt("r", [](const sf::Vector2f& pos, const std::string& name) {
     return std::make_unique<Rock>(pos, name);
     });

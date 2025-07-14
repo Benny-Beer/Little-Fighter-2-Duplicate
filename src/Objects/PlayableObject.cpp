@@ -44,8 +44,12 @@ void PlayableObject::setDiraction(Input input)
         setScale(1);
         break;
     case RELEASE_LEFT:
+        if (m_direction.x < 0.f)
+            m_direction.x = 0.f;
+        break;
     case RELEASE_RIGHT:
-        m_direction.x = 0.f;
+        if(m_direction.x > 0.f)
+            m_direction.x = 0.f;
         break;
     case PRESS_JUMP:
     case PRESS_UP:
@@ -53,8 +57,12 @@ void PlayableObject::setDiraction(Input input)
         break;
     case PRESS_FALLING:
     case RELEASE_UP:
+        if (m_direction.y > 0.f)
+            m_direction.y = 0.f;
+        break;
     case RELEASE_DOWN:
-        m_direction.y = 0.f;
+		if (m_direction.y < 0.f)
+            m_direction.y = 0.f;
         break;
     case PRESS_DOWN:
         m_direction.y = 1.f;
@@ -129,6 +137,7 @@ void PlayableObject::takeDamage(int damageAmount) {
 
 void PlayableObject::resetDirection()
 {
+	std::cout << "Resetting direction for " << getName() << std::endl;
     if (m_direction.x != 0 || m_direction.y != 0)
     {
         m_direction = { 0.f, 0.f };
