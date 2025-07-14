@@ -19,9 +19,9 @@ void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
 void PlayableObject::pickUpObject(std::shared_ptr<PickableObject> obj)
 {
     m_heldObject = obj;
-
-    //just for expirience. must do it nice
+    m_attackRange = obj->getRange();
     m_strategyName = obj->getName();
+    obj->pick();
     auto attack = Factory<AttackBehavior>::createAttackBehavior(m_strategyName, m_heldObject, this);
     if (attack)
     {
@@ -44,8 +44,12 @@ void PlayableObject::setDiraction(Input input)
         setScale(1);
         break;
     case RELEASE_LEFT:
+        if (m_direction.x < 0.f)
+            m_direction.x = 0.f;
+        break;
     case RELEASE_RIGHT:
-        m_direction.x = 0.f;
+        if(m_direction.x > 0.f)
+            m_direction.x = 0.f;
         break;
     case PRESS_JUMP:
     case PRESS_UP:
@@ -53,8 +57,12 @@ void PlayableObject::setDiraction(Input input)
         break;
     case PRESS_FALLING:
     case RELEASE_UP:
+        if (m_direction.y > 0.f)
+            m_direction.y = 0.f;
+        break;
     case RELEASE_DOWN:
-        m_direction.y = 0.f;
+		if (m_direction.y < 0.f)
+            m_direction.y = 0.f;
         break;
     case PRESS_DOWN:
         m_direction.y = 1.f;
@@ -89,7 +97,18 @@ std::shared_ptr<PickableObject> PlayableObject::getHeldObj() const
 }
 
 void PlayableObject::dropHeldObj() {
-    m_heldObject = nullptr;
+    std::cout << "\nin dropHeldObj \n\n";
+;    if (m_heldObject) {
+        m_attackRange = 50.f;
+        m_strategyName = "";
+        m_heldObject->putBack();
+        m_heldObject = nullptr;
+    }
+    auto attack = Factory<AttackBehavior>::createAttackBehavior(m_strategyName, m_heldObject, this);
+    if (attack)
+    {
+        m_attack = std::move(attack);
+    }
 }
 
 void PlayableObject::setStrategyName(const std::string& name)
@@ -118,6 +137,7 @@ void PlayableObject::takeDamage(int damageAmount) {
 
 void PlayableObject::resetDirection()
 {
+	std::cout << "Resetting direction for " << getName() << std::endl;
     if (m_direction.x != 0 || m_direction.y != 0)
     {
         m_direction = { 0.f, 0.f };

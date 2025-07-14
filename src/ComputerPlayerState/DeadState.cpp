@@ -5,6 +5,7 @@
 void DeadState::enter(PlayableObject& player)
 {
 	player.setAniName("dead");
+	player.dropHeldObj();
 	player.setDiraction(RELEASE_DOWN);
 	player.setDiraction(RELEASE_RIGHT);
 }

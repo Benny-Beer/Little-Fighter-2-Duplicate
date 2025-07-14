@@ -8,6 +8,7 @@ BlockingState::BlockingState() = default;
 
 void BlockingState::enter(PlayableObject& player) {
     std::cout << "enter:: BlockingState\n";
+    player.dropHeldObj();
 
     Animation blockingAnim(player.getTexture(),
         480, 400,          // x, y
