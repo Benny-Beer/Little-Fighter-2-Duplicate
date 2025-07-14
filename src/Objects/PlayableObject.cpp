@@ -18,6 +18,7 @@ void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
 void PlayableObject::pickUpObject(std::shared_ptr<PickableObject> obj)
 {
     m_heldObject = obj;
+    m_heldObject->setHolder(this);
     m_attackRange = obj->getRange();
     m_strategyName = obj->getName();
     obj->pick();

@@ -5,6 +5,8 @@
 #include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
 #include "PlayableObjectStates/ComputerPlayerState/RetreatingState.h"
 #include "PlayableObjectStates/ComputerPlayerState/GotHitState.h"
+#include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
+
 
 
 #include "GamePlay/ComputerPlayer.h"
@@ -133,6 +135,8 @@ void AttackingState::onHandsAttack(PlayableObject& player)
     player.setState(std::make_unique<GotHitState>());
 }
 void AttackingState::onStoneHit(PlayableObject& player) {
+    std::cout << "inAttackingState::onStoneHit\n";
+	player.setState(std::make_unique<KnockedDownState>());
 
 }
 void AttackingState::onExplosion(PlayableObject& player) {
