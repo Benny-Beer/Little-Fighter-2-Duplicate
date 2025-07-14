@@ -32,6 +32,7 @@ inline const AnimationInfo BOX_EXPLOIDING = { 58, 0, 58, 58, 2, 0.2f, false };
 inline const AnimationInfo BLOCKING = { 0, 0, 58, 58, 1, 0.2f, false };
 inline const AnimationInfo KNOCKEDDOWN = { 240, 240, 80, 80, 2, 0.2f, false };
 
+inline const AnimationInfo GOTHIT = { 480, 320, 80, 80, 3, 0.2f, false };
 
 
 

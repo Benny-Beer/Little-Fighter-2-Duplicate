@@ -4,7 +4,9 @@
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 #include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
 #include "PlayableObjectStates/ComputerPlayerState/RetreatingState.h"
+#include "PlayableObjectStates/ComputerPlayerState/GotHitState.h"
 #include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
+
 
 
 #include "GamePlay/ComputerPlayer.h"
@@ -19,34 +21,19 @@ AttackingState::AttackingState(std::shared_ptr<Object> target)
 }
 
 void AttackingState::enter(PlayableObject& player) {
-    //std::cout << "enter:: AttackingState\n";
+    std::cout << "enter:: AttackingState\n";
 
     //auto target = std::dynamic_pointer_cast<PlayableObject>(m_target);
     
 
     alignAttacker(player);
     player.setAniName("attacking");
-    if (player.getHeldObj()) {
-        std::cout << "before attack: YES!\n";
-    }
-    else {
-        std::cout << "before attack: NO!\n";
-
-    }
     player.attack();
     player.adjustRange(50.f);
     player.setStrategyName("");
 
     player.wantItem();
     
-
-    if (player.getHeldObj()) {
-        std::cout << "after attack: YES!\n";
-    }
-    else {
-        std::cout << "after attack: NO!\n";
-
-    }
     if (auto target = std::dynamic_pointer_cast<PlayableObject>(m_target))
         target->handleCommand(std::make_unique<HandsAttackCommand>());
     // I think we need switch-case here according to the attack
@@ -65,7 +52,6 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
     }
     if (auto enemy = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
         if (!enemy->getState()->isAccessible()) {
-            std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\im hehreeeee\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
             m_target = player.getTarget();
         }
     }
@@ -145,7 +131,8 @@ void AttackingState::name() {
 
 void AttackingState::onHandsAttack(PlayableObject& player)
 {
-    player.setState(std::make_unique<RetreatingState>());
+    std::cout << "im in attacking\n";
+    player.setState(std::make_unique<GotHitState>());
 }
 void AttackingState::onStoneHit(PlayableObject& player) {
     std::cout << "inAttackingState::onStoneHit\n";

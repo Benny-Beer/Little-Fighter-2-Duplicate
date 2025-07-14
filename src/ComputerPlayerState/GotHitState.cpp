@@ -1,11 +1,12 @@
+#include "PlayableObjectStates/ComputerPlayerState/GotHitState.h"
 #include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
 #include "GamePlay/ComputerPlayer.h"
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 
-KnockedDownState::KnockedDownState() = default;
+GotHitState::GotHitState() = default;
 
-void KnockedDownState::enter(PlayableObject& player) {
-    std::cout << "enter:: KnockedDownState\n";
+void GotHitState::enter(PlayableObject& player) {
+    std::cout << "enter:: GotHitState\n";
     player.dropHeldObj();
 
     //Animation knockedDownAnim(player.getTexture(),
@@ -15,13 +16,13 @@ void KnockedDownState::enter(PlayableObject& player) {
     //    0.2f,
     //    false);         
     //player.setAnimation(knockedDownAnim);
-    player.setAniName("knocked");
+    player.setAniName("gothit");
     //player.setDiraction(m_input);     
     m_elapsedTime = 0.0f;
     // need information that the player isnt controllable - ?
 }
 
-void KnockedDownState::update(PlayableObject& player, float deltaTime) {
+void GotHitState::update(PlayableObject& player, float deltaTime) {
 
     m_elapsedTime += deltaTime;
 
@@ -31,17 +32,17 @@ void KnockedDownState::update(PlayableObject& player, float deltaTime) {
     }
 }
 
-void KnockedDownState::exit(ComputerPlayer& player) {
+void GotHitState::exit(ComputerPlayer& player) {
     //player.setControllable(true); // Restore control in any case
 }
 
-void KnockedDownState::onHandsAttack(PlayableObject& player) {
+void GotHitState::onHandsAttack(PlayableObject& player) {
 
 }
 
-void KnockedDownState::onStoneHit(PlayableObject& player) {
+void GotHitState::onStoneHit(PlayableObject& player) {
 
 }
-void KnockedDownState::onExplosion(PlayableObject& player) {
+void GotHitState::onExplosion(PlayableObject& player) {
 
 }

@@ -86,8 +86,6 @@ void ComputerPlayer::setTarget(std::shared_ptr<Object> obj) {
 
 std::shared_ptr<Object> ComputerPlayer::getTarget()
 {
-    if (!m_target)
-        std::cout << "THERE IS NO TARGET!\n";
     return m_target;
 }
 //std::shared_ptr<PickableObject> ComputerPlayer::getObject()
