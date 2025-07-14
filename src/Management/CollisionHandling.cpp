@@ -86,8 +86,9 @@
 #include <typeindex>
 #include <map>
 
+using Key = std::tuple<std::type_index, std::type_index, std::type_index>;
 using CollisionFunc = void(*)(Object&, std::shared_ptr<PickableObject>);
-using HitMap = std::map<std::pair<std::type_index, std::type_index>, CollisionFunc>;
+using HitMap = std::map<Key, CollisionFunc>;
 
 //
 // פונקציה גנרית — template — לאיסוף חפץ
@@ -125,25 +126,21 @@ void playerPickableObjectWrapper(Object& playerObj, std::shared_ptr<PickableObje
     playerPickableObject<T>(playerObj, pickableObj);
 }
 
-void computerPlayerPickable(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
+void enemyAttackingAlly(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
-	Enemy& player = static_cast<Enemy&>(playerObj);
+	/*auto& ally = static_cast<Ally&>(playerObj);
 	if(pickableObj->thrown())
 
     {
 		std::cout << "in computerPlayerPickable before handle command\n";
-        player.handleCommand((pickableObj->getHitCommand()));
+        ally.handleCommand((pickableObj->getHitCommand()));
     }
-    
+    */
 }
 
-void handleAttack(Player& attacker, PickableObject& obj, Enemy& attacked)
+void friendlyFire(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
-	std::cout << "Player attacking with rock\n";
-	attacked.handleCommand(obj.getHitCommand());
 }
-
-
 //
 // initializeCollisionMap
 //
@@ -151,20 +148,39 @@ HitMap initializeCollisionMap()
 {
     HitMap map;
 
-    map[{typeid(Player), typeid(Rock)}] = &playerPickableObjectWrapper<Rock>;
-	map[{typeid(Player), typeid(Box)}] = &playerPickableObjectWrapper<Box>;
-    map[{typeid(Rock), typeid(Player)}] = &playerPickableObjectWrapper<Rock>;
-    map[{ typeid(Ally), { typeid(Box) }}] = &computerPlayerPickable;
-    map[{ typeid(Bandit), { typeid(Box) }}] = &computerPlayerPickable;
-    map[{ typeid(Ally), { typeid(Rock) }}] = &computerPlayerPickable;
-    map[{ typeid(Bandit), { typeid(Rock) }}] = &computerPlayerPickable;
+    map[{typeid(Player), typeid(Rock), typeid(void)}] = &playerPickableObjectWrapper<Rock>;
+    map[{typeid(Player), typeid(Box), typeid(void)}] = &playerPickableObjectWrapper<Box>;
+    //Box
+    //map[{ typeid(Ally), typeid(Box), typeid(Bandit)}] = &enemyAttackingAlly;
+    map[{ typeid(Bandit), typeid(Box), typeid(Ally)}] = &enemyAttackingAlly;
+    //map[{ typeid(Player), typeid(Box), typeid(Bandit)}] = &playerAttackingEnemy;
+    //Rock
+    map[{ typeid(Bandit), typeid(Box), typeid(Ally)}] = &enemyAttackingAlly;
+    //map[{ typeid(Ally), typeid(Rock), typeid(Bandit)}] = &enemyAttackingAlly;
+    //map[{ typeid(Player), typeid(Rock), typeid(Bandit)}] = &playerAttackingEnemy;
+    //Box
+    map[{ typeid(Ally), typeid(Box), typeid(Ally)}] = &friendlyFire;
+    map[{ typeid(Ally), typeid(Box), typeid(Player)}] = &friendlyFire;
+    map[{ typeid(Player), typeid(Box), typeid(Ally)}] = &friendlyFire;
+    map[{ typeid(Bandit), typeid(Box), typeid(Bandit)}] = &friendlyFire;
+    map[{ typeid(Player), typeid(Box), typeid(Player)}] = &friendlyFire;
+    //Rock
+    map[{ typeid(Ally), typeid(Rock), typeid(Ally)}] = &friendlyFire;
+    map[{ typeid(Ally), typeid(Rock), typeid(Player)}] = &friendlyFire;
+    map[{ typeid(Player), typeid(Rock), typeid(Ally)}] = &friendlyFire;
+    map[{ typeid(Bandit), typeid(Rock), typeid(Bandit)}] = &friendlyFire;
+    map[{ typeid(Player), typeid(Rock), typeid(Player)}] = &friendlyFire;
+    
+    
     return map;
 }
 
 void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
 {
     static HitMap map = initializeCollisionMap();
-    auto it = map.find({ typeid(obj1), typeid(*obj2) });
+    Object* holder = obj2->getHolder();
+    std::type_index holderType = holder ? typeid(*holder) : typeid(void);
+	auto it = map.find({ typeid(obj1), typeid(*obj2), holderType });
     if (it != map.end())
     {
         it->second(obj1, obj2);
