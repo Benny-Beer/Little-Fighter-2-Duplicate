@@ -37,5 +37,4 @@ void WalkingState::enter(PlayableObject& player)
 	player.setAniName("walking");
 	player.setDiraction(m_input);
 	
-	
 }

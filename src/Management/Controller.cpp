@@ -20,12 +20,15 @@ Controller::Controller(sf::RenderWindow& window,
     //=============================================================
     // === this section is hard coded. need to be done in Level ===
     // add pickable (rock)
-    std::string objectLine = "r";
+
+    std::string objectLine = "r r b";
+
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
     std::string sq = "b1";
     m_level->addSquad(sq);
     // ============================================================
+
 
     //========================================================================
     // === this section is hard coded. need to be done in InGameScreem (?) === 
@@ -42,11 +45,14 @@ Controller::Controller(sf::RenderWindow& window,
     //m_allies.push_back(allyThree);
     //========================================================================
 
+
     m_enemies = m_level->getAllEnemies();
     m_pickables = m_level->getAllObjects();
     updateComputerPlayerStats();
 
+
     // TODO: initialize HUD (m_stats)
+
 }
 
 void Controller::handleInput(sf::Event ev)
@@ -63,25 +69,38 @@ void Controller::updateWorld(float deltaTime)
     for (auto& player : m_players)
     {
         player->update(deltaTime);
+        m_level->handleCollisionsWithPlayer(*player); // currently through level, need to transfer into controller
+
     }
 
     for (auto& ally : m_allies)
     {
-       ally->update(deltaTime);     
+
+       ally->update(deltaTime);
+       m_level->handleCollisionsWithPlayer(*ally);//TODO: update() in Ally
+
     }
     for (auto& enemy : m_enemies)
     {
         enemy->update(deltaTime);
+        m_level->handleCollisionsWithPlayer(*enemy);
     }
     for (auto& obj : m_pickables)
     {
         obj->update(deltaTime);
+		
+		
     }
     for (auto& dead : m_deads)
     {
         dead->update(deltaTime);
     }
 
+
+    std::erase_if(m_pickables, [](const std::shared_ptr<PickableObject>& obj) {
+        return obj->isUsed();
+        });
+  
     updateComputerPlayerStats();
 
     for (int i = 0; i < m_players.size(); i++) {
@@ -94,6 +113,7 @@ void Controller::updateWorld(float deltaTime)
         }
     }
 
+
     // Update the level itself (enemies, objects, etc.)
      //m_level->update(deltaTime);
     //      TODO: create uptade() in Level - needs to update m_enemies!
@@ -101,8 +121,10 @@ void Controller::updateWorld(float deltaTime)
     // Update HUD/stats with current data
     //m_stats.update(m_players, m_allies, *m_level);
     //      TODO: create uptade() in HUD
+
     if(m_players.size())
         m_level->handleCollisionsWithPlayer(*m_players.back()); // currently through level, need to transfer into controller
+
 
 }
 
@@ -147,12 +169,14 @@ void Controller::render()
     // Draw background, enemies, pickable objects, etc.
     m_level->render(m_window);
 
+
     for (const auto& dead : m_deads)
     {
         dead->draw(m_window);
     }
 
     float i = 0.f;
+
     for (const auto& player : m_players)
     {
         player->draw(m_window);
@@ -171,6 +195,8 @@ void Controller::render()
         printHp(ally->getPotentialHp(), { 10.f, 30.f+i }, true);
         i += 40.f;
     }
+    
+
 
     i = 0.f;
     for (const auto& enemy : m_enemies)

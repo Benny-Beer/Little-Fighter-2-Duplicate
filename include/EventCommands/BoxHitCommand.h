@@ -1,8 +1,8 @@
 #include "EventCommands/ICommand.h"
 #include "Objects/PlayableObject.h"
 
-class StoneHitCommand : public ICommand {
+class BoxHitCommand : public ICommand {
 public:
-	StoneHitCommand() = default;
+	BoxHitCommand() = default;
 	void execute(PlayableObject& player) override;
 };

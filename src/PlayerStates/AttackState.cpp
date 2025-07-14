@@ -30,7 +30,7 @@ void AttackState::enter(PlayableObject& player)
     player.setAniName("attacking");
     std::cout << "after setAniName\n";
     player.attack();
-    player.handleCommand(std::make_unique<HandsAttackCommand>());
+    //player.handleCommand(std::make_unique<HandsAttackCommand>());
     std::cout << "after attack()\n";
 }
 
