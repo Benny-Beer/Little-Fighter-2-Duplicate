@@ -88,6 +88,9 @@ void IdleState::onHandsAttack(PlayableObject& player) {
 void IdleState::onStoneHit(PlayableObject& player) {
 
 }
+void IdleState::onBoxHit(PlayableObject& player)
+{
+}
 void IdleState::onExplosion(PlayableObject& player) {
     player.setState(std::make_unique<GotHitState>());
 

@@ -93,6 +93,10 @@ void ApproachingEnemyState::onStoneHit(PlayableObject& player) {
     std::cout << "inApproachingEnemyState::onStoneHit!!!!!\n";
     player.setState(std::make_unique<GotHitState>());
 }
+void ApproachingEnemyState::onBoxHit(PlayableObject& player)
+{
+    player.setState(std::make_unique<KnockedDownState>());
+}
 void ApproachingEnemyState::onExplosion(PlayableObject& player) {
 
 }

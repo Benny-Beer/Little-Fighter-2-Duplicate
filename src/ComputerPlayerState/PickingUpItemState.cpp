@@ -80,6 +80,10 @@ void PickingUpItemState::onStoneHit(PlayableObject& player) {
     std::cout << "inPickingUpItemState::onStoneHit\n";
     player.setState(std::make_unique<GotHitState>());
 }
+void PickingUpItemState::onBoxHit(PlayableObject& player)
+{
+    player.setState(std::make_unique<KnockedDownState>());
+}
 void PickingUpItemState::onExplosion(PlayableObject& player) {
 
 }

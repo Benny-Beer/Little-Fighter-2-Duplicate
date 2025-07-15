@@ -47,7 +47,7 @@ public:
 	// in-game Events:
 
 	virtual void onStoneHit() { m_state->onStoneHit(*this); }
-
+	virtual void onBoxHit() { m_state->onBoxHit(*this); }
 	virtual void onHandsAttack();
 
 	void adjustRange(float range);

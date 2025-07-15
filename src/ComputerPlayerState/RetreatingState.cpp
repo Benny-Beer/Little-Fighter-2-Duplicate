@@ -56,6 +56,11 @@ void RetreatingState::onStoneHit(PlayableObject& player) {
     std::cout << " RetreatingState::onStoneHit\n";
     player.setState(std::make_unique<KnockedDownState>());
 }
+void RetreatingState::onBoxHit(PlayableObject& player)
+{
+    std::cout << " RetreatingState::onBoxeHit\n";
+    player.setState(std::make_unique<KnockedDownState>());
+}
 void RetreatingState::onExplosion(PlayableObject& player) {
 
 }

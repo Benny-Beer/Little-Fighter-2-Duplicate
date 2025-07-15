@@ -8,17 +8,10 @@ void KnockedDownState::enter(PlayableObject& player) {
     std::cout << player.getName() << " enter:: KnockedDownState\n";
     player.dropHeldObj();
 
-    //Animation knockedDownAnim(player.getTexture(),
-    //    240, 0,          // x, y
-    //    80, 80,        // width, height
-    //    5,             // מספר פריימים
-    //    0.2f,
-    //    false);         
-    //player.setAnimation(knockedDownAnim);
     player.setAniName("knocked");
-    //player.setDiraction(m_input);     
+    
     m_elapsedTime = 0.0f;
-    // need information that the player isnt controllable - ?
+    
 }
 
 void KnockedDownState::update(PlayableObject& player, float deltaTime) {
@@ -41,6 +34,9 @@ void KnockedDownState::onHandsAttack(PlayableObject& player) {
 
 void KnockedDownState::onStoneHit(PlayableObject& player) {
 
+}
+void KnockedDownState::onBoxHit(PlayableObject& player)
+{
 }
 void KnockedDownState::onExplosion(PlayableObject& player) {
 
