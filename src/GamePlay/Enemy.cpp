@@ -21,6 +21,8 @@ void Enemy::update(float dt)
     //m_prevPosition = getPosition();
 
     ComputerPlayer::update(dt);  // זה מפעיל את ה־state
+    //std::cout << "Player Pos is: " << getPosition().x << "," << getPosition().y << "\n";
+
     if (m_currentAnimationName != m_aniName + m_strategyName) {
         setAnimation(AnimationManager::getAnimation(m_aniName + m_strategyName, getTexture()));
         m_currentAnimationName = m_aniName + m_strategyName;

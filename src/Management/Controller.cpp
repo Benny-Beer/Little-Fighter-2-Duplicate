@@ -1,5 +1,6 @@
 #include "Management/Controller.h"
 #include "Gameplay/Level.h"
+
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window.hpp>
@@ -20,8 +21,8 @@ Controller::Controller(sf::RenderWindow& window,
     //=============================================================
     // === this section is hard coded. need to be done in Level ===
     // add pickable (rock)
-
-    std::string objectLine = "r";
+    
+    std::string objectLine = "r r b";
 
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
@@ -34,16 +35,16 @@ Controller::Controller(sf::RenderWindow& window,
     // === this section is hard coded. need to be done in InGameScreem (?) === 
     // (The vectors will NOT be empty at first place) ========================
     // creating user's player
-    m_players.push_back(std::make_shared<Player>(sf::Vector2f(1000, 800), "davis_ani", 320.f));
+    m_players.push_back(std::make_shared<Player>(sf::Vector2f(700, 700), "davis_ani", 320.f));
     // creating ally
 
     auto ally = std::make_shared<Ally>(sf::Vector2f(800, 100), "davis_ani",60.f);
-    //auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
-    //auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
+    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
+    auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
 
     m_allies.push_back(ally);
-    //m_allies.push_back(allyTwo);
-    //m_allies.push_back(allyThree);
+    m_allies.push_back(allyTwo);
+    m_allies.push_back(allyThree);
 
 
 

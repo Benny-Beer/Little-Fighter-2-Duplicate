@@ -4,6 +4,8 @@
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
 #include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
+#include "PlayableObjectStates/ComputerPlayerState/GotHitState.h"
+#include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
 
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
@@ -70,12 +72,13 @@ void PickingUpItemState::name() {
 }
 
 void PickingUpItemState::onHandsAttack(PlayableObject& player) {
+    player.setState(std::make_unique<BlockingState>());
 
 }
 
 void PickingUpItemState::onStoneHit(PlayableObject& player) {
     std::cout << "inPickingUpItemState::onStoneHit\n";
-    player.setState(std::make_unique<KnockedDownState>());
+    player.setState(std::make_unique<GotHitState>());
 }
 void PickingUpItemState::onExplosion(PlayableObject& player) {
 

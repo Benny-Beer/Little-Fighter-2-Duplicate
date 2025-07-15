@@ -8,6 +8,7 @@ BigWeapon::BigWeapon(const sf::Vector2f pos, const std::string& name, std::uniqu
 
 void BigWeapon::update(float dt)
 {
+    Object::update(dt);
     if (m_isFlying)
     {
         // тглеп ойчен:
