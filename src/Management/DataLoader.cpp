@@ -58,8 +58,8 @@ bool DataLoader::loadCharacterDat()
 	auto p = std::make_shared<PlayerData>();
 	p->m_name = jsonData["name"].get<std::string>();
 	p->m_description = jsonData["description"].get<std::string>();
-
-	// Correct: do NOT store raw pointers if you're not 100% sure of lifetime
+	p->m_hp = jsonData["hp"].get<int>();
+	p->m_speed = jsonData["speed"].get<float>();
 	p->m_profilePic = std::make_shared<sf::Texture>(ResourceManager::instance().getTexture(jsonData["profile"]));
 	p->m_chracterIcon = std::make_shared<sf::Texture>(ResourceManager::instance().getTexture(jsonData["icon"]));
 	p->m_animationSheet = std::make_shared<sf::Texture>(ResourceManager::instance().getTexture(jsonData["animation"]));

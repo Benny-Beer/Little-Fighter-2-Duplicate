@@ -11,29 +11,29 @@ public:
 	Object(const sf::Vector2f pos, const std::string& name);
 	virtual ~Object() = default;
 	virtual void handleCollision() = 0;
-	void draw(sf::RenderWindow& window) const;
-	const sf::Texture* getTexture();
+	virtual void update(float dt);
+	
 	void setAnimation(const Animation& anim);
 	void setPosition(const sf::Vector2f pos);
-	
-	virtual void update(float dt);
-	bool collide(Object& other)const;
-	sf::FloatRect getGlobalBounds();
-	sf::Vector2f getPosition()const;
 	void setSize(float scale);
+	sf::FloatRect getGlobalBounds() const;
+	sf::Vector2f getPosition() const;
+	const sf::Texture* getTexture();
+	
+	void draw(sf::RenderWindow& window) const;
+	bool collide(Object& other) const;
+
 protected:
-	void updateAnimation(float dt);
-	void apllySprite();
-	void moveSprite(sf::Vector2f pos);
 	void setScale(int side);
 	void setOrigin(float x, float y);
 	sf::Vector2f getSize() const;
 	sf::Sprite& getSprite();
+	void updateAnimation(float dt);
+	void apllySprite();
+	void moveSprite(sf::Vector2f pos);
 	
 private:
-	sf::Sprite m_sprite;
 	const sf::Texture* m_texture = nullptr;
-
+	sf::Sprite m_sprite;
 	Animation m_animation;
-	
 };

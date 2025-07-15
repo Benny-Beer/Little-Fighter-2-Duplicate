@@ -12,6 +12,8 @@
 struct PlayerData {
     std::string m_name;
     std::string m_description;
+    int m_hp;
+    float m_speed; 
     std::shared_ptr<sf::Texture> m_profilePic;
     std::shared_ptr<sf::Texture> m_chracterIcon;
     std::shared_ptr<sf::Texture> m_animationSheet;

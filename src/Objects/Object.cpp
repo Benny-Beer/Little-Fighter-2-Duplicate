@@ -53,7 +53,7 @@ bool Object::collide(Object& other) const
 	return thisBounds.intersects(otherBounds);
 }
 
-sf::FloatRect Object::getGlobalBounds()
+sf::FloatRect Object::getGlobalBounds() const
 {
 	return m_sprite.getGlobalBounds();
 }

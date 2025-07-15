@@ -8,8 +8,6 @@
 Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
     : PlayableObject(pos, name)
 {
-
-    this->setState(std::make_unique<StandingState>(RELEASE_RIGHT));
 	//setSize(1.2);
 
     m_hp = 500;
