@@ -10,6 +10,7 @@ ComputerPlayer::ComputerPlayer(const sf::Vector2f pos, const std::string& name) 
 }
 void ComputerPlayer::update(float dt)
 {
+    Object::update(dt);
     m_prevPosition = getPosition();
     if (m_state) {
 

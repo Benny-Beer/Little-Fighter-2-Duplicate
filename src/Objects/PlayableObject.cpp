@@ -277,17 +277,3 @@ void PlayableObject::updateHp() {
     }
     m_hpClock = m_hpClock % 36;
 }
-
-void printFPS(sf::RenderWindow& window)
-{
-    static int frameCount = 0;
-    static sf::Clock clock;
-
-    frameCount++;
-    float elapsed = clock.getElapsedTime().asSeconds();
-    if (elapsed >= 1.0f) {
-        std::cout << "FPS: " << frameCount << std::endl;
-        frameCount = 0;
-        clock.restart();
-    }
-}
