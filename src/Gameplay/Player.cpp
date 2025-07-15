@@ -40,6 +40,7 @@ void Player::handleInput(sf::Event event)
 
 void Player::update(float dt)
 {
+    Object::update(dt);
     if (m_currentAnimationName != m_aniName + m_strategyName) {
         setAnimation(AnimationManager::getAnimation(m_aniName + m_strategyName, getTexture()));
         m_currentAnimationName = m_aniName + m_strategyName;
@@ -49,6 +50,7 @@ void Player::update(float dt)
     updateAnimation(dt);
     apllySprite();
     updateHp();
+    //std::cout << "Player Pos is: " << getPosition().x << "," << getPosition().y << "\n";
     //m_prevPosition = getPosition();
 
 }

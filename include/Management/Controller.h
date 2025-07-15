@@ -9,6 +9,7 @@
 #include "Gameplay/Ally.h"
 #include "UI/HeadsUpDisplay.h"
 
+
 class Controller
 {
 public:
@@ -154,11 +155,8 @@ private:
         if (it != livePlayers.end()) {
             m_deads.push_back(*it);
             std::cout << m_deads[0]->getName() << std::endl;
-            std::cout << "\n\n Live size is: " << livePlayers.size() << "\n" << std::endl;
 
-            std::cout << "\n\n m_deads size is: " << m_deads.size() << "\n" << std::endl;
             livePlayers.erase(it);
-            std::cout << "\n\n Live size is: " << livePlayers.size() << "\n" << std::endl;
 
             
         }

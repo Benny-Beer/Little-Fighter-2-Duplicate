@@ -4,6 +4,7 @@
 #include "Management/Animation.h"
 #include "Management/AnimationManager.h"
 #include "Factory/Factory.h"
+#include "Management/WorldBounds.h"
 #include "iostream"
 
 class Object {
@@ -19,8 +20,9 @@ public:
 	virtual void update(float dt);
 	bool collide(Object& other)const;
 	sf::FloatRect getGlobalBounds();
-	sf::Vector2f getPosition()const;
+	sf::Vector2f getPosition() const;
 	void setSize(float scale);
+	sf::Vector2f getGeometricCenter() const;
 protected:
 	void updateAnimation(float dt);
 	void apllySprite();
@@ -33,6 +35,7 @@ protected:
 private:
 	sf::Sprite m_sprite;
 	const sf::Texture* m_texture = nullptr;
+	WorldBounds m_bounds = sf::FloatRect(0, 400, 1000, 400); // x of leftUpCorner, y of leftUpCorner, width, height  
 
 	Animation m_animation;
 	

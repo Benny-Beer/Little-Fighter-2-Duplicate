@@ -5,7 +5,7 @@
 KnockedDownState::KnockedDownState() = default;
 
 void KnockedDownState::enter(PlayableObject& player) {
-    std::cout << "enter:: KnockedDownState\n";
+    std::cout << player.getName() << " enter:: KnockedDownState\n";
     player.dropHeldObj();
 
     player.setAniName("knocked");
@@ -25,7 +25,7 @@ void KnockedDownState::update(PlayableObject& player, float deltaTime) {
 }
 
 void KnockedDownState::exit(ComputerPlayer& player) {
-    player.setControllable(true); // Restore control in any case
+    //player.setControllable(true); // Restore control in any case
 }
 
 void KnockedDownState::onHandsAttack(PlayableObject& player) {

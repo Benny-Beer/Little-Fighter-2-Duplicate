@@ -40,6 +40,7 @@ public:
 	const std::string& getAnimationName() const { return m_animationName; }
 	void setState(std::unique_ptr<ObjectBaseState> state);
 	const std::unique_ptr<ObjectBaseState>& getState() const { return m_state; }
+	void setCommand(std::unique_ptr<ICommand> cmd) { m_command = std::move(cmd); }
 protected:
 	sf::Vector2f m_offset;
 	Status m_status = ON_EARTH;

@@ -4,6 +4,7 @@
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 #include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
 #include "PlayableObjectStates/ComputerPlayerState/RetreatingState.h"
+#include "PlayableObjectStates/ComputerPlayerState/GotHitState.h"
 
 #include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
 #include "GamePlay/ComputerPlayer.h"
@@ -83,14 +84,14 @@ void ApproachingEnemyState::exit(ComputerPlayer& player) {
 void ApproachingEnemyState::onHandsAttack(PlayableObject& player) {
     std::cout << player.getName() << " is in [ApproachingEnemyState] and i got attacked by hands\n"
         "activating blocking state\n";
-    player.setState(std::make_unique<RetreatingState>());
+    player.setState(std::make_unique<BlockingState>());
 
     //player.setState(std::make_unique<BlockingState>());
 }
 
 void ApproachingEnemyState::onStoneHit(PlayableObject& player) {
     std::cout << "inApproachingEnemyState::onStoneHit!!!!!\n";
-    player.setState(std::make_unique<KnockedDownState>());
+    player.setState(std::make_unique<GotHitState>());
 }
 void ApproachingEnemyState::onBoxHit(PlayableObject& player)
 {

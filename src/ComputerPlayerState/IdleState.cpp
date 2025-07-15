@@ -3,7 +3,9 @@
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h" // the next state
 #include <cmath> // distance calculation
 #include "PlayableObjectStates/ComputerPlayerState/PickingUpItemState.h"
+#include "PlayableObjectStates/ComputerPlayerState/GotHitState.h"
 #include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
+#include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
 
 
 void IdleState::enter(PlayableObject& player) {
@@ -79,7 +81,8 @@ void IdleState::exit(ComputerPlayer& player) {
 
 void IdleState::onHandsAttack(PlayableObject& player) {
     std::cout << "Im in IdleState and i got attacked by hands\n";
-    
+    player.setState(std::make_unique<BlockingState>());
+
 }
 
 void IdleState::onStoneHit(PlayableObject& player) {
@@ -89,7 +92,7 @@ void IdleState::onBoxHit(PlayableObject& player)
 {
 }
 void IdleState::onExplosion(PlayableObject& player) {
-    player.setState(std::make_unique<KnockedDownState>());
+    player.setState(std::make_unique<GotHitState>());
 
 }
 

@@ -12,7 +12,6 @@ void PlayableObject::setState(std::unique_ptr<PlayableObjectState> newState)
 void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
 {
 	std::cout << getName() << " is handling command\n";
-	std::cout << typeid(*command).name() << std::endl;
     command->execute(*this);
 }
 
@@ -277,18 +276,4 @@ void PlayableObject::updateHp() {
         m_hp += 1;
     }
     m_hpClock = m_hpClock % 36;
-}
-
-void printFPS(sf::RenderWindow& window)
-{
-    static int frameCount = 0;
-    static sf::Clock clock;
-
-    frameCount++;
-    float elapsed = clock.getElapsedTime().asSeconds();
-    if (elapsed >= 1.0f) {
-        std::cout << "FPS: " << frameCount << std::endl;
-        frameCount = 0;
-        clock.restart();
-    }
 }

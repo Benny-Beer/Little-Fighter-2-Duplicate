@@ -33,8 +33,14 @@ void Object::setPosition(const sf::Vector2f pos)
 
 void Object::update(float dt)
 {	
-	m_animation.applyToSprite(m_sprite);
 
+	sf::Vector2f center = getGeometricCenter();
+	std::cout << center.x << "," << center.y << "\n";
+	if (!m_bounds.isInside(center)) {
+		std::cout << "im here " << m_bounds.clampPosition(getPosition(), getSize()).x << "," << m_bounds.clampPosition(getPosition(), getSize()).y << "\n";
+		setPosition(m_bounds.clampPosition(getPosition(), getSize()));
+	}
+	m_animation.applyToSprite(m_sprite);
 }
 
 bool Object::collide(Object& other) const
@@ -112,3 +118,10 @@ sf::Sprite& Object::getSprite() {
 //const sf::Sprite& Object::getSprite() const {
 //	return m_sprite;
 //}
+
+sf::Vector2f Object::getGeometricCenter() const {
+	return {
+		getPosition().x,
+		getPosition().y - getSize().y / 2.f
+	};
+}
