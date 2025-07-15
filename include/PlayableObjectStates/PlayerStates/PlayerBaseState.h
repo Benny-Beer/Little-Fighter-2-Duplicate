@@ -5,6 +5,7 @@
 #include"Management/ResourceManager.h"
 #include "Management/Animation.h"
 #include "PlayableObjectStates/PlayableObjectState.h"
+
 #include <SFML/Window.hpp>
 
 
@@ -60,6 +61,7 @@ inline Input getEventType(const sf::Event& event)
 
 
 class Player;
+class PlayableObject;
 
 class PlayerBaseState : public PlayableObjectState {
 public:
@@ -67,6 +69,7 @@ public:
     //virtual void enter(Player& player) = 0;
     //virtual void update(Player& player, float dt) {};
     void name() override {};
+	virtual void onBoxHit(PlayableObject& player) override {};
 
 protected:
     Input m_input;

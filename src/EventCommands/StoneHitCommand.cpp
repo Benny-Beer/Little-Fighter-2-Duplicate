@@ -3,8 +3,9 @@
 void StoneHitCommand::execute(PlayableObject& player)
 {
 	//player.setAniName("stonehit");
+	player.reduceHp(60); 
 	player.onStoneHit();
-	std::cout << "ON STONE HIT!!!!!!!!!!!!!\n";
+	std::cout << typeid(player).name() << "ON STONE HIT!!!!!!!!!!!!!\n";
 	// player.takeDamage(40); // for example... 
 	// add anything else that happens when player hit by stone
 }

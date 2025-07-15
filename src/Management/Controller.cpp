@@ -21,7 +21,7 @@ Controller::Controller(sf::RenderWindow& window,
     // === this section is hard coded. need to be done in Level ===
     // add pickable (rock)
 
-    std::string objectLine = "r r b";
+    std::string objectLine = "r";
 
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
@@ -171,13 +171,16 @@ void Controller::render()
     // Draw background, enemies, pickable objects, etc.
     m_level->render(m_window);
 
-
+    float i = 0.f;
     for (const auto& dead : m_deads)
     {
         dead->draw(m_window);
+        printHp(dead->getHp(), { 930.f, 10.f + i }, false);
+        printHp(dead->getPotentialHp(), { 930.f, 30.f + i }, true);
+        i += 40.f;
     }
 
-    float i = 0.f;
+    i = 0.f;
 
     for (const auto& player : m_players)
     {

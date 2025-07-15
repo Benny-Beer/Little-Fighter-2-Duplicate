@@ -156,3 +156,8 @@ void AttackingState::onExplosion(PlayableObject& player) {
 
 
 }
+
+void AttackingState::onBoxHit(PlayableObject& player)
+{
+    player.setState(std::make_unique<KnockedDownState>());
+}

@@ -62,8 +62,8 @@ void enemyAttackingAlly(Object& playerObj, std::shared_ptr<PickableObject> picka
 {
 	auto& ally = static_cast<Ally&>(playerObj);
 	if(pickableObj->thrown())
-
     {
+        //pickableObj->collide();
 		std::cout << "in computerPlayerPickable before handle command\n";
         ally.handleCommand((pickableObj->getHitCommand()));
     }
@@ -71,10 +71,11 @@ void enemyAttackingAlly(Object& playerObj, std::shared_ptr<PickableObject> picka
 }
 
 void enemyAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableObj) {
+    std::cout << pickableObj->getStatus() << std::endl;
     auto& enemy = static_cast<Enemy&>(playerObj);
-    if (pickableObj->thrown())
-
+    if (pickableObj->thrown() )
     {
+        //pickableObj->collide();
         std::cout << "in computerPlayerPickable before handle command\n";
         enemy.handleCommand((pickableObj->getHitCommand()));
     }
@@ -84,9 +85,8 @@ void enemyAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableOb
 void playerAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
     auto& player = static_cast<Player&>(playerObj);
-    if (pickableObj->thrown())
-
     {
+		pickableObj->collide();
         std::cout << "in computerPlayerPickable before handle command\n";
         player.handleCommand((pickableObj->getHitCommand()));
     }
@@ -107,13 +107,15 @@ HitMap initializeCollisionMap()
     //Box
     //map[{ typeid(Ally), typeid(Box), typeid(Bandit)}] = &enemyAttackingAlly;
     map[{ typeid(Bandit), typeid(Box), typeid(Ally)}] = &enemyAttackingAlly;
+    map[{ typeid(Bandit), typeid(Box), typeid(Player)}] = &enemyAttacked;
     map[{ typeid(Player), typeid(Box), typeid(Bandit)}] = &enemyAttacked;
     map[{ typeid(Ally), typeid(Box), typeid(Bandit)}] = &enemyAttacked;
 
     //Rock
     map[{ typeid(Bandit), typeid(Rock), typeid(Ally)}] = &enemyAttackingAlly;
     map[{ typeid(Bandit), typeid(Rock), typeid(Player)}] = &enemyAttacked;
-    map[{ typeid(Player), typeid(Rock), typeid(Enemy)}] = &playerAttacked;
+    map[{ typeid(Player), typeid(Rock), typeid(Bandit)}] = &playerAttacked;
+    map[{ typeid(Ally), typeid(Rock), typeid(Bandit)}] = &enemyAttacked;
 
     //map[{ typeid(Ally), typeid(Rock), typeid(Bandit)}] = &enemyAttackingAlly;
     //map[{ typeid(Player), typeid(Rock), typeid(Bandit)}] = &playerAttackingEnemy;

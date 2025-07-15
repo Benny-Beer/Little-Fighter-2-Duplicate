@@ -12,6 +12,7 @@ public:
 
     void onHandsAttack(PlayableObject& player) override;
     void onStoneHit(PlayableObject& player) override;
+    void onBoxHit(PlayableObject& player) override;
     void onExplosion(PlayableObject& player) override;
     void name();
 private:
