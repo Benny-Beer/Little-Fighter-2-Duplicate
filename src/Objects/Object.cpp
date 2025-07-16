@@ -5,7 +5,6 @@ Object::Object(const sf::Vector2f pos, const std::string& name)
 	m_texture = &ResourceManager::instance().getTexture(name);
 	m_sprite.setTexture(*m_texture);
 	m_sprite.setOrigin(40.f, 80.f); // 80 / 2
-	std::cout << "Pos is: " << pos.x << "," << pos.y << "\n";
 	m_sprite.setPosition(pos);
 	
 }
@@ -34,8 +33,6 @@ void Object::setPosition(const sf::Vector2f pos)
 
 void Object::update(float dt)
 {
-	std::cout << "Update Pos is: " << getPosition().x << "," << getPosition().y << "\n";
-
 	// חישוב תיבת הגבולות הנוכחית של האובייקט
 	sf::FloatRect box = getGlobalBounds();
 	if (!m_bounds.contains(box)) {

@@ -50,9 +50,7 @@ void Player::update(float dt)
     updateAnimation(dt);
     apllySprite();
     updateHp();
-    //std::cout << "Player Pos is: " << getPosition().x << "," << getPosition().y << "\n";
-    //m_prevPosition = getPosition();
-
+    
 }
 
 //void Player::move(float dt)

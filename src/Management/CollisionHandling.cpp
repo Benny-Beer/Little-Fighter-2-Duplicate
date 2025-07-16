@@ -67,6 +67,10 @@ void enemyAttackingAlly(Object& playerObj, std::shared_ptr<PickableObject> picka
 		std::cout << "in computerPlayerPickable before handle command\n";
         ally.handleCommand((pickableObj->getHitCommand()));
     }
+    else if (pickableObj->isExploded())
+    {
+        ally.handleCommand((pickableObj->getHitCommand()));
+    }
     
 }
 
@@ -77,6 +81,10 @@ void enemyAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableOb
     {
         pickableObj->collide();
         std::cout << "in computerPlayerPickable before handle command\n";
+        enemy.handleCommand((pickableObj->getHitCommand()->clone()));
+    }
+    else if (pickableObj->isExploded())
+    {
         enemy.handleCommand((pickableObj->getHitCommand()));
     }
 
@@ -89,6 +97,10 @@ void playerAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableO
     {
 		pickableObj->collide();
         std::cout << "in computerPlayerPickable before handle command\n";
+        player.handleCommand((pickableObj->getHitCommand()));
+    }
+    else if (pickableObj->isExploded())
+    {
         player.handleCommand((pickableObj->getHitCommand()));
     }
 }

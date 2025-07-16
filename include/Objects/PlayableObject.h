@@ -49,6 +49,7 @@ public:
 	virtual void onStoneHit() { m_state->onStoneHit(*this); }
 	virtual void onBoxHit() { m_state->onBoxHit(*this); }
 	virtual void onHandsAttack();
+	virtual void onExplosion();
 
 	void adjustRange(float range);
 	float getAttackRange() const;

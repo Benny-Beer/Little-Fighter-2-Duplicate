@@ -214,6 +214,16 @@ void PlayableObject::onHandsAttack()
 
 }
 
+void PlayableObject::onExplosion()
+{
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+	m_state->onExplosion(*this);
+}
+
 void PlayableObject::setAniName(const std::string& name)
 {
     m_aniName = name;

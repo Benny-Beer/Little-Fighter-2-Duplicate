@@ -23,7 +23,7 @@ Controller::Controller(sf::RenderWindow& window,
     // add pickable (rock)
 
 
-    std::string objectLine = "b";
+    std::string objectLine = "r b";
 
 
     m_level->addPickableObjects(objectLine);
@@ -75,8 +75,6 @@ void Controller::updateWorld(float deltaTime)
 
     for (auto& player : m_players)
     {
-        std::cout << "UpdateWorld Pos is: " << player->getPosition().x << "," << player->getPosition().y << "\n";
-
         player->update(deltaTime);
         m_level->handleCollisionsWithPlayer(*player); // currently through level, need to transfer into controller
 
@@ -93,6 +91,7 @@ void Controller::updateWorld(float deltaTime)
     {
         enemy->update(deltaTime);
         m_level->handleCollisionsWithPlayer(*enemy);
+        //checkCollisionWithPlayer()
     }
     for (auto& obj : m_pickables)
     {
@@ -100,15 +99,20 @@ void Controller::updateWorld(float deltaTime)
 		
 		
     }
+	m_level->update(deltaTime);
+    std::erase_if(m_pickables, [](std::shared_ptr<PickableObject>& obj) {
+		std::cout << "im here in Controller erase_if\n";
+		std::cout << obj->getName() << " isUsed: " << obj->isUsed() << "\n";
+        return obj->isUsed();
+        });
+
     for (auto& dead : m_deads)
     {
         dead->update(deltaTime);
     }
 
 
-    std::erase_if(m_pickables, [](const std::shared_ptr<PickableObject>& obj) {
-        return obj->isUsed();
-        });
+    
   
     updateComputerPlayerStats();
 
