@@ -7,7 +7,14 @@ Object::Object(const sf::Vector2f pos, const std::string& name)
 	m_sprite.setOrigin(40.f, 80.f); // 80 / 2
 	std::cout << "Pos is: " << pos.x << "," << pos.y << "\n";
 	m_sprite.setPosition(pos);
-	
+}
+
+Object::Object(std::shared_ptr<sf::Texture>textSheet)
+{
+	m_texture = textSheet.get();
+	m_sprite.setTexture(*textSheet);
+	m_sprite.setOrigin(40.f, 80.f);
+	m_sprite.setPosition(sf::Vector2f(1000,800));
 }
 
 void Object::draw(sf::RenderWindow& window) const
@@ -72,7 +79,7 @@ bool Object::collide(Object& other) const
 	return thisBounds.intersects(otherBounds);
 }
 
-sf::FloatRect Object::getGlobalBounds()
+sf::FloatRect Object::getGlobalBounds() const
 {
 	return m_sprite.getGlobalBounds();
 }

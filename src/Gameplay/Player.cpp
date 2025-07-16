@@ -8,19 +8,26 @@
 Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
     : PlayableObject(pos, name)
 {
-
-    this->setState(std::make_unique<StandingState>(RELEASE_RIGHT));
 	//setSize(1.2);
-
     m_hp = 500;
     m_potentialHp = 500;
-
 	m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
     m_speed = speed;
     m_name = "player";
     this->setState(std::make_unique<StandingState>(RELEASE_RIGHT));
     m_state->enter(*this);
 
+}
+
+Player::Player(PlayerData data) : PlayableObject(data.m_animationSheet)
+{
+    m_hp = data.m_hp;
+    m_potentialHp = data.m_hp;
+    m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
+    m_speed = data.m_speed;
+    m_name = data.m_name;
+    this -> setState(std::make_unique<StandingState>(RELEASE_RIGHT));
+    m_state->enter(*this);
 }
 
 // Updates m_direction according to arrow keys

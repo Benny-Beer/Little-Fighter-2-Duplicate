@@ -46,8 +46,6 @@ LoadingScreen::LoadingScreen(sf::RenderWindow& window, GameManager& manager) : I
 		m_chienese.getPosition().y + m_chienese.getGlobalBounds().height + 20
 	);
 	
-	
-	
 }
 
 void LoadingScreen::update(sf::Time deltaTime) {

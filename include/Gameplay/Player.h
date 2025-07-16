@@ -12,6 +12,8 @@
 struct PlayerData {
     std::string m_name;
     std::string m_description;
+    int m_hp;
+    float m_speed; 
     std::shared_ptr<sf::Texture> m_profilePic;
     std::shared_ptr<sf::Texture> m_chracterIcon;
     std::shared_ptr<sf::Texture> m_animationSheet;
@@ -24,6 +26,7 @@ class Player : public PlayableObject
 {
 public:
     explicit Player(const sf::Vector2f pos, const std::string& name, float speed = 200.f);
+    Player(PlayerData data);
 
     void handleInput(sf::Event event);                 // Reads arrow-key state (?) m_direction
     void update(float dt);

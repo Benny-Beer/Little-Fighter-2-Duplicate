@@ -16,7 +16,7 @@ public:
     void render() override;
 
 private:
-    std::vector<std::pair<std::string, std::shared_ptr<PlayerData>>> m_characters;
+    std::vector<std::pair<std::string,std::shared_ptr<PlayerData>>> m_characters;
     bool m_selectionMode = false;
     bool m_selected = false;
     int m_currentIndex = 0;

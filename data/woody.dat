@@ -1,7 +1,9 @@
 {
-"name":"woody",
-"description":"Gritty veteran who can teleport (??)",
-"profile":"characters/woody_f",
-"icon":"characters/woody_s",
-"animation":"characters/woody_0"
+  "name": "woody",
+  "description": "Gritty veteran who can teleport (??)",
+  "hp": 500,
+  "speed": 320,
+  "profile": "characters/woody_f",
+  "icon": "characters/woody_s",
+  "animation": "characters/woody_0"
 }

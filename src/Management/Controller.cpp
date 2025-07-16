@@ -30,14 +30,7 @@ Controller::Controller(sf::RenderWindow& window,
     // add enemies (one bandit)
     std::string sq = "b4";
     m_level->addSquad(sq);
-    // ============================================================
 
-
-    //========================================================================
-    // === this section is hard coded. need to be done in InGameScreem (?) === 
-    // (The vectors will NOT be empty at first place) ========================
-    // creating user's player
-    m_players.push_back(std::make_shared<Player>(sf::Vector2f(525, 750), "davis_ani", 320.f));
     // creating ally
 
     auto ally = std::make_shared<Ally>(sf::Vector2f(100, 450), "davis_ani",60.f);
@@ -227,6 +220,22 @@ void Controller::render()
 
 
             
+}
+
+void Controller::setPlayer(PlayerData player)
+{
+    m_players.push_back(std::make_shared<Player>(player));
+    //add support to multipule players. 
+}
+
+void Controller::setAlly(std::shared_ptr<Ally> ally)
+{
+	if (ally) {
+		m_allies.push_back(ally);
+	}
+	else {
+		std::cerr << "Error: Attempted to add a null ally." << std::endl;
+	}
 }
 
 //void Controller::updateAndRender(float deltaTime)

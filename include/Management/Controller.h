@@ -27,7 +27,8 @@ public:
     void updateWorld(float deltaTime);   // Updates players, allies, level, etc.
     void checkLevelEndConditions();      // Determines whether the match is over
     void render();
-
+    void setPlayer(PlayerData player);
+	void setAlly(std::shared_ptr<Ally> ally);
     // Returns whether the level has ended, and who won
     bool isLevelFinished() const;
     bool didWin() const;
@@ -111,7 +112,6 @@ private:
             }
         }
     }
-
 
     template<typename T>
     void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<T>>& enemies) {
