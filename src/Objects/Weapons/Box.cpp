@@ -1,6 +1,7 @@
 #include "Objects/Weapons/Box.h"
 #include "Objects/ObjectStates/ExplodingObjState.h"
 #include "EventCommands/BoxHitCommand.h"
+#include "EventCommands/ExplodeCommand.h"
 
 Box::Box(const sf::Vector2f pos, const std::string& name)
 	:BigWeapon(pos, name, std::make_unique<BoxHitCommand>())
@@ -13,29 +14,30 @@ Box::Box(const sf::Vector2f pos, const std::string& name)
 
 void Box::update(float dt)
 {
-    BigWeapon::update(dt);
-    if (!m_command)
+   Object::update(dt);
+    if (isExploded())
+
     {
-		m_command = std::make_unique<BoxHitCommand>();
+		m_command = std::make_unique<ExplodeCommand>();
     }
     if (m_isFlying)
     {
-        // òãëåï îé÷åí:
+        // Ã²Ã£Ã«Ã¥Ã¯ Ã®Ã©Ã·Ã¥Ã­:
         sf::Vector2f pos = getPosition();
         pos.x += m_velocity.x * dt;
         pos.y += m_velocity.y * dt;
 
-        // òãëåï îäéøåú Y òí Gravity:
+        // Ã²Ã£Ã«Ã¥Ã¯ Ã®Ã¤Ã©Ã¸Ã¥Ãº Y Ã²Ã­ Gravity:
         m_velocity.y += m_gravity * dt;
 
-        // äàí ðçúðå?
+        // Ã¤Ã Ã­ Ã°Ã§ÃºÃ°Ã¥?
         if (pos.y >= m_groundY)
         {
+			explode(); 
             pos.y = m_groundY;
-            m_isFlying = false;  // äôñé÷ ìòåó
+            m_isFlying = false;  // Ã¤Ã´Ã±Ã©Ã· Ã¬Ã²Ã¥Ã³
             m_velocity = { 0.f, 0.f };
-            std::cout << "Rock landed!\n";
-            //setAnimation(AnimationManager::getAnimation("r", getTexture()));
+            
 			setState(std::make_unique<ExplodingObjState>()); // Change state to ExplodingObjState
             
         }
@@ -51,6 +53,8 @@ void Box::update(float dt)
     updateAnimation(dt);
     apllySprite();
 }
+
+
 
 
 

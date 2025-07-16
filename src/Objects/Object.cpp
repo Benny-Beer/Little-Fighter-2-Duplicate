@@ -5,7 +5,6 @@ Object::Object(const sf::Vector2f pos, const std::string& name)
 	m_texture = &ResourceManager::instance().getTexture(name);
 	m_sprite.setTexture(*m_texture);
 	m_sprite.setOrigin(40.f, 80.f); // 80 / 2
-	std::cout << "Pos is: " << pos.x << "," << pos.y << "\n";
 	m_sprite.setPosition(pos);
 }
 
@@ -49,8 +48,6 @@ sf::FloatRect Object::buildMyRect() {
 
 void Object::update(float dt)
 {
-
-	// חישוב תיבת הגבולות הנוכחית של האובייקט
 	sf::FloatRect box = buildMyRect();
 
 	if (!m_bounds.contains(box)) {
@@ -68,8 +65,8 @@ bool Object::collide(Object& other) const
 	sf::FloatRect thisBounds = m_sprite.getGlobalBounds();
 	sf::FloatRect otherBounds = other.getGlobalBounds();
 
-	// הקטנה או הגדלה של גבולות – לפי הצורך שלך
-	const float buffer = -20.f; // <0: הקטנה של הקופסה (מדויקת יותר), >0: הגדלה (רכה יותר)
+	// ֳ₪ֳ·ֳ¨ֳ°ֳ₪ ֳ ֳ¥ ֳ₪ֳ¢ֳ£ֳ¬ֳ₪ ֳ¹ֳ¬ ֳ¢ֳ¡ֳ¥ֳ¬ֳ¥ֳ÷ ג€“ ֳ¬ֳ´ֳ© ֳ₪ֳ¶ֳ¥ֳ¸ֳ× ֳ¹ֳ¬ֳ×
+	const float buffer = -20.f; // <0: ֳ₪ֳ·ֳ¨ֳ°ֳ₪ ֳ¹ֳ¬ ֳ₪ֳ·ֳ¥ֳ´ֳ±ֳ₪ (ֳ®ֳ£ֳ¥ֳ©ֳ·ֳ÷ ֳ©ֳ¥ֳ÷ֳ¸), >0: ֳ₪ֳ¢ֳ£ֳ¬ֳ₪ (ֳ¸ֳ«ֳ₪ ֳ©ֳ¥ֳ÷ֳ¸)
 
 	thisBounds.left -= buffer;
 	thisBounds.top -= buffer;

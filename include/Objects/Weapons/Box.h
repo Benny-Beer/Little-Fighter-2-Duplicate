@@ -8,7 +8,7 @@ public:
 	Box(const sf::Vector2f pos, const std::string& name);
 	virtual void playAttack() override {};
 	virtual void update(float dt) override;
-	//void setState(std::unique_ptr<ObjectBaseState> state);
+	
 private:
 	static bool m_registered;
 	

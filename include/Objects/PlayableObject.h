@@ -47,6 +47,9 @@ public:
 	virtual void onStoneHit();
 	virtual void onBoxHit();
 	virtual void onHandsAttack();
+
+	virtual void onExplosion();
+
 	void adjustRange(float range);
 	float getAttackRange() const;
 	std::shared_ptr<PickableObject> getHeldObj() const;
