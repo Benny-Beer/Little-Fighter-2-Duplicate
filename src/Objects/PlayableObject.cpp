@@ -213,6 +213,25 @@ void PlayableObject::onHandsAttack()
     m_state->onHandsAttack(*this);
 
 }
+void PlayableObject::onStoneHit()
+{
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onStoneHit(*this);
+}
+
+void PlayableObject::onBoxHit()
+{
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onBoxHit(*this);
+}
 
 void PlayableObject::onExplosion()
 {

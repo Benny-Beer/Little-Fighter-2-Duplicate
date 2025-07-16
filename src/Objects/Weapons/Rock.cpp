@@ -17,7 +17,7 @@ void Rock::update(float dt)
     {
         m_command = std::make_unique<StoneHitCommand>();
     }*/
-    Object::update(dt);
+    BigWeapon::update(dt);
     if (m_isFlying)
     {
         std::cout << "\n\n in m_isFlying condition\n\n";

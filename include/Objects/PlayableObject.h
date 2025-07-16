@@ -9,10 +9,10 @@ enum class Direction
 	RIGHT = 1, LEFT = -1
 };
 
-
 class PlayableObject : public Object{
 public:
 	PlayableObject(sf::Vector2f pos, const std::string& name) : Object(pos, name), m_prevPosition(pos) {}
+	PlayableObject(std::shared_ptr<sf::Texture> textSheet) : Object(textSheet), m_prevPosition(sf::Vector2f(1000,800)) {}
 	void setState(std::unique_ptr<PlayableObjectState> newState); 
 	virtual void handleCommand(std::unique_ptr<ICommand> command);
 	virtual void pickUpObject(std::shared_ptr<PickableObject> obj);
@@ -41,14 +41,13 @@ public:
 	//virtual void attack();
 	virtual void tookItem();
 	virtual void wantItem();
-
 	virtual bool needItem();
 
 	// in-game Events:
-
-	virtual void onStoneHit() { m_state->onStoneHit(*this); }
-	virtual void onBoxHit() { m_state->onBoxHit(*this); }
+	virtual void onStoneHit();
+	virtual void onBoxHit();
 	virtual void onHandsAttack();
+
 	virtual void onExplosion();
 
 	void adjustRange(float range);
@@ -61,8 +60,6 @@ public:
 	int getHp() { return m_hp; }
 	int getPotentialHp() { return m_potentialHp; }
 	void updateHp();
-
-
 
 protected:
 	int m_hp;

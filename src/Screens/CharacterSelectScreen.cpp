@@ -194,7 +194,7 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
             if (ev.key.code == sf::Keyboard::Enter) {
                 std::cout << "enter pressed in selection mode " << std::endl;
                 //add PlayerData struct in InGameString constructor
-                m_manager.switchScreen(std::make_unique<InGameScreen>(m_window, m_manager));
+                m_manager.switchScreen(std::make_unique<InGameScreen>(m_window, m_manager,m_characters[m_currentIndex].second));
             }
         }
     }

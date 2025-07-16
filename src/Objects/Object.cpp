@@ -6,7 +6,14 @@ Object::Object(const sf::Vector2f pos, const std::string& name)
 	m_sprite.setTexture(*m_texture);
 	m_sprite.setOrigin(40.f, 80.f); // 80 / 2
 	m_sprite.setPosition(pos);
-	
+}
+
+Object::Object(std::shared_ptr<sf::Texture>textSheet)
+{
+	m_texture = textSheet.get();
+	m_sprite.setTexture(*textSheet);
+	m_sprite.setOrigin(40.f, 80.f);
+	m_sprite.setPosition(sf::Vector2f(1000,800));
 }
 
 void Object::draw(sf::RenderWindow& window) const
@@ -31,22 +38,25 @@ void Object::setPosition(const sf::Vector2f pos)
 	m_sprite.setPosition(pos);
 }
 
+sf::FloatRect Object::buildMyRect() {
+	sf::Vector2f dimensions = m_animation.getCurrentSize();
+	float myX = getPosition().x - dimensions.x/2;
+	float myY = getPosition().y - dimensions.y;
+	sf::FloatRect rect = sf::FloatRect(myX, myY, dimensions.x, dimensions.y);
+	return rect;		
+}
+
 void Object::update(float dt)
 {
-	// חישוב תיבת הגבולות הנוכחית של האובייקט
-	sf::FloatRect box = getGlobalBounds();
+	sf::FloatRect box = buildMyRect();
+
 	if (!m_bounds.contains(box)) {
-	// חישוב ההפרש בין ה-position (מבוסס origin) לבין הפינה השמאלית-עליונה של המלבן
-	sf::Vector2f offset = getPosition() - sf::Vector2f(box.left, box.top);
-
-	// תיקון המיקום של המלבן לפי הגבולות
-	sf::Vector2f correctedTopLeft = m_bounds.clampPosition(box);
-
-	// הגדרת מיקום חדש בהתאם ל־offset כדי לשמור על origin נכון
-	setPosition(correctedTopLeft + offset);
+		sf::Vector2f offset = getPosition() - sf::Vector2f(box.left, box.top);
+		sf::Vector2f correctedTopLeft = m_bounds.clampPosition(box);
+		setPosition(correctedTopLeft + offset);
 	}
-	// עדכון אנימציה
 	m_animation.applyToSprite(m_sprite);
+
 }
 
 
@@ -55,8 +65,8 @@ bool Object::collide(Object& other) const
 	sf::FloatRect thisBounds = m_sprite.getGlobalBounds();
 	sf::FloatRect otherBounds = other.getGlobalBounds();
 
-	// הקטנה או הגדלה של גבולות – לפי הצורך שלך
-	const float buffer = -20.f; // <0: הקטנה של הקופסה (מדויקת יותר), >0: הגדלה (רכה יותר)
+	// ֳ₪ֳ·ֳ¨ֳ°ֳ₪ ֳ ֳ¥ ֳ₪ֳ¢ֳ£ֳ¬ֳ₪ ֳ¹ֳ¬ ֳ¢ֳ¡ֳ¥ֳ¬ֳ¥ֳ÷ ג€“ ֳ¬ֳ´ֳ© ֳ₪ֳ¶ֳ¥ֳ¸ֳ× ֳ¹ֳ¬ֳ×
+	const float buffer = -20.f; // <0: ֳ₪ֳ·ֳ¨ֳ°ֳ₪ ֳ¹ֳ¬ ֳ₪ֳ·ֳ¥ֳ´ֳ±ֳ₪ (ֳ®ֳ£ֳ¥ֳ©ֳ·ֳ÷ ֳ©ֳ¥ֳ÷ֳ¸), >0: ֳ₪ֳ¢ֳ£ֳ¬ֳ₪ (ֳ¸ֳ«ֳ₪ ֳ©ֳ¥ֳ÷ֳ¸)
 
 	thisBounds.left -= buffer;
 	thisBounds.top -= buffer;
@@ -66,7 +76,7 @@ bool Object::collide(Object& other) const
 	return thisBounds.intersects(otherBounds);
 }
 
-sf::FloatRect Object::getGlobalBounds()
+sf::FloatRect Object::getGlobalBounds() const
 {
 	return m_sprite.getGlobalBounds();
 }
@@ -112,6 +122,16 @@ void Object::setOrigin(float x, float y)
 	m_sprite.setOrigin(x, y);
 
 }
+
+void Object::adjustBoundsToJump()
+{
+	m_bounds = sf::FloatRect(-25, 280, 1050, 520);
+}
+void Object::adjustBoundsBack()
+{
+	m_bounds = sf::FloatRect(-25, 380, 1050, 420);
+}
+
 
 sf::Vector2f Object::getSize() const
 {
