@@ -75,6 +75,8 @@ void Controller::updateWorld(float deltaTime)
 
     for (auto& player : m_players)
     {
+        std::cout << "UpdateWorld Pos is: " << player->getPosition().x << "," << player->getPosition().y << "\n";
+
         player->update(deltaTime);
         m_level->handleCollisionsWithPlayer(*player); // currently through level, need to transfer into controller
 

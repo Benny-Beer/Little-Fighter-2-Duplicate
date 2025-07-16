@@ -35,7 +35,7 @@ protected:
 private:
 	sf::Sprite m_sprite;
 	const sf::Texture* m_texture = nullptr;
-	WorldBounds m_bounds = sf::FloatRect(0, 400, 1000, 400); // x of leftUpCorner, y of leftUpCorner, width, height  
+	WorldBounds m_bounds = sf::FloatRect(-25, 380, 1050, 420); // x of leftUpCorner, y of leftUpCorner, width, height  
 
 	Animation m_animation;
 	
