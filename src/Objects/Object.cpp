@@ -38,18 +38,17 @@ void Object::update(float dt)
 
 	// חישוב תיבת הגבולות הנוכחית של האובייקט
 	sf::FloatRect box = getGlobalBounds();
+	std::cout << box.left << "and " << box.top << "\n";
 	if (!m_bounds.contains(box)) {
-	// חישוב ההפרש בין ה-position (מבוסס origin) לבין הפינה השמאלית-עליונה של המלבן
-	sf::Vector2f offset = getPosition() - sf::Vector2f(box.left, box.top);
-
-	// תיקון המיקום של המלבן לפי הגבולות
-	sf::Vector2f correctedTopLeft = m_bounds.clampPosition(box);
-
-	// הגדרת מיקום חדש בהתאם ל־offset כדי לשמור על origin נכון
-	setPosition(correctedTopLeft + offset);
+		std::cout << "im in\n";
+		sf::Vector2f offset = getPosition() - sf::Vector2f(box.left, box.top);
+		sf::Vector2f correctedTopLeft = m_bounds.clampPosition(box);
+		std::cout << "Corrected: (" << correctedTopLeft.x << "," << correctedTopLeft.y << ")\n";
+		setPosition(correctedTopLeft + offset);
 	}
-	// עדכון אנימציה
 	m_animation.applyToSprite(m_sprite);
+	std::cout << "After Update Pos is: " << getPosition().x << "," << getPosition().y << "\n";
+
 }
 
 

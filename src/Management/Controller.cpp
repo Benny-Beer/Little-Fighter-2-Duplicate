@@ -28,7 +28,7 @@ Controller::Controller(sf::RenderWindow& window,
 
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
-    std::string sq = "b3";
+    std::string sq = "b1";
     m_level->addSquad(sq);
     // ============================================================
 

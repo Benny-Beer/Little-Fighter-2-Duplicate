@@ -45,11 +45,11 @@ void IdleState::update(PlayableObject& player, float deltaTime) {
         return;
     }
     if (std::dynamic_pointer_cast<PlayableObject>(target)) {
-        player.setState(std::make_unique<ApproachingEnemyState>(target));
+       // player.setState(std::make_unique<ApproachingEnemyState>(target));
         return;
     }
     else if (std::dynamic_pointer_cast<PickableObject>(target)) {
-        player.setState(std::make_unique<PickingUpItemState>(target));
+        //player.setState(std::make_unique<PickingUpItemState>(target));
         return;
     }
     //player.setState(std::make_unique<PickingUpItemState>(target));
