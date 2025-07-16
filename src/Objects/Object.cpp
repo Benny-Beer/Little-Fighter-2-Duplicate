@@ -5,6 +5,7 @@ Object::Object(const sf::Vector2f pos, const std::string& name)
 	m_texture = &ResourceManager::instance().getTexture(name);
 	m_sprite.setTexture(*m_texture);
 	m_sprite.setOrigin(40.f, 80.f); // 80 / 2
+	std::cout << "Pos is: " << pos.x << "," << pos.y << "\n";
 	m_sprite.setPosition(pos);
 	
 }
@@ -32,16 +33,25 @@ void Object::setPosition(const sf::Vector2f pos)
 }
 
 void Object::update(float dt)
-{	
+{
+	std::cout << "Update Pos is: " << getPosition().x << "," << getPosition().y << "\n";
 
-	sf::Vector2f center = getGeometricCenter();
-	std::cout << center.x << "," << center.y << "\n";
-	if (!m_bounds.isInside(center)) {
-		std::cout << "im here " << m_bounds.clampPosition(getPosition(), getSize()).x << "," << m_bounds.clampPosition(getPosition(), getSize()).y << "\n";
-		setPosition(m_bounds.clampPosition(getPosition(), getSize()));
+	// חישוב תיבת הגבולות הנוכחית של האובייקט
+	sf::FloatRect box = getGlobalBounds();
+	if (!m_bounds.contains(box)) {
+	// חישוב ההפרש בין ה-position (מבוסס origin) לבין הפינה השמאלית-עליונה של המלבן
+	sf::Vector2f offset = getPosition() - sf::Vector2f(box.left, box.top);
+
+	// תיקון המיקום של המלבן לפי הגבולות
+	sf::Vector2f correctedTopLeft = m_bounds.clampPosition(box);
+
+	// הגדרת מיקום חדש בהתאם ל־offset כדי לשמור על origin נכון
+	setPosition(correctedTopLeft + offset);
 	}
+	// עדכון אנימציה
 	m_animation.applyToSprite(m_sprite);
 }
+
 
 bool Object::collide(Object& other) const
 {

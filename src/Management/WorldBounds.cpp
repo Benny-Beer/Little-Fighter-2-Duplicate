@@ -2,25 +2,34 @@
 #include "Management/WorldBounds.h"
 #include <SFML/Graphics.hpp>
 
-bool WorldBounds::isInside(const sf::Vector2f& center) const {
-    return m_bounds.contains(center);
+bool WorldBounds::contains(const sf::FloatRect& rect) const {
+    return m_bounds.contains(rect.left, rect.top) &&
+        m_bounds.contains(rect.left + rect.width, rect.top + rect.height);
+
 }
 
-
-sf::Vector2f WorldBounds::clampPosition(const sf::Vector2f& pos, const sf::Vector2f& size) const
+sf::Vector2f WorldBounds::clampPosition(const sf::FloatRect& objBounds) const
 {
-    // ממיר מיקום (שהוא תחתית) למרכז
-    sf::Vector2f center = { pos.x, pos.y - size.y / 2.f };
+    sf::Vector2f fixed = { objBounds.left, objBounds.top };
 
-    // מחשב גבולות בטוחים עבור center לפי size
-    float minX = m_bounds.left;
-    float maxX = m_bounds.left + m_bounds.width;
-    float minY = m_bounds.top + size.y / 2.f;
-    float maxY = m_bounds.top + m_bounds.height - size.y / 2.f;
+    if (objBounds.left < m_bounds.left)
+        fixed.x += m_bounds.left - objBounds.left;
 
-    float clampedX = std::max(minX, std::min(center.x, maxX));
-    float clampedY = std::max(minY, std::min(center.y, maxY));
+    if (objBounds.left + objBounds.width > m_bounds.left + m_bounds.width)
+        fixed.x -= (objBounds.left + objBounds.width) - (m_bounds.left + m_bounds.width);
 
-    // ממיר חזרה למיקום (שהוא תחתית)
-    return { clampedX, clampedY + size.y / 2.f };
+    if (objBounds.top < m_bounds.top)
+        fixed.y += m_bounds.top - objBounds.top;
+
+    if (objBounds.top + objBounds.height > m_bounds.top + m_bounds.height)
+        fixed.y -= (objBounds.top + objBounds.height) - (m_bounds.top + m_bounds.height);
+
+    return fixed;
 }
+
+
+
+
+
+
+
