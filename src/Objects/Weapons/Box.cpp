@@ -13,7 +13,7 @@ Box::Box(const sf::Vector2f pos, const std::string& name)
 
 void Box::update(float dt)
 {
-    Object::update(dt);
+    BigWeapon::update(dt);
     if (!m_command)
     {
 		m_command = std::make_unique<BoxHitCommand>();

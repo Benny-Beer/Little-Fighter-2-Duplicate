@@ -143,7 +143,7 @@ void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
     static HitMap map = initializeCollisionMap();
     Object* holder = obj2->getHolder();
     std::type_index holderType = holder ? typeid(*holder) : typeid(void);
-    std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << holderType.name() << std::endl;
+    std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << " and holder was " << holderType.name() << std::endl;
 	auto it = map.find({ typeid(obj1), typeid(*obj2), holderType });
     if (it != map.end())
     {

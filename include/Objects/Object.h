@@ -16,13 +16,15 @@ public:
 	const sf::Texture* getTexture();
 	void setAnimation(const Animation& anim);
 	void setPosition(const sf::Vector2f pos);
-	
+	sf::FloatRect buildMyRect();
 	virtual void update(float dt);
 	bool collide(Object& other)const;
 	sf::FloatRect getGlobalBounds();
 	sf::Vector2f getPosition() const;
 	void setSize(float scale);
 	sf::Vector2f getGeometricCenter() const;
+	virtual void adjustBoundsToJump();
+	virtual void adjustBoundsBack();
 protected:
 	void updateAnimation(float dt);
 	void apllySprite();
@@ -31,7 +33,7 @@ protected:
 	void setOrigin(float x, float y);
 	sf::Vector2f getSize() const;
 	sf::Sprite& getSprite();
-	
+
 private:
 	sf::Sprite m_sprite;
 	const sf::Texture* m_texture = nullptr;

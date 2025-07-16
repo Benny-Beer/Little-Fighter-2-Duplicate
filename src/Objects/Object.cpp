@@ -32,22 +32,26 @@ void Object::setPosition(const sf::Vector2f pos)
 	m_sprite.setPosition(pos);
 }
 
+sf::FloatRect Object::buildMyRect() {
+	sf::Vector2f dimensions = m_animation.getCurrentSize();
+	float myX = getPosition().x - dimensions.x/2;
+	float myY = getPosition().y - dimensions.y;
+	sf::FloatRect rect = sf::FloatRect(myX, myY, dimensions.x, dimensions.y);
+	return rect;		
+}
+
 void Object::update(float dt)
 {
-	std::cout << "Update Pos is: " << getPosition().x << "," << getPosition().y << "\n";
 
 	// חישוב תיבת הגבולות הנוכחית של האובייקט
-	sf::FloatRect box = getGlobalBounds();
-	std::cout << box.left << "and " << box.top << "\n";
+	sf::FloatRect box = buildMyRect();
+
 	if (!m_bounds.contains(box)) {
-		std::cout << "im in\n";
 		sf::Vector2f offset = getPosition() - sf::Vector2f(box.left, box.top);
 		sf::Vector2f correctedTopLeft = m_bounds.clampPosition(box);
-		std::cout << "Corrected: (" << correctedTopLeft.x << "," << correctedTopLeft.y << ")\n";
 		setPosition(correctedTopLeft + offset);
 	}
 	m_animation.applyToSprite(m_sprite);
-	std::cout << "After Update Pos is: " << getPosition().x << "," << getPosition().y << "\n";
 
 }
 
@@ -114,6 +118,16 @@ void Object::setOrigin(float x, float y)
 	m_sprite.setOrigin(x, y);
 
 }
+
+void Object::adjustBoundsToJump()
+{
+	m_bounds = sf::FloatRect(-25, 280, 1050, 520);
+}
+void Object::adjustBoundsBack()
+{
+	m_bounds = sf::FloatRect(-25, 380, 1050, 420);
+}
+
 
 sf::Vector2f Object::getSize() const
 {

@@ -23,12 +23,12 @@ Controller::Controller(sf::RenderWindow& window,
     // add pickable (rock)
 
 
-    std::string objectLine = "r r r";
+    std::string objectLine = "r b r";
 
 
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
-    std::string sq = "b1";
+    std::string sq = "b4";
     m_level->addSquad(sq);
     // ============================================================
 
@@ -37,16 +37,19 @@ Controller::Controller(sf::RenderWindow& window,
     // === this section is hard coded. need to be done in InGameScreem (?) === 
     // (The vectors will NOT be empty at first place) ========================
     // creating user's player
-    m_players.push_back(std::make_shared<Player>(sf::Vector2f(700, 700), "davis_ani", 320.f));
+    m_players.push_back(std::make_shared<Player>(sf::Vector2f(525, 750), "davis_ani", 320.f));
     // creating ally
 
-    //auto ally = std::make_shared<Ally>(sf::Vector2f(800, 100), "davis_ani",60.f);
-    //auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
-    //auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);
+    auto ally = std::make_shared<Ally>(sf::Vector2f(100, 450), "davis_ani",60.f);
+    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(100, 550), "davis_ani", 60.f);
+    auto allyThree = std::make_shared<Ally>(sf::Vector2f(100, 650), "davis_ani", 60.f);
+    auto allyFour = std::make_shared<Ally>(sf::Vector2f(100, 750), "davis_ani", 60.f);
 
-    //m_allies.push_back(ally);
-    //m_allies.push_back(allyTwo);
-    //m_allies.push_back(allyThree);
+    m_allies.push_back(ally);
+    m_allies.push_back(allyTwo);
+    m_allies.push_back(allyThree);
+    m_allies.push_back(allyFour);
+
 
 
 
@@ -75,7 +78,6 @@ void Controller::updateWorld(float deltaTime)
 
     for (auto& player : m_players)
     {
-        std::cout << "UpdateWorld Pos is: " << player->getPosition().x << "," << player->getPosition().y << "\n";
 
         player->update(deltaTime);
         m_level->handleCollisionsWithPlayer(*player); // currently through level, need to transfer into controller
