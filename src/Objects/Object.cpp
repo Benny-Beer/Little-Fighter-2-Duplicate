@@ -10,6 +10,7 @@ Object::Object(const sf::Vector2f pos, const std::string& name)
 
 Object::Object(std::shared_ptr<sf::Texture>textSheet)
 {
+	m_texture = textSheet.get();
 	m_sprite.setTexture(*textSheet);
 	m_sprite.setOrigin(40.f, 80.f);
 	m_sprite.setPosition(sf::Vector2f(1000,800));
