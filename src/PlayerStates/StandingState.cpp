@@ -2,6 +2,7 @@
 #include "PlayableObjectStates/PlayerStates/WalkingState.h" 
 #include "PlayableObjectStates/PlayerStates/JumpingState.h"
 #include "PlayableObjectStates/PlayerStates/AttackState.h"
+#include "PlayableObjectStates/PlayerStates/KnockedState.h"
 #include "Gameplay/Player.h"
 #include <iostream>
 StandingState::StandingState(Input input)
@@ -36,13 +37,25 @@ void StandingState::enter(PlayableObject& player)
 	player.setAniName("standing");
 	
 	player.resetDirection();
-	
+}
 
+void StandingState::onHandsAttack(PlayableObject& player)
+{
 }
 
 void StandingState::onStoneHit(PlayableObject& player)
 {
 	std::cout << player.getName() << " got  hit by stone\n";
 	player.setAniName("knockedDown");
-	//player.setState(std::make_unique<knockedDownState>());
+	player.setState(std::make_unique<KnockedState>());
+}
+
+void StandingState::onBoxHit(PlayableObject& player)
+{
+	player.setAniName("knockedDown");
+	player.setState(std::make_unique<KnockedState>());
+}
+
+void StandingState::onExplosion(PlayableObject& player)
+{
 }

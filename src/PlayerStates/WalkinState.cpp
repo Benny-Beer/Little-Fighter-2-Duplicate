@@ -38,3 +38,9 @@ void WalkingState::enter(PlayableObject& player)
 	player.setDiraction(m_input);
 	
 }
+
+void WalkingState::onStoneHit(PlayableObject& player)
+{
+	std::cout << " RetreatingState::onStoneHit\n";
+	//player.setState(std::make_unique<KnockedDownState>());
+}

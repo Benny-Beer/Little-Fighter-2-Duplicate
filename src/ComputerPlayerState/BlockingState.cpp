@@ -48,6 +48,9 @@ void BlockingState::onHandsAttack(PlayableObject& player) {
 void BlockingState::onStoneHit(PlayableObject& player) {
 
 }
+void BlockingState::onBoxHit(PlayableObject& player)
+{
+}
 void BlockingState::onExplosion(PlayableObject& player) {
 
 }

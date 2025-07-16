@@ -1,5 +1,6 @@
 #include "Management/Controller.h"
 #include "Gameplay/Level.h"
+
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window.hpp>
@@ -21,20 +22,28 @@ Controller::Controller(sf::RenderWindow& window,
     // === this section is hard coded. need to be done in Level ===
     // add pickable (rock)
 
-    std::string objectLine = "r r b";
+
+    std::string objectLine = "r b r";
+
 
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
-    std::string sq = "b1";
+    std::string sq = "b4";
     m_level->addSquad(sq);
+
     // creating ally
-    auto ally = std::make_shared<Ally>(sf::Vector2f(800, 100), "davis_ani",60.f);
-    /*auto allyTwo = std::make_shared<Ally>(sf::Vector2f(900, 700), "davis_ani", 60.f);
-    auto allyThree = std::make_shared<Ally>(sf::Vector2f(380, 580), "davis_ani", 60.f);*/
+
+    auto ally = std::make_shared<Ally>(sf::Vector2f(100, 450), "davis_ani",60.f);
+    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(100, 550), "davis_ani", 60.f);
+    auto allyThree = std::make_shared<Ally>(sf::Vector2f(100, 650), "davis_ani", 60.f);
+    auto allyFour = std::make_shared<Ally>(sf::Vector2f(100, 750), "davis_ani", 60.f);
 
     m_allies.push_back(ally);
-    /*m_allies.push_back(allyTwo);
-    m_allies.push_back(allyThree);*/
+    m_allies.push_back(allyTwo);
+    m_allies.push_back(allyThree);
+    m_allies.push_back(allyFour);
+
+
 
 
     //========================================================================
@@ -62,6 +71,7 @@ void Controller::updateWorld(float deltaTime)
 
     for (auto& player : m_players)
     {
+
         player->update(deltaTime);
         m_level->handleCollisionsWithPlayer(*player); // currently through level, need to transfer into controller
 
@@ -163,13 +173,16 @@ void Controller::render()
     // Draw background, enemies, pickable objects, etc.
     m_level->render(m_window);
 
-
+    float i = 0.f;
     for (const auto& dead : m_deads)
     {
         dead->draw(m_window);
+        printHp(dead->getHp(), { 750.f, 10.f + i }, false);
+        printHp(dead->getPotentialHp(), { 750.f, 30.f + i }, true);
+        i += 40.f;
     }
 
-    float i = 0.f;
+    i = 0.f;
 
     for (const auto& player : m_players)
     {

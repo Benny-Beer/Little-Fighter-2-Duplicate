@@ -15,11 +15,11 @@ Rock::Rock(const sf::Vector2f pos, const std::string& name)
 
 void Rock::update(float dt)
 {
-    if (!m_command)
+    /*if (!m_command)
     {
         m_command = std::make_unique<StoneHitCommand>();
-    }
-
+    }*/
+    BigWeapon::update(dt);
     if (m_isFlying)
     {
         std::cout << "\n\n in m_isFlying condition\n\n";
@@ -36,7 +36,7 @@ void Rock::update(float dt)
         if (pos.y >= m_groundY)
         {
             std::cout << "now here\n";
-
+            setHolder(nullptr);
             pos.y = m_groundY;
             m_isFlying = false;  // äôñé÷ ìòåó
             m_velocity = { 0.f, 0.f };

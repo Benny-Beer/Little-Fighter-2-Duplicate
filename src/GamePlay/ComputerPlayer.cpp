@@ -10,6 +10,7 @@ ComputerPlayer::ComputerPlayer(const sf::Vector2f pos, const std::string& name) 
 }
 void ComputerPlayer::update(float dt)
 {
+    Object::update(dt);
     m_prevPosition = getPosition();
     if (m_state) {
 
@@ -86,8 +87,6 @@ void ComputerPlayer::setTarget(std::shared_ptr<Object> obj) {
 
 std::shared_ptr<Object> ComputerPlayer::getTarget()
 {
-    if (!m_target)
-        std::cout << "THERE IS NO TARGET!\n";
     return m_target;
 }
 //std::shared_ptr<PickableObject> ComputerPlayer::getObject()

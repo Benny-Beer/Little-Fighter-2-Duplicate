@@ -4,6 +4,7 @@
 #include "Management/Animation.h"
 #include "Management/AnimationManager.h"
 #include "Factory/Factory.h"
+#include "Management/WorldBounds.h"
 #include "iostream"
 
 class Object {
@@ -16,14 +17,18 @@ public:
 	
 	void setAnimation(const Animation& anim);
 	void setPosition(const sf::Vector2f pos);
-	void setSize(float scale);
+
 	sf::FloatRect getGlobalBounds() const;
-	sf::Vector2f getPosition() const;
 	const sf::Texture* getTexture();
-	
 	void draw(sf::RenderWindow& window) const;
 	bool collide(Object& other) const;
-
+	sf::FloatRect buildMyRect();
+	virtual void update(float dt);
+	sf::Vector2f getPosition() const;
+	void setSize(float scale);
+	sf::Vector2f getGeometricCenter() const;
+	virtual void adjustBoundsToJump();
+	virtual void adjustBoundsBack();
 protected:
 	void setScale(int side);
 	void setOrigin(float x, float y);
@@ -32,9 +37,10 @@ protected:
 	void updateAnimation(float dt);
 	void apllySprite();
 	void moveSprite(sf::Vector2f pos);
-	
+
 private:
 	const sf::Texture* m_texture = nullptr;
 	sf::Sprite m_sprite;
+	WorldBounds m_bounds = sf::FloatRect(-25, 380, 1050, 420); // x of leftUpCorner, y of leftUpCorner, width, height  
 	Animation m_animation;
 };

@@ -31,6 +31,7 @@ void JumpingState::enter(PlayableObject& player)
 void JumpingState::update(PlayableObject& player, float dt)
 {
     if (!m_phase) {
+        player.adjustBoundsBack();
         player.setState(std::make_unique<StandingState>(Input::NONE));
         return;
     }
@@ -39,6 +40,7 @@ void JumpingState::update(PlayableObject& player, float dt)
         m_phase = std::move(next);
     }
     else if (player.getPosition().y >= m_groundY) {
+        player.adjustBoundsBack();
         player.setState(std::make_unique<StandingState>(Input::NONE));
     }
 

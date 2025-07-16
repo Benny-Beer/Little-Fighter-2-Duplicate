@@ -15,7 +15,7 @@ LoadingScreen::LoadingScreen(sf::RenderWindow& window, GameManager& manager) : I
 {
 	sf::Vector2f screenSize(static_cast <sf::Vector2f> (m_window.getSize()));
 	m_backGround = Background(screenSize, ResourceManager::instance().getTexture("screen_backgrounds/Loading_bg"));
-	m_startButton = Button("to character select screen", sf::Vector2f(screenSize.x / 4, screenSize.y / 4), sf::Vector2f(screenSize.x / 2, screenSize.y / 2), sf::Color::Transparent, 30);
+	m_startButton = Button("  to character\n select screen", sf::Vector2f(screenSize.x / 4, screenSize.y / 4), sf::Vector2f(screenSize.x / 2, screenSize.y / 2), sf::Color::Transparent, 30);
 	std::cout << "LoadingState created, m_manager ptr: " << &m_manager << std::endl;
 
 	if (m_font.getInfo().family.empty()) {
@@ -27,23 +27,23 @@ LoadingScreen::LoadingScreen(sf::RenderWindow& window, GameManager& manager) : I
 	m_chienese.setString("Currently Loading file: ");
 	m_currentlyLoading.setString("data.txt");
 	m_chienese.setFont(m_font); // assuming m_font is already loaded
-	m_chienese.setCharacterSize(16);
+	m_chienese.setCharacterSize(50);
 	m_chienese.setFillColor(sf::Color::White);
 
 	m_currentlyLoading.setFont(m_font);
-	m_currentlyLoading.setCharacterSize(12);
+	m_currentlyLoading.setCharacterSize(40);
 	m_currentlyLoading.setFillColor(sf::Color::White);
 
 	auto windowSize = m_window.getSize();
 
 	m_chienese.setPosition(
-		windowSize.x - m_chienese.getGlobalBounds().width - 10, // 10px from right
-		10 // 10px from top
+		windowSize.x - m_chienese.getGlobalBounds().width - 100, // 10px from right
+		200 // 10px from top
 	);
 
 	m_currentlyLoading.setPosition(
-		windowSize.x - m_chienese.getGlobalBounds().width - 10,
-		m_chienese.getPosition().y + m_chienese.getGlobalBounds().height + 5
+		windowSize.x - m_chienese.getGlobalBounds().width - 100,
+		m_chienese.getPosition().y + m_chienese.getGlobalBounds().height + 20
 	);
 	
 }

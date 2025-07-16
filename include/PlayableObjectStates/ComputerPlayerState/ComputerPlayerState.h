@@ -11,4 +11,5 @@ public:
     //virtual void enter(ComputerPlayer& player) = 0;
     //virtual void update(ComputerPlayer& player, float deltaTime) = 0;
     virtual void exit(ComputerPlayer& player) = 0;
+    virtual void onBoxHit(PlayableObject& player) override {};
 };

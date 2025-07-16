@@ -30,7 +30,7 @@ void Level::addSquad(std::string& squadLine)
 
         for (int i = 0; i < count; ++i) {
            
-            auto enemy = Factory<Enemy>::create(std::string(1, type), sf::Vector2f(80.f + 25.f*i, 80.f + 250.f*i));
+            auto enemy = Factory<Enemy>::create(std::string(1, type), sf::Vector2f(950.f, 450.f+100*i));
 
             if (enemy)
                 newSquad.addEnemy(std::move(enemy));
@@ -52,7 +52,7 @@ void Level::addPickableObjects(const std::string& objectLine)
 
         char type = std::tolower(token[0]);
 
-        auto obj = Factory<PickableObject>::create(std::string(1, type), sf::Vector2f(250.f*i, 500.f));
+        auto obj = Factory<PickableObject>::create(std::string(1, type), sf::Vector2f(525.f, 350.f+100*i));
         if (obj)
         {
             std::cout << "in Level::addPickableObjects if (obj) " << i <<  "\n";

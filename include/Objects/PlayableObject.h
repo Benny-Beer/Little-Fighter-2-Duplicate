@@ -44,7 +44,8 @@ public:
 	virtual bool needItem();
 
 	// in-game Events:
-	virtual void onStoneHit() { m_state->onStoneHit(*this); }
+	virtual void onStoneHit();
+	virtual void onBoxHit();
 	virtual void onHandsAttack();
 	void adjustRange(float range);
 	float getAttackRange() const;

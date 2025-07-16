@@ -5,7 +5,7 @@
 #include "EventCommands\ICommand.h"
 #include <memory>
 
-enum Status { ON_EARTH, PICKED, THROWN};
+enum Status { ON_EARTH, PICKED, THROWN, COLLIDE};
 
 class PickableObject : public Object {
 public:
@@ -18,25 +18,29 @@ public:
 	virtual bool onEarth() { return m_status == ON_EARTH; }
 	virtual bool picked() { return m_status == PICKED; }
 	virtual bool thrown() { return m_status == THROWN; }
+	virtual bool isCollided() { return m_status == COLLIDE; }
 	virtual void putBack(); 
 	virtual void pick() { m_status = PICKED; }
 	virtual void throwIt() { m_status = THROWN; }
+	virtual void collide() { m_status = COLLIDE; }
 	float getRange() const { return m_range; } ;
 	std::unique_ptr<ICommand> getHitCommand();
+	Status getStatus() const { return m_status; }
 
 
 
 
 	void markAsUsed();
 	bool isUsed() const; 
-	void setHolder(PlayableObject* holder); 
-	PlayableObject* getHolder() const;
+	void setHolder(PlayableObject* holder);
+	PlayableObject*  getHolder() const;
 	const std::string& getStateName() const { return m_stateName; }
 	void setStateName(const std::string& state) { m_stateName = state; }
 	void setAnimationName(const std::string& animationName) { m_animationName = animationName; }
 	const std::string& getAnimationName() const { return m_animationName; }
 	void setState(std::unique_ptr<ObjectBaseState> state);
 	const std::unique_ptr<ObjectBaseState>& getState() const { return m_state; }
+	void setCommand(std::unique_ptr<ICommand> cmd) { m_command = std::move(cmd); }
 protected:
 	sf::Vector2f m_offset;
 	Status m_status = ON_EARTH;

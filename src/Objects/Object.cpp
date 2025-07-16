@@ -5,6 +5,7 @@ Object::Object(const sf::Vector2f pos, const std::string& name)
 	m_texture = &ResourceManager::instance().getTexture(name);
 	m_sprite.setTexture(*m_texture);
 	m_sprite.setOrigin(40.f, 80.f); // 80 / 2
+	std::cout << "Pos is: " << pos.x << "," << pos.y << "\n";
 	m_sprite.setPosition(pos);
 }
 
@@ -38,11 +39,29 @@ void Object::setPosition(const sf::Vector2f pos)
 	m_sprite.setPosition(pos);
 }
 
+sf::FloatRect Object::buildMyRect() {
+	sf::Vector2f dimensions = m_animation.getCurrentSize();
+	float myX = getPosition().x - dimensions.x/2;
+	float myY = getPosition().y - dimensions.y;
+	sf::FloatRect rect = sf::FloatRect(myX, myY, dimensions.x, dimensions.y);
+	return rect;		
+}
+
 void Object::update(float dt)
-{	
+{
+
+	// חישוב תיבת הגבולות הנוכחית של האובייקט
+	sf::FloatRect box = buildMyRect();
+
+	if (!m_bounds.contains(box)) {
+		sf::Vector2f offset = getPosition() - sf::Vector2f(box.left, box.top);
+		sf::Vector2f correctedTopLeft = m_bounds.clampPosition(box);
+		setPosition(correctedTopLeft + offset);
+	}
 	m_animation.applyToSprite(m_sprite);
 
 }
+
 
 bool Object::collide(Object& other) const
 {
@@ -107,6 +126,16 @@ void Object::setOrigin(float x, float y)
 
 }
 
+void Object::adjustBoundsToJump()
+{
+	m_bounds = sf::FloatRect(-25, 280, 1050, 520);
+}
+void Object::adjustBoundsBack()
+{
+	m_bounds = sf::FloatRect(-25, 380, 1050, 420);
+}
+
+
 sf::Vector2f Object::getSize() const
 {
 	return m_animation.getCurrentSize();
@@ -119,3 +148,10 @@ sf::Sprite& Object::getSprite() {
 //const sf::Sprite& Object::getSprite() const {
 //	return m_sprite;
 //}
+
+sf::Vector2f Object::getGeometricCenter() const {
+	return {
+		getPosition().x,
+		getPosition().y - getSize().y / 2.f
+	};
+}

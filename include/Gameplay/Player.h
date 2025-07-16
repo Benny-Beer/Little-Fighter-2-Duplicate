@@ -58,18 +58,4 @@ public:
     const PlayableObjectState* getState() const { return m_state.get(); }
 private:
     bool m_alive = true;
-    //Direction m_dir;
-    //sf::Vector2f m_direction{ 0.f,0.f };
-    //sf::Text m_name;
-
-    //std::unique_ptr<PlayerBaseState> m_state; -->INHERIT IT FROM PLAYABLEOBJECT
-    //std::unique_ptr<AttackBehavior> m_attack;
-    //std::shared_ptr<PickableObject> m_heldObject = nullptr;
-    
-
-
-    //maybe in base
-    //std::string m_aniName ;
-    //std::string m_strategyName = "";
-    //std::string m_currentAnimationName;
 };

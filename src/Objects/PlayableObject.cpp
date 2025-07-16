@@ -12,13 +12,13 @@ void PlayableObject::setState(std::unique_ptr<PlayableObjectState> newState)
 void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
 {
 	std::cout << getName() << " is handling command\n";
-	std::cout << typeid(*command).name() << std::endl;
     command->execute(*this);
 }
 
 void PlayableObject::pickUpObject(std::shared_ptr<PickableObject> obj)
 {
     m_heldObject = obj;
+    m_heldObject->setHolder(this);
     m_attackRange = obj->getRange();
     m_strategyName = obj->getName();
     obj->pick();
@@ -213,6 +213,25 @@ void PlayableObject::onHandsAttack()
     m_state->onHandsAttack(*this);
 
 }
+void PlayableObject::onStoneHit()
+{
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onStoneHit(*this);
+}
+
+void PlayableObject::onBoxHit()
+{
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onBoxHit(*this);
+}
 
 void PlayableObject::setAniName(const std::string& name)
 {
@@ -276,18 +295,4 @@ void PlayableObject::updateHp() {
         m_hp += 1;
     }
     m_hpClock = m_hpClock % 36;
-}
-
-void printFPS(sf::RenderWindow& window)
-{
-    static int frameCount = 0;
-    static sf::Clock clock;
-
-    frameCount++;
-    float elapsed = clock.getElapsedTime().asSeconds();
-    if (elapsed >= 1.0f) {
-        std::cout << "FPS: " << frameCount << std::endl;
-        frameCount = 0;
-        clock.restart();
-    }
 }

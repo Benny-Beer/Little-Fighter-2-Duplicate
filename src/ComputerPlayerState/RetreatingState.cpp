@@ -1,6 +1,7 @@
 #include "PlayableObjectStates/ComputerPlayerState/RetreatingState.h"
 #include "GamePlay/ComputerPlayer.h"
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
+#include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
 #include <SFML/System/Vector2.hpp>
 
 RetreatingState::RetreatingState() = default;
@@ -52,7 +53,13 @@ void RetreatingState::onHandsAttack(PlayableObject& player) {
 }
 
 void RetreatingState::onStoneHit(PlayableObject& player) {
-
+    std::cout << " RetreatingState::onStoneHit\n";
+    player.setState(std::make_unique<KnockedDownState>());
+}
+void RetreatingState::onBoxHit(PlayableObject& player)
+{
+    std::cout << " RetreatingState::onBoxeHit\n";
+    player.setState(std::make_unique<KnockedDownState>());
 }
 void RetreatingState::onExplosion(PlayableObject& player) {
 

@@ -9,6 +9,7 @@
 #include "Gameplay/Ally.h"
 #include "UI/HeadsUpDisplay.h"
 
+
 class Controller
 {
 public:
@@ -116,14 +117,14 @@ private:
     void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<T>>& enemies) {
         static_assert(std::is_base_of<ComputerPlayer, T>::value, "T must derive from ComputerPlayer");
 
-        const float gridSize = 100.f;
-        const sf::Vector2f mapSize = static_cast<sf::Vector2f>(m_window.getSize());
+        const float gridSize = 50.f;
+        const sf::FloatRect searchBounds(50.f, 450.f, 900.f, 300.f);
 
         float bestScore = std::numeric_limits<float>::max();
         sf::Vector2f bestPoint;
 
-        for (float x = 0; x < mapSize.x; x += gridSize) {
-            for (float y = 0; y < mapSize.y; y += gridSize) {
+        for (float x = searchBounds.left; x < searchBounds.left + searchBounds.width; x += gridSize) {
+            for (float y = searchBounds.top; y < searchBounds.top+searchBounds.height; y += gridSize) {
                 sf::Vector2f point(x, y);
                 float dangerScore = 0.f;
 
@@ -154,11 +155,8 @@ private:
         if (it != livePlayers.end()) {
             m_deads.push_back(*it);
             std::cout << m_deads[0]->getName() << std::endl;
-            std::cout << "\n\n Live size is: " << livePlayers.size() << "\n" << std::endl;
 
-            std::cout << "\n\n m_deads size is: " << m_deads.size() << "\n" << std::endl;
             livePlayers.erase(it);
-            std::cout << "\n\n Live size is: " << livePlayers.size() << "\n" << std::endl;
 
             
         }

@@ -7,3 +7,7 @@ void HandsAttackCommand::execute(PlayableObject& player)
 	player.reduceHp(30);
 	player.onHandsAttack();
 }
+
+std::unique_ptr<ICommand> HandsAttackCommand::clone() const {
+    return std::make_unique<HandsAttackCommand>(*this);
+};
