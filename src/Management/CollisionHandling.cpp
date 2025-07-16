@@ -63,7 +63,7 @@ void enemyAttackingAlly(Object& playerObj, std::shared_ptr<PickableObject> picka
 	auto& ally = static_cast<Ally&>(playerObj);
 	if(pickableObj->thrown())
     {
-        //pickableObj->collide();
+        pickableObj->collide();
 		std::cout << "in computerPlayerPickable before handle command\n";
         ally.handleCommand((pickableObj->getHitCommand()));
     }
@@ -75,7 +75,7 @@ void enemyAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableOb
     auto& enemy = static_cast<Enemy&>(playerObj);
     if (pickableObj->thrown() )
     {
-        //pickableObj->collide();
+        pickableObj->collide();
         std::cout << "in computerPlayerPickable before handle command\n";
         enemy.handleCommand((pickableObj->getHitCommand()));
     }
@@ -85,6 +85,7 @@ void enemyAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableOb
 void playerAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
     auto& player = static_cast<Player&>(playerObj);
+    if (pickableObj->thrown())
     {
 		pickableObj->collide();
         std::cout << "in computerPlayerPickable before handle command\n";
