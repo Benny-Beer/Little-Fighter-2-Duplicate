@@ -6,7 +6,13 @@ Object::Object(const sf::Vector2f pos, const std::string& name)
 	m_sprite.setTexture(*m_texture);
 	m_sprite.setOrigin(40.f, 80.f); // 80 / 2
 	m_sprite.setPosition(pos);
-	
+}
+
+Object::Object(std::shared_ptr<sf::Texture>textSheet)
+{
+	m_sprite.setTexture(*textSheet);
+	m_sprite.setOrigin(40.f, 80.f);
+	m_sprite.setPosition(sf::Vector2f(1000,800));
 }
 
 void Object::draw(sf::RenderWindow& window) const

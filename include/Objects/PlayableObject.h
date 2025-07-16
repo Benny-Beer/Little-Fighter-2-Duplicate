@@ -12,6 +12,7 @@ enum class Direction
 class PlayableObject : public Object{
 public:
 	PlayableObject(sf::Vector2f pos, const std::string& name) : Object(pos, name), m_prevPosition(pos) {}
+	PlayableObject(std::shared_ptr<sf::Texture> textSheet) : Object(textSheet), m_prevPosition(sf::Vector2f(1000,800)) {}
 	void setState(std::unique_ptr<PlayableObjectState> newState); 
 	virtual void handleCommand(std::unique_ptr<ICommand> command);
 	virtual void pickUpObject(std::shared_ptr<PickableObject> obj);

@@ -4,17 +4,19 @@
 #include "UI/Background.h"
 #include "UI/Button.h"
 #include "Management/GameManager.h"
+#include "Gameplaye/Player.h"
 #include "Management/ResourceManager.h"
 
 #include <iostream>
 #include <stdexcept>
 #include <memory>
 
-InGameScreen::InGameScreen(sf::RenderWindow& window, GameManager& manager) : IScreen(window, manager),
-																			m_controller(window, std::make_unique<Level>("lvl1bg", sf::Vector2f(m_window.getSize())), 
-																			std::vector<std::shared_ptr<Player>>{},
-																			std::vector<std::shared_ptr<Ally>>{})
+InGameScreen::InGameScreen(sf::RenderWindow& window, GameManager& manager, PlayerData p) : IScreen(window, manager)																			
 {
+	std::vector<std::shared_ptr<Player>> players;
+	std::vector<std::shared_ptr<Ally>> allies;
+	players.push_back(std::make_shared<Player>(p));
+	Controller m_controller(window, std::make_unique<Level>("lvl1bg", sf::Vector2f(m_window.getSize())),players ,allies);
 }
 
 

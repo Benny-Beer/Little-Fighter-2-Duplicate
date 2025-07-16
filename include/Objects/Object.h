@@ -9,6 +9,7 @@
 class Object {
 public:
 	Object(const sf::Vector2f pos, const std::string& name);
+	Object(std::shared_ptr<sf::Texture>textSheet);
 	virtual ~Object() = default;
 	virtual void handleCollision() = 0;
 	virtual void update(float dt);
