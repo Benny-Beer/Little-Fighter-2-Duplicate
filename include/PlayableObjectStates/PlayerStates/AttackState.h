@@ -15,6 +15,6 @@ public:
 	void onExplosion(PlayableObject& player) override {};
 private:
 	sf::Clock m_clock;
-	float m_attackDuration = 1.0f;
+	float m_attackDuration = 0.15f;
 
 };

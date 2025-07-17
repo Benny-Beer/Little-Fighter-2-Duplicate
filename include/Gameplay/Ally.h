@@ -9,6 +9,7 @@
 class Ally : public ComputerPlayer {
 public:
 	Ally(const sf::Vector2f pos, const std::string& name, float speed = 200.f);
+	Ally(PlayerData p);
 	void update(float dt) override; 
 	void handleCollision() override;
 

@@ -1,4 +1,5 @@
 #include "Management/Controller.h"
+#include "Management/CollisionHandling.h"
 #include "Gameplay/Level.h"
 
 #include <cmath>
@@ -34,28 +35,21 @@ Controller::Controller(sf::RenderWindow& window,
    // std::string sq = "b4";
   //  m_level->addSquad(sq);
 
+
     // creating ally
 
-    auto ally = std::make_shared<Ally>(sf::Vector2f(100, 450), "davis_ani",60.f);
-    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(100, 550), "davis_ani", 60.f);
+   // auto ally = std::make_shared<Ally>(sf::Vector2f(100, 450), "davis_ani",60.f);
+   /* auto allyTwo = std::make_shared<Ally>(sf::Vector2f(100, 550), "davis_ani", 60.f);
     auto allyThree = std::make_shared<Ally>(sf::Vector2f(100, 650), "davis_ani", 60.f);
-    auto allyFour = std::make_shared<Ally>(sf::Vector2f(100, 750), "davis_ani", 60.f);
+    auto allyFour = std::make_shared<Ally>(sf::Vector2f(100, 750), "davis_ani", 60.f);*/
 
-    m_allies.push_back(ally);
-    m_allies.push_back(allyTwo);
+    //m_allies.push_back(ally);
+    /*m_allies.push_back(allyTwo);
     m_allies.push_back(allyThree);
-    m_allies.push_back(allyFour);
-
-
-
-
-    //========================================================================
-
-
+    m_allies.push_back(allyFour);*/
     m_enemies = m_level->getAllEnemies();
     m_pickables = m_level->getAllObjects();
     updateComputerPlayerStats();
-
 
     // TODO: initialize HUD (m_stats)
 
@@ -127,7 +121,8 @@ void Controller::updateWorld(float deltaTime)
     {
         enemy->update(deltaTime);
         m_level->handleCollisionsWithPlayer(*enemy);
-        //checkCollisionWithPlayer()
+		checkCollisions(enemy);
+
     }
     for (auto& obj : m_pickables)
     {
@@ -413,9 +408,32 @@ void Controller::restoreKnockedAccess() {
     }
 }
 
+void Controller::checkCollisions(std::shared_ptr<Enemy> enemy)
+{
+    checkCollisionsWithPlayers(enemy);
+    checkCollisionsWithAllies(enemy);
+}
+
+void Controller::checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy)
+{
+    for (auto& ally : m_allies) {
+        if (ally->collide(*enemy))
+            processCollision(*ally, *enemy);
+       
+    }
+}
+
+void Controller::checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy)
+{
+	for (auto& player : m_players) {
+		if (player->collide(*enemy))
+			processCollision(*player, *enemy);
+	}
+}
+
 
 void Controller::printStageAlert(const std::string& message) {
-    //sf::Font& font = ResourceManager::instance().getFont("bigFont"); // ъеега щдфери джд чййн
+    //sf::Font& font = ResourceManager::instance().getFont("bigFont"); // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
     static sf::Font font;
     static bool loaded = false;
     if (!loaded) {
@@ -427,15 +445,15 @@ void Controller::printStageAlert(const std::string& message) {
     sf::Text alert;
     alert.setFont(font);
     alert.setString(message);
-    alert.setCharacterSize(64); // вегм ичси вгем
-    alert.setFillColor(sf::Color::White); // цбт мбп
-    alert.setOutlineColor(sf::Color::Black); // че оъаш щзеш
+    alert.setCharacterSize(64); // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+    alert.setFillColor(sf::Color::White); // пїЅпїЅпїЅ пїЅпїЅпїЅ
+    alert.setOutlineColor(sf::Color::Black); // пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
     alert.setOutlineThickness(4.f);
 
-    // ойчен ошлж доск
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
     sf::FloatRect bounds = alert.getLocalBounds();
     alert.setOrigin(bounds.width / 2, bounds.height / 2);
-    alert.setPosition(m_window.getSize().x / 2.f, m_window.getSize().y / 4.f); // мотмд бошлж
+    alert.setPosition(m_window.getSize().x / 2.f, m_window.getSize().y / 4.f); // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
     m_window.draw(alert);
 }

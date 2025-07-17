@@ -10,7 +10,7 @@
 
 class InGameScreen : public IScreen {
 public:
-	InGameScreen(sf::RenderWindow& window, GameManager& manager, std::shared_ptr<PlayerData> p);
+	InGameScreen(sf::RenderWindow& window, GameManager& manager, std::shared_ptr<PlayerData> p, std::vector<std::shared_ptr<Ally>> allies);
 	void update(sf::Time deltaTime) override;
 	void handleEvents(sf::Event& ev) override;
 	void render() override;

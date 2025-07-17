@@ -142,7 +142,9 @@ void Level::handleCollisionsWithPlayer(PlayableObject& player)
     for (const auto& obj : m_pickables)
     {
         if (player.collide(*obj)) {
+            player.setXHit(obj->getXDirThrow());
             processCollision(player, obj);
+
         }
     }
 }

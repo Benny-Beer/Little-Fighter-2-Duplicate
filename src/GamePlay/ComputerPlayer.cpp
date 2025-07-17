@@ -1,9 +1,15 @@
 #include "GamePlay/ComputerPlayer.h"
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
+#include "Gameplay/Player.h"
 #include <iostream>
 
 ComputerPlayer::ComputerPlayer(const sf::Vector2f pos, const std::string& name) : PlayableObject(pos, name)
+{
+    m_state = std::make_unique<IdleState>();
+    m_state->enter(*this);
+}
+ComputerPlayer::ComputerPlayer(PlayerData p) : PlayableObject(p.m_animationSheet)
 {
     m_state = std::make_unique<IdleState>();
     m_state->enter(*this);

@@ -36,6 +36,8 @@ std::unique_ptr<PlayableObjectState> CollideWithObject::handleInput(Input input)
 		return std::make_unique<StandingState>(input);
 	case Input::PRESS_JUMP:
 		return std::make_unique<JumpingState>(input);
+	case Input::PRESS_ATTACK:
+		return std::make_unique<AttackState>();
 
 	}
 
