@@ -19,15 +19,8 @@ Controller::Controller(sf::RenderWindow& window,
     m_allies(std::move(allies))
 {   
     AnimationManager::loadAnimations();
-    //=============================================================
     // === this section is hard coded. need to be done in Level ===
-    // add pickable (rock)
-
-
- 
     std::string objectLine = "r b r";
-
-
 
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
@@ -45,17 +38,9 @@ Controller::Controller(sf::RenderWindow& window,
     /*m_allies.push_back(allyTwo);
     m_allies.push_back(allyThree);
     m_allies.push_back(allyFour);*/
-
-
-
-
-    //========================================================================
-
-
     m_enemies = m_level->getAllEnemies();
     m_pickables = m_level->getAllObjects();
     updateComputerPlayerStats();
-
 
     // TODO: initialize HUD (m_stats)
 
