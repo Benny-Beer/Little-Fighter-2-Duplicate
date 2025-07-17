@@ -1,4 +1,5 @@
 #include "Gameplay/Ally.h"
+#include "Gameplay/Player.h"
 #include "Management/AnimationManager.h"
 #include <iostream>
 
@@ -13,6 +14,15 @@ Ally::Ally(const sf::Vector2f pos, const std::string& name, float speed)
     changeState(std::make_unique<IdleState>());
     m_name = "ally";
 
+}
+
+Ally::Ally(PlayerData p) : ComputerPlayer(p)
+{
+    m_hp = p.m_hp;
+    m_potentialHp = p.m_hp;
+    m_speed = p.m_speed;
+    m_name = p.m_name;
+    changeState(std::make_unique<IdleState>());
 }
 
 

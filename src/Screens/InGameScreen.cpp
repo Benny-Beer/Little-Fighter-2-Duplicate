@@ -11,12 +11,11 @@
 #include <stdexcept>
 #include <memory>
 
-InGameScreen::InGameScreen(sf::RenderWindow& window, GameManager& manager, std::shared_ptr<PlayerData> p) : IScreen(window, manager),
+InGameScreen::InGameScreen(sf::RenderWindow& window, GameManager& manager, std::shared_ptr<PlayerData> p, std::vector<std::shared_ptr<Ally>> allies) : IScreen(window, manager),
 																						   m_controller(window, std::make_unique<Level>("lvl1bg", sf::Vector2f(m_window.getSize())),
 																						   std::vector<std::shared_ptr<Player>>{std::make_shared<Player>(*p)},
-																						   std::vector<std::shared_ptr<Ally>>{})
+																						   allies)
 {}
-
 
 
 void InGameScreen::update(sf::Time deltaTime) {
