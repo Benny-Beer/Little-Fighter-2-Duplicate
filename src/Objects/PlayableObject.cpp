@@ -217,6 +217,7 @@ void PlayableObject::onHandsAttack()
 }
 void PlayableObject::onStoneHit()
 {
+	moveSprite({ static_cast<float>(m_xdirHit)*100, 0.f });
     if (m_hp <= 0) {
         m_hp = 0;
         m_potentialHp = 0;
@@ -227,6 +228,7 @@ void PlayableObject::onStoneHit()
 
 void PlayableObject::onBoxHit()
 {
+    moveSprite({ static_cast<float>(m_xdirHit) * 100, 0.f });
     if (m_hp <= 0) {
         m_hp = 0;
         m_potentialHp = 0;
@@ -237,6 +239,7 @@ void PlayableObject::onBoxHit()
 
 void PlayableObject::onExplosion()
 {
+    moveSprite({ static_cast<float>(m_direction.x) * 100, 0.f });
     if (m_hp <= 0) {
         m_hp = 0;
         m_potentialHp = 0;
@@ -260,16 +263,6 @@ void PlayableObject::reduceHp(int amountToReduce)
     m_hp -= amountToReduce;
     m_potentialHp -= amountToReduce / 3;
 }
-
-//bool PlayableObject::isAttacked() const
-//{
-//    return m_underAttack;
-//}
-
-//void PlayableObject::attack()
-//{
-//    m_underAttack = true;
-//}
 
 void PlayableObject::tookItem()
 {
