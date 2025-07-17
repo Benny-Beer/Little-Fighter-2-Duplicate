@@ -58,6 +58,11 @@ void PickableObject::setState(std::unique_ptr<ObjectBaseState> state)
 	}
 }
 
+const int PickableObject::getXDirThrow() const
+{
+	return m_xDirThrow; 
+}
+
 void PickableObject::putBack()
 {
     m_status = ON_EARTH;

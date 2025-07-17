@@ -43,13 +43,14 @@ public:
 	void setState(std::unique_ptr<ObjectBaseState> state);
 	const std::unique_ptr<ObjectBaseState>& getState() const { return m_state; }
 	void setCommand(std::unique_ptr<ICommand> cmd) { m_command = std::move(cmd); }
+	const int getXDirThrow() const;
 protected:
 	sf::Vector2f m_offset;
 	Status m_status = ON_EARTH;
 	float m_range;
 	bool m_justDropped = false;
 	sf::Vector2f m_dropTarget;
-
+	int m_xDirThrow = 0;
 	std::unique_ptr<ICommand> m_command = nullptr;
 private:
 	std::unique_ptr<ObjectBaseState> m_state = nullptr;
@@ -60,4 +61,5 @@ private:
 	std::string m_stateName ; // Default state is idle
 	std::string m_animationName; // Default animation name is idle
 	bool m_used = false;
+	
 };

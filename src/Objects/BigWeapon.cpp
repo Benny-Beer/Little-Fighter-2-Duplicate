@@ -42,6 +42,7 @@ void BigWeapon::update(float dt)
 
 void BigWeapon::throwMe(int direction, float groundY, float speed)
 {
+    m_xDirThrow = direction;
     m_isFlying = true;
     m_groundY = groundY;
 

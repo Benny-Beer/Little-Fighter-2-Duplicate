@@ -60,6 +60,7 @@ public:
 	int getHp() { return m_hp; }
 	int getPotentialHp() { return m_potentialHp; }
 	void updateHp();
+	void setXHit(int xdirHit) { m_xdirHit = xdirHit; }
 
 protected:
 	int m_hp;
@@ -81,5 +82,6 @@ protected:
 	sf::Vector2f m_direction{ 0.f,0.f };
 	sf::Vector2f m_safeZone = { 0.f, 0.f };
 	float m_attackRange = 50.f;
-
+private:
+	int m_xdirHit = 0;
 };
