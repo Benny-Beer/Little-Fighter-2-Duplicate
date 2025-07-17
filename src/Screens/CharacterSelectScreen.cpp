@@ -7,8 +7,6 @@
 #include <cmath> // for std::sin
 #include <iostream>
 
-
-
 CharacterSelectScreen::CharacterSelectScreen(sf::RenderWindow& window, GameManager& manager)
     : IScreen(window,manager)
 {
@@ -193,7 +191,9 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
             //add here another enter event to pass the data to inGameState and switchState
             if (ev.key.code == sf::Keyboard::Enter) {
                 std::cout << "enter pressed in selection mode " << std::endl;
-
+                std::vector<std::shared_ptr<Ally>> allies;
+                allies.push_back(std::make_shared<Ally>(*m_characters[m_currentIndex + 1 % m_characters.size()].second.get()));
+                allies.push_back(std::make_shared<Ally>(*m_characters[m_currentIndex - 1 % m_characters.size()].second.get()));
                 //add PlayerData struct in InGameString constructor
                 m_manager.switchScreen(std::make_unique<InGameScreen>(m_window, m_manager,m_characters[m_currentIndex].second));
             }
