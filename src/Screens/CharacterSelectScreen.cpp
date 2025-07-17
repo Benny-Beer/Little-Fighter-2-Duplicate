@@ -195,7 +195,7 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
                 allies.push_back(std::make_shared<Ally>(*m_characters[m_currentIndex + 1 % m_characters.size()].second.get()));
                 allies.push_back(std::make_shared<Ally>(*m_characters[m_currentIndex - 1 % m_characters.size()].second.get()));
                 //add PlayerData struct in InGameString constructor
-                m_manager.switchScreen(std::make_unique<InGameScreen>(m_window, m_manager,m_characters[m_currentIndex].second));
+                m_manager.switchScreen(std::make_unique<InGameScreen>(m_window, m_manager,m_characters[m_currentIndex].second,allies));
             }
         }
     }
