@@ -63,7 +63,7 @@ const std::shared_ptr<PlayerData> ResourceManager::getPlayerData(const std::stri
 
 std::unique_ptr<Level> ResourceManager::getLevel(const int index) {
     if (index < m_levels.size()) return std::move(m_levels[index]);
-    else throw std::runtime_error("Level " + std::to_string(index) + " not found.");
+    else throw std::runtime_error("Level " + std::to_string(index + 1) + " not found.");
 }
 int ResourceManager::getNumOfLevels() {
     return m_levels.size();

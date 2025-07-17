@@ -71,6 +71,9 @@ void Controller::handleInput(sf::Event ev)
 
 void Controller::updateWorld(float deltaTime)
 {
+
+    //===========================================
+    //===== MOVE INSIDE FUNC ====================
     if (m_waitingForNextWave) {
         m_DelayTimer += deltaTime;
         if (m_DelayTimer >= WAVE_DELAY) {
@@ -88,14 +91,15 @@ void Controller::updateWorld(float deltaTime)
         }
     }
     else if (!m_enemies.size()) {
-        if (m_nextStageIndex < m_level->numOfStages()) {
+        if (m_nextStageIndex < m_level->numOfStages()) { // V
             m_waitingForNextWave = true;
             m_DelayTimer = 0.f;
             m_nextStageIndex++;
         }
-        else if(m_nextLevelIndex < m_numOfLevels) {
+        else if (m_nextLevelIndex < m_numOfLevels) { // V
             
             m_waitingForNextLevel = true;
+            m_nextStageIndex = 1;
             m_DelayTimer = 0.f;
             m_nextLevelIndex++;
         }
@@ -103,7 +107,7 @@ void Controller::updateWorld(float deltaTime)
             // winning
         }
     }
-
+    //===========================================
 
     for (auto& player : m_players)
     {
@@ -261,7 +265,7 @@ void Controller::render()
     }
     if (m_waitingForNextLevel) {
 
-        printStageAlert("New level!\n strating level " + std::to_string(m_nextStageIndex) + ".");
+        printStageAlert("New level!\n strating level " + std::to_string(m_nextStageIndex + 1) + ".");
     }
     // Draw HUD
     //m_window.draw(m_stats);        TODO: draw() in HUD
@@ -312,6 +316,9 @@ void Controller::launchNextStage()
 void Controller::launchNextLevel()
 {
     if (m_nextLevelIndex <= m_numOfLevels) {
+        std::erase_if(m_deads, [](const std::shared_ptr<PlayableObject>& obj) {
+            return dynamic_cast<Enemy*>(obj.get()) != nullptr;
+            });
         m_level = ResourceManager::instance().getLevel(m_nextLevelIndex);
         m_enemies = m_level->getAllEnemies();
         m_pickables = m_level->getAllObjects();

@@ -1,5 +1,5 @@
-b5
-b7
-b9
+b3
+b3
+b6
 obj
 b b b b
