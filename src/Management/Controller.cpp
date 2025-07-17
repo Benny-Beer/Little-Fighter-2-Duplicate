@@ -1,4 +1,5 @@
 #include "Management/Controller.h"
+#include "Management/CollisionHandling.h"
 #include "Gameplay/Level.h"
 
 #include <cmath>
@@ -30,20 +31,20 @@ Controller::Controller(sf::RenderWindow& window,
 
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
-    std::string sq = "b4";
+    std::string sq = "b1";
     m_level->addSquad(sq);
 
     // creating ally
 
     auto ally = std::make_shared<Ally>(sf::Vector2f(100, 450), "davis_ani",60.f);
-    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(100, 550), "davis_ani", 60.f);
+   /* auto allyTwo = std::make_shared<Ally>(sf::Vector2f(100, 550), "davis_ani", 60.f);
     auto allyThree = std::make_shared<Ally>(sf::Vector2f(100, 650), "davis_ani", 60.f);
-    auto allyFour = std::make_shared<Ally>(sf::Vector2f(100, 750), "davis_ani", 60.f);
+    auto allyFour = std::make_shared<Ally>(sf::Vector2f(100, 750), "davis_ani", 60.f);*/
 
     m_allies.push_back(ally);
-    m_allies.push_back(allyTwo);
+    /*m_allies.push_back(allyTwo);
     m_allies.push_back(allyThree);
-    m_allies.push_back(allyFour);
+    m_allies.push_back(allyFour);*/
 
 
 
@@ -89,7 +90,8 @@ void Controller::updateWorld(float deltaTime)
     {
         enemy->update(deltaTime);
         m_level->handleCollisionsWithPlayer(*enemy);
-        //checkCollisionWithPlayer()
+		checkCollisions(enemy);
+
     }
     for (auto& obj : m_pickables)
     {
@@ -342,6 +344,29 @@ void Controller::restoreKnockedAccess() {
 
         ++it; 
     }
+}
+
+void Controller::checkCollisions(std::shared_ptr<Enemy> enemy)
+{
+    checkCollisionsWithPlayers(enemy);
+    checkCollisionsWithAllies(enemy);
+}
+
+void Controller::checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy)
+{
+    for (auto& ally : m_allies) {
+        if (ally->collide(*enemy))
+            processCollision(*ally, *enemy);
+       
+    }
+}
+
+void Controller::checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy)
+{
+	for (auto& player : m_players) {
+		if (player->collide(*enemy))
+			processCollision(*player, *enemy);
+	}
 }
 
 

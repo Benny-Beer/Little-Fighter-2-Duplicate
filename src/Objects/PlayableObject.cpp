@@ -205,6 +205,8 @@ void PlayableObject::move(float dt)
 }
 void PlayableObject::onHandsAttack()
 {
+
+
     if (m_hp <= 0) {
         m_hp = 0;
         m_potentialHp = 0;
