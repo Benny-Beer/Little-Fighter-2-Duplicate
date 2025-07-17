@@ -12,7 +12,9 @@ void ExplodingObjState::enter(PickableObject& obj)
 void ExplodingObjState::update(PickableObject& obj, float dt)
 {
 	std::cout << "ExplodingObjState::update\n";
-	if (m_clock.getElapsedTime().asSeconds() > m_explosionDuration) {
+	m_elapsedTime += dt;
+	std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n" << m_elapsedTime <<"\n\n\n\n\n\n\n\n\n\n\n\n\n";
+	if (m_elapsedTime > m_explosionDuration) {
 		std::cout << "ExplodingObjState::update - time to destroy\n";
 		obj.markAsUsed();
 		obj.setState(nullptr); // Change state to HeldObjState

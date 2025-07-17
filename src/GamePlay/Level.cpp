@@ -80,19 +80,21 @@ void Level::render(sf::RenderWindow& window)
 
 void Level::update(float dt)
 {
-    int index = static_cast<int>(m_phase);
+    //int index = static_cast<int>(m_phase);
 
-    //just for demo need to pass player position
-    if (index < m_enemies.size()) {
-        m_enemies[index].update(dt);
-    }
+    ////just for demo need to pass player position
+    //if (index < m_enemies.size()) {
+    //    m_enemies[index].update(dt);
+    //}
 
-    for (auto& obj : m_pickables)
-    {
-        obj->update(dt);
-    }
+    //for (auto& obj : m_pickables)
+    //{
+    //    obj->update(dt);
+    //}
 
-    std::erase_if(m_pickables, [](const std::shared_ptr<PickableObject>& obj) {
+    std::erase_if(m_pickables, [](std::shared_ptr<PickableObject>& obj) {
+        std::cout << "im here in Level erase_if\n";
+        std::cout << obj->getName() << " isUsed: " << obj->isUsed() << "\n";
         return obj->isUsed();
         });
         

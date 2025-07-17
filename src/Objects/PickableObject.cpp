@@ -3,7 +3,7 @@
 
 
 PickableObject::PickableObject(const sf::Vector2f pos, const std::string& name, std::unique_ptr<ICommand> cmd)
-	:Object(pos, name), m_name(name), m_command(std::move(cmd))
+	:Object(pos, name), m_name(name), m_command(std::move(cmd)), m_range(250.f)
 {
 	sf::Vector2f offset(2.f, -62.f);
 	m_offset = offset;

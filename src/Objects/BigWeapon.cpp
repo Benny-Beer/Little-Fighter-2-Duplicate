@@ -47,7 +47,7 @@ void BigWeapon::throwMe(int direction, float groundY, float speed)
 
     // מהירות התחלתית:
     m_velocity.x = direction * speed;
-    m_velocity.y = -400.f;  // לזרוק קצת למעלה (שלילי כי Y יורד למטה)
+    m_velocity.y = -100.f;  // לזרוק קצת למעלה (שלילי כי Y יורד למטה)
     setAnimation(AnimationManager::getAnimation("rock_flying", getTexture()));
 
     std::cout << "thrown! Velocity x=" << m_velocity.x << " y=" << m_velocity.y << " groundY=" << m_groundY << "\n";

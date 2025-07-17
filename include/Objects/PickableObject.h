@@ -5,7 +5,7 @@
 #include "EventCommands\ICommand.h"
 #include <memory>
 
-enum Status { ON_EARTH, PICKED, THROWN, COLLIDE};
+enum Status { ON_EARTH, PICKED, THROWN, COLLIDE, EXPLODE};
 
 class PickableObject : public Object {
 public:
@@ -19,11 +19,13 @@ public:
 	virtual bool picked() { return m_status == PICKED; }
 	virtual bool thrown() { return m_status == THROWN; }
 	virtual bool isCollided() { return m_status == COLLIDE; }
+	virtual bool isExploded() { return m_status == EXPLODE; }
 	virtual void putBack(); 
 	virtual void pick() { m_status = PICKED; }
 	virtual void throwIt() { m_status = THROWN; }
 	virtual void collide() { m_status = COLLIDE; }
-	float getRange() const { return m_range; } ;
+	virtual void explode() { m_status = EXPLODE; }
+	float getRange() const { return m_range; } 
 	std::unique_ptr<ICommand> getHitCommand();
 	Status getStatus() const { return m_status; }
 
