@@ -1,5 +1,7 @@
 #include "Management/ResourceManager.h"
 #include "Gameplay/Player.h"
+#include "Gameplay/Level.h"
+
 /* static */ ResourceManager& ResourceManager::instance()
 {
     static ResourceManager s_instance;   // Constructed on first use, destroyed on exit.
@@ -59,6 +61,14 @@ const std::shared_ptr<PlayerData> ResourceManager::getPlayerData(const std::stri
     throw std::runtime_error("Player not found: " + name);
 }
 
+std::unique_ptr<Level> ResourceManager::getLevel(const int index) {
+    if (index < m_levels.size()) return std::move(m_levels[index]);
+    else throw std::runtime_error("Level " + std::to_string(index + 1) + " not found.");
+}
+int ResourceManager::getNumOfLevels() {
+    return m_levels.size();
+}
+
 const std::vector<std::pair<std::string, std::shared_ptr<PlayerData>>>& ResourceManager::getCharacters() const
 {
     return m_characters;
@@ -67,6 +77,11 @@ const std::vector<std::pair<std::string, std::shared_ptr<PlayerData>>>& Resource
 void ResourceManager::loadCharacterData(const std::shared_ptr<PlayerData> p)
 {
     m_characters.push_back({p->m_name, p});
+}
+
+void ResourceManager::loadCurrentLevel(std::unique_ptr<Level> level)
+{
+    m_levels.push_back(std::move(level));
 }
 
 bool ResourceManager::loadTexture(const std::string& name) {

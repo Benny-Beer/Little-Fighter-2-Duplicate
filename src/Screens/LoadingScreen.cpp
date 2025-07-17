@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Screens/LoadingScreen.h"
+#include "Management/LevelLoader.h"
 #include "Screens/CharacterSelectScreen.h"
 #include "Screens/IScreen.h"
 #include <SFML/System.hpp>
@@ -11,8 +12,10 @@
 #include <stdexcept>
 
 LoadingScreen::LoadingScreen(sf::RenderWindow& window, GameManager& manager) : IScreen(window, manager),
-																			   m_dataLoader(DataLoader("data/data.txt"))
+																			   m_dataLoader(DataLoader("data/data.txt")),
+																			m_levelsLoader(LevelLoader("levelsData/levels.txt", sf::Vector2f(m_window.getSize())))
 {
+	AnimationManager::loadAnimations();
 	sf::Vector2f screenSize(static_cast <sf::Vector2f> (m_window.getSize()));
 	m_backGround = Background(screenSize, ResourceManager::instance().getTexture("screen_backgrounds/Loading_bg"));
 	m_startButton = Button("  to character\n select screen", sf::Vector2f(screenSize.x / 4, screenSize.y / 4), sf::Vector2f(screenSize.x / 2, screenSize.y / 2), sf::Color::Transparent, 30);
@@ -51,6 +54,9 @@ LoadingScreen::LoadingScreen(sf::RenderWindow& window, GameManager& manager) : I
 void LoadingScreen::update(sf::Time deltaTime) {
 	if (m_dataLoader.loadCharacterDat()) {
 		m_currentlyLoading.setString(m_dataLoader.getCurrentlyLoadingFile());
+	}
+	else if (m_levelsLoader.loadNewLevel()) {
+		m_currentlyLoading.setString(m_levelsLoader.getCurrentlyLoadingFile());
 	}
 	else {
 		m_canSwitchScreen = true;

@@ -18,14 +18,23 @@ Controller::Controller(sf::RenderWindow& window,
     m_players(std::move(players)),
     m_allies(std::move(allies))
 {   
-    AnimationManager::loadAnimations();
+    m_numOfLevels = ResourceManager::instance().getNumOfLevels();
+    //AnimationManager::loadAnimations();
+    //=============================================================
     // === this section is hard coded. need to be done in Level ===
-    std::string objectLine = "r b r";
+    // add pickable (rock)
 
-    m_level->addPickableObjects(objectLine);
+
+ 
+   // std::string objectLine = "r b r";
+
+
+
+   // m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
-    std::string sq = "b1";
-    m_level->addSquad(sq);
+   // std::string sq = "b4";
+  //  m_level->addSquad(sq);
+
 
     // creating ally
 
@@ -56,6 +65,43 @@ void Controller::handleInput(sf::Event ev)
 
 void Controller::updateWorld(float deltaTime)
 {
+
+    //===========================================
+    //===== MOVE INSIDE FUNC ====================
+    if (m_waitingForNextWave) {
+        m_DelayTimer += deltaTime;
+        if (m_DelayTimer >= WAVE_DELAY) {
+            m_waitingForNextWave = false;
+            m_DelayTimer = 0.f;
+            launchNextStage();
+        }
+    }
+    else if (m_waitingForNextLevel) {
+        m_DelayTimer += deltaTime;
+        if (m_DelayTimer >= LEVEL_DELAY) {
+            m_waitingForNextLevel = false;
+            m_DelayTimer = 0.f;
+            launchNextLevel();
+        }
+    }
+    else if (!m_enemies.size()) {
+        if (m_nextStageIndex < m_level->numOfStages()) { // V
+            m_waitingForNextWave = true;
+            m_DelayTimer = 0.f;
+            m_nextStageIndex++;
+        }
+        else if (m_nextLevelIndex < m_numOfLevels) { // V
+            
+            m_waitingForNextLevel = true;
+            m_nextStageIndex = 1;
+            m_DelayTimer = 0.f;
+            m_nextLevelIndex++;
+        }
+        else {
+            // winning
+        }
+    }
+    //===========================================
 
     for (auto& player : m_players)
     {
@@ -208,7 +254,14 @@ void Controller::render()
         printHp(enemy->getPotentialHp(), { 930.f, 30.f + i}, true);
         i += 40.f;
     }
+    if (m_waitingForNextWave) {
 
+        printStageAlert("Stage: " + std::to_string(m_nextStageIndex));
+    }
+    if (m_waitingForNextLevel) {
+
+        printStageAlert("New level!\n strating level " + std::to_string(m_nextStageIndex + 1) + ".");
+    }
     // Draw HUD
     //m_window.draw(m_stats);        TODO: draw() in HUD
 
@@ -243,6 +296,30 @@ void Controller::setAlly(std::shared_ptr<Ally> ally)
 //    render();
 //}
 
+
+void Controller::launchNextStage()
+{
+    if (m_nextStageIndex <= m_level->numOfStages()) {
+        std::erase_if(m_deads, [](const std::shared_ptr<PlayableObject>& obj) {
+            return dynamic_cast<Enemy*>(obj.get()) != nullptr;
+            });
+        m_enemies = m_level->getAllEnemies();
+    }
+
+}
+
+void Controller::launchNextLevel()
+{
+    if (m_nextLevelIndex <= m_numOfLevels) {
+        std::erase_if(m_deads, [](const std::shared_ptr<PlayableObject>& obj) {
+            return dynamic_cast<Enemy*>(obj.get()) != nullptr;
+            });
+        m_level = ResourceManager::instance().getLevel(m_nextLevelIndex);
+        m_enemies = m_level->getAllEnemies();
+        m_pickables = m_level->getAllObjects();
+    }
+
+}
 
 // Responsibile for target & safe zone assignment, death handling. 
 // (for each of the computer players)
@@ -355,4 +432,29 @@ void Controller::checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy)
 }
 
 
+void Controller::printStageAlert(const std::string& message) {
+    //sf::Font& font = ResourceManager::instance().getFont("bigFont"); // ����� ������ ��� ����
+    static sf::Font font;
+    static bool loaded = false;
+    if (!loaded) {
+        if (!font.loadFromFile("resources/Fonts/lesterbold.ttf"))
+            return;
+        loaded = true;
+    }
+    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nim here hey\n";
+    sf::Text alert;
+    alert.setFont(font);
+    alert.setString(message);
+    alert.setCharacterSize(64); // ���� ���� ����
+    alert.setFillColor(sf::Color::White); // ��� ���
+    alert.setOutlineColor(sf::Color::Black); // �� ���� ����
+    alert.setOutlineThickness(4.f);
+
+    // ����� ���� ����
+    sf::FloatRect bounds = alert.getLocalBounds();
+    alert.setOrigin(bounds.width / 2, bounds.height / 2);
+    alert.setPosition(m_window.getSize().x / 2.f, m_window.getSize().y / 4.f); // ����� �����
+
+    m_window.draw(alert);
+}
 

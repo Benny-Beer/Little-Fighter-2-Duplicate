@@ -1,5 +1,6 @@
 #include "Gameplay/Level.h"
 #include <sstream>
+#include <fstream>
 #include "Management/ResourceManager.h"
 #include "Factory/Factory.h"
 #include "Management/CollisionHandling.h"
@@ -13,6 +14,7 @@
 Level::Level(std::string background, sf::Vector2f screenSize) : 
     m_backgorund(screenSize, ResourceManager::instance().getTexture(background))
 {
+
 }
 
 void Level::addSquad(std::string& squadLine)
@@ -66,7 +68,7 @@ void Level::render(sf::RenderWindow& window)
 {
     m_backgorund.draw(window, sf::RenderStates::Default);
 
-    int index = static_cast<int>(m_phase);
+    int index = m_phase;
 
     if (index < m_enemies.size()) {
         m_enemies[index].render(window); 
@@ -103,15 +105,17 @@ void Level::update(float dt)
 }
 
 std::vector<std::shared_ptr<Enemy>> Level::getAllEnemies() {
+    m_phase++;
     std::vector<std::shared_ptr<Enemy>> enemies;
 
-    Squad& curSquad = m_enemies[(int)m_phase];
+    if (m_phase < m_enemies.size()) {
+        Squad& curSquad = m_enemies[m_phase];
         for (auto& enemyPtr : curSquad.getEnemies()) {
             if (enemyPtr) {
                 enemies.push_back(enemyPtr); // Convert unique_ptr to raw pointer
             }
         }
-
+    }
     return enemies;
 }
 
@@ -144,3 +148,7 @@ void Level::handleCollisionsWithPlayer(PlayableObject& player)
         }
     }
 }
+
+
+
+

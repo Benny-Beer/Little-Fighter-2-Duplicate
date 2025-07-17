@@ -11,8 +11,9 @@
 #include <stdexcept>
 #include <memory>
 
+
 InGameScreen::InGameScreen(sf::RenderWindow& window, GameManager& manager, std::shared_ptr<PlayerData> p, std::vector<std::shared_ptr<Ally>> allies) : IScreen(window, manager),
-																						   m_controller(window, std::make_unique<Level>("lvl1bg", sf::Vector2f(m_window.getSize())),
+																						   m_controller(window, ResourceManager::instance().getLevel(0),
 																						   std::vector<std::shared_ptr<Player>>{std::make_shared<Player>(*p)},
 																						   allies)
 {}
