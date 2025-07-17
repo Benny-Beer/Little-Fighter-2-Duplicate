@@ -26,6 +26,7 @@ Player::Player(PlayerData data) : PlayableObject(data.m_animationSheet)
     m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
     m_speed = data.m_speed;
     m_name = data.m_name;
+    m_icon = data.m_chracterIcon;
     this -> setState(std::make_unique<StandingState>(RELEASE_RIGHT));
     m_state->enter(*this);
 }
