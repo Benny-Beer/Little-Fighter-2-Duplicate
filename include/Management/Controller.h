@@ -41,6 +41,11 @@ private:
     std::vector<std::shared_ptr<Enemy>> m_enemies; // Non-owning pointers to current squad
     std::vector<std::shared_ptr<PickableObject>> m_pickables;
     std::vector<std::shared_ptr<PlayableObject>> m_deads;
+    int m_nextLevelIndex = 1; // means level 2
+    int m_nextStageIndex = 1;
+    bool m_waitingForNextWave = false;
+    float m_waveDelayTimer = 0.f;
+    const float WAVE_DELAY = 2.0f;  
 
 
     // ========== Internal state ==========
@@ -52,9 +57,10 @@ private:
     float distanceBetween(sf::Vector2f a, sf::Vector2f b);
     bool enemyExist() { return m_enemies.size(); }
     bool alliesExist() { return m_allies.size() + m_players.size(); }
-
+    void launchNextStage();
     void updateComputerPlayerStats();
     void restoreKnockedAccess();
+    void printStageAlert(const std::string& message);
     //void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<ComputerPlayer>>& enemies);
     //void updateComputerPlayerTargetsTwo();
 

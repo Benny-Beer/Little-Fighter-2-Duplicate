@@ -3,6 +3,7 @@
 #include "UI/Background.h"
 #include "UI/Button.h"
 #include "Management/DataLoader.h"
+#include "Management/LevelLoader.h"
 
 
 class LoadingScreen: public IScreen {
@@ -17,6 +18,7 @@ private:
 	sf::Text m_currentlyLoading;
 	sf::Text m_chienese;
 	sf::Font m_font;
+	LevelLoader m_levelsLoader;
 	DataLoader m_dataLoader;
 	bool m_canSwitchScreen = false;
 };

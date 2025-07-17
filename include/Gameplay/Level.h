@@ -5,6 +5,7 @@
 #include "Gameplay/Squad.h"
 #include "Objects/PickableObject.h"
 #include "UI/Background.h"
+#include "Management/LevelLoader.h"
 class Player;
 
 enum class Phase { Phase1, Phase2, Phase3 };
@@ -20,11 +21,11 @@ public:
 	std::vector<std::shared_ptr<Enemy>> getAllEnemies();
 	std::vector<std::shared_ptr<PickableObject>> getAllObjects();
 	void handleCollisionsWithPlayer(PlayableObject& player);
-
+	int numOfStages() { return m_enemies.size(); };
 	
 private:
 	std::vector<Squad> m_enemies;
 	std::vector<std::shared_ptr<PickableObject>> m_pickables;
-	Phase m_phase = Phase::Phase1;
+	int m_phase = -1;
 	Background m_backgorund;
 };

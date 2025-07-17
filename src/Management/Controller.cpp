@@ -17,21 +17,22 @@ Controller::Controller(sf::RenderWindow& window,
     m_players(std::move(players)),
     m_allies(std::move(allies))
 {   
-    AnimationManager::loadAnimations();
+
+    //AnimationManager::loadAnimations();
     //=============================================================
     // === this section is hard coded. need to be done in Level ===
     // add pickable (rock)
 
 
  
-    std::string objectLine = "r b r";
+   // std::string objectLine = "r b r";
 
 
 
-    m_level->addPickableObjects(objectLine);
+   // m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
-    std::string sq = "b4";
-    m_level->addSquad(sq);
+   // std::string sq = "b4";
+  //  m_level->addSquad(sq);
 
     // creating ally
 
@@ -70,6 +71,20 @@ void Controller::handleInput(sf::Event ev)
 
 void Controller::updateWorld(float deltaTime)
 {
+    if (m_waitingForNextWave) {
+        m_waveDelayTimer += deltaTime;
+        if (m_waveDelayTimer >= WAVE_DELAY) {
+            m_waitingForNextWave = false;
+            m_waveDelayTimer = 0.f;
+            launchNextStage();
+        }
+    }
+    else if (!m_enemies.size()) {
+        m_waitingForNextWave = true;
+        m_waveDelayTimer = 0.f;
+        m_nextStageIndex++;
+    }
+
 
     for (auto& player : m_players)
     {
@@ -221,7 +236,10 @@ void Controller::render()
         printHp(enemy->getPotentialHp(), { 930.f, 30.f + i}, true);
         i += 40.f;
     }
+    if (m_waitingForNextWave) {
 
+        printStageAlert("Next stage: " + std::to_string(m_nextStageIndex));
+    }
     // Draw HUD
     //m_window.draw(m_stats);        TODO: draw() in HUD
 
@@ -256,6 +274,18 @@ void Controller::setAlly(std::shared_ptr<Ally> ally)
 //    render();
 //}
 
+
+void Controller::launchNextStage()
+{
+    if (m_nextStageIndex < m_level->numOfStages()) {
+        std::erase_if(m_deads, [](const std::shared_ptr<PlayableObject>& obj) {
+            return dynamic_cast<Enemy*>(obj.get()) != nullptr;
+            });
+        // maybe here print "NEXT STAGE" to screen
+        m_enemies = m_level->getAllEnemies();
+    }
+
+}
 
 // Responsibile for target & safe zone assignment, death handling. 
 // (for each of the computer players)
@@ -345,4 +375,29 @@ void Controller::restoreKnockedAccess() {
 }
 
 
+void Controller::printStageAlert(const std::string& message) {
+    //sf::Font& font = ResourceManager::instance().getFont("bigFont"); // תוודא שהפונט הזה קיים
+    static sf::Font font;
+    static bool loaded = false;
+    if (!loaded) {
+        if (!font.loadFromFile("resources/Fonts/lesterbold.ttf"))
+            return;
+        loaded = true;
+    }
+    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nim here hey\n";
+    sf::Text alert;
+    alert.setFont(font);
+    alert.setString(message);
+    alert.setCharacterSize(64); // גודל טקסט גדול
+    alert.setFillColor(sf::Color::White); // צבע לבן
+    alert.setOutlineColor(sf::Color::Black); // קו מתאר שחור
+    alert.setOutlineThickness(4.f);
+
+    // מיקום מרכז המסך
+    sf::FloatRect bounds = alert.getLocalBounds();
+    alert.setOrigin(bounds.width / 2, bounds.height / 2);
+    alert.setPosition(m_window.getSize().x / 2.f, m_window.getSize().y / 4.f); // למעלה במרכז
+
+    m_window.draw(alert);
+}
 
