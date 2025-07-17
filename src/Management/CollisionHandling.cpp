@@ -173,8 +173,15 @@ void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
 
 void playerVsenemy(Object& playerObj, Object& enemyObj)
 {
+
 	Player& player = static_cast<Player&>(playerObj);
 	Enemy& enemy = static_cast<Enemy&>(enemyObj);
+
+    auto playerDirX = player.getDirection();
+	auto enemyDirX = enemy.getDirection();
+
+	if (playerDirX == enemyDirX) // if they are facing each other, do not attack
+		return;
 
 	auto playerState = player.getState();
 	auto enemyState = enemy.getState();
