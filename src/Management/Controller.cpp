@@ -20,37 +20,12 @@ Controller::Controller(sf::RenderWindow& window,
     AnimationManager::loadAnimations();
     //=============================================================
     // === this section is hard coded. need to be done in Level ===
-    // add pickable (rock)
-
-
- 
     std::string objectLine = "r b r";
-
-
 
     m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
     std::string sq = "b4";
     m_level->addSquad(sq);
-
-    // creating ally
-
-    auto ally = std::make_shared<Ally>(sf::Vector2f(100, 450), "davis_ani",60.f);
-    auto allyTwo = std::make_shared<Ally>(sf::Vector2f(100, 550), "davis_ani", 60.f);
-    auto allyThree = std::make_shared<Ally>(sf::Vector2f(100, 650), "davis_ani", 60.f);
-    auto allyFour = std::make_shared<Ally>(sf::Vector2f(100, 750), "davis_ani", 60.f);
-
-    m_allies.push_back(ally);
-    m_allies.push_back(allyTwo);
-    m_allies.push_back(allyThree);
-    m_allies.push_back(allyFour);
-
-
-
-
-    //========================================================================
-
-
     m_enemies = m_level->getAllEnemies();
     m_pickables = m_level->getAllObjects();
     updateComputerPlayerStats();

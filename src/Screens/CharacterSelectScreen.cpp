@@ -154,7 +154,7 @@ void CharacterSelectScreen::update(sf::Time deltaTime)
 void CharacterSelectScreen::handleEvents(sf::Event& ev)
 {
     if (ev.type == sf::Event::KeyPressed) {
-        if (ev.key.code == sf::Keyboard::Enter && !m_selectionMode) { 
+        if (ev.key.code == sf::Keyboard::Enter && !m_selectionMode) {
             std::cout << "Enter pressed - character selected" << std::endl;
             m_selectionMode = true;
             m_placeholderText.setString("");
@@ -165,17 +165,18 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
 
             sf::Vector2u textureSize = m_profileSprite.getTexture()->getSize();
             m_profileSprite.setScale(
-               desiredSize.x / textureSize.x,
-               desiredSize.y / textureSize.y
+                desiredSize.x / textureSize.x,
+                desiredSize.y / textureSize.y
             );
             m_profileSprite.setPosition(desiredPos);
 
             m_characterName.setString(m_characters[m_currentIndex].second->m_name);
             m_characterDescription.setString(m_characters[m_currentIndex].second->m_description);
-        
         }
+
         else if (m_selectionMode) {
             std::cout << "Index: " << m_currentIndex << " / " << m_characters.size() << "\n";
+
             if (ev.key.code == sf::Keyboard::Right) {
                 m_currentIndex = (m_currentIndex + 1) % m_characters.size();
             }
@@ -183,19 +184,26 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
                 m_currentIndex = (m_currentIndex + m_characters.size() - 1) % m_characters.size();
             }
 
-            // Update content
             m_profileSprite.setTexture(*m_characters[m_currentIndex].second->m_profilePic);
             m_characterName.setString(m_characters[m_currentIndex].second->m_name);
             m_characterDescription.setString(m_characters[m_currentIndex].second->m_description);
 
-            //add here another enter event to pass the data to inGameState and switchState
             if (ev.key.code == sf::Keyboard::Enter) {
-                std::cout << "enter pressed in selection mode " << std::endl;
+                std::cout << "Enter pressed in selection mode" << std::endl;
+
                 std::vector<std::shared_ptr<Ally>> allies;
-                allies.push_back(std::make_shared<Ally>(*m_characters[m_currentIndex + 1 % m_characters.size()].second.get()));
-                allies.push_back(std::make_shared<Ally>(*m_characters[m_currentIndex - 1 % m_characters.size()].second.get()));
-                //add PlayerData struct in InGameString constructor
-                m_manager.switchScreen(std::make_unique<InGameScreen>(m_window, m_manager,m_characters[m_currentIndex].second,allies));
+                size_t nextIndex = (m_currentIndex + 1) % m_characters.size();
+                size_t prevIndex = (m_currentIndex + m_characters.size() - 1) % m_characters.size();
+
+                allies.push_back(std::make_shared<Ally>(*m_characters[nextIndex].second));
+                allies.push_back(std::make_shared<Ally>(*m_characters[prevIndex].second));
+
+                m_manager.switchScreen(std::make_unique<InGameScreen>(
+                    m_window,
+                    m_manager,
+                    m_characters[m_currentIndex].second,
+                    allies
+                ));
             }
         }
     }
