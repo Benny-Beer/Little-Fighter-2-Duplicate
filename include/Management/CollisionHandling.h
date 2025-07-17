@@ -11,3 +11,4 @@ struct UnknownCollision : public std::runtime_error {
 
 // פונקציית עיבוד ההתנגשות הכללית
 void processCollision(Object& object1, std::shared_ptr<PickableObject> object2);
+void processCollision(Object& object1, Object& object2);

@@ -6,9 +6,14 @@
 #include "PlayableObjectStates/PlayerStates/CollideWithObjectState.h"
 #include "PlayableObjectStates/PlayerStates/JumpingState.h"
 #include "PlayableObjectStates/PlayerStates/AttackState.h"
+#include "PlayableObjectStates/ComputerPlayerState/AttackingState.h"
 #include "Gameplay/ComputerPlayer.h"
 #include "EventCommands/StoneHitCommand.h"
 #include "EventCommands/BoxHitCommand.h"
+#include "EventCommands/HandsAttackCommand.h"
+
+
+
 #include "GamePlay/Enemy.h"
 #include "GamePlay/Ally.h"
 #include "GamePlay/Bandit.h"
@@ -22,6 +27,13 @@ using Key = std::tuple<std::type_index, std::type_index, std::type_index>;
 using CollisionFunc = void(*)(Object&, std::shared_ptr<PickableObject>);
 using HitMap = std::map<Key, CollisionFunc>;
 
+
+
+using KeyOO = std::pair<std::type_index, std::type_index>;
+using ObjectCollisionFunc = void(*)(Object&, Object&);
+using objectVsObjectMap = std::map<KeyOO, ObjectCollisionFunc>;
+
+
 //
 // פונקציה גנרית — template — לאיסוף חפץ
 //
@@ -33,13 +45,7 @@ void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pic
     auto& object = pickableObj;
     if (player.isHoldingWeapon(object))
         return;
-    if(object->thrown())
-	{
-        object->putBack();
-        std::cout << "in playerPickableObject before handle command\n"; return;
-        player.handleCommand(object->getHitCommand());
-		std::cout << "object is thrown, cannot pick it up\n"; return;
-	}
+    
     //not so nice!!!!!
 	if (typeid(*player.getState()) == typeid(JumpingState) || typeid(*player.getState()) == typeid(AttackState))
 	{
@@ -161,4 +167,48 @@ void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
     {
         it->second(obj1, obj2);
     }
+}
+
+
+
+void playerVsenemy(Object& playerObj, Object& enemyObj)
+{
+	Player& player = static_cast<Player&>(playerObj);
+	Enemy& enemy = static_cast<Enemy&>(enemyObj);
+
+	auto playerState = player.getState();
+	auto enemyState = enemy.getState();
+
+	if (typeid(*playerState) == typeid(AttackState))
+	{
+		enemy.handleCommand(std::make_unique<HandsAttackCommand>());
+	}
+    /*if (typeid(*enemyState) == typeid(AttackingState))
+    {
+		player.handleCommand(std::make_unique<HandsAttackCommand>());
+    }*/
+		
+}
+
+//PlayableObjec vs PlayebleObject collision
+
+objectVsObjectMap initializeOvsOmap(){
+
+    objectVsObjectMap map;
+
+    map[{typeid(Player), typeid(Bandit)}] = &playerVsenemy;
+
+    return map;
+}
+
+void processCollision(Object& object1, Object& object2)
+{
+	static objectVsObjectMap map = initializeOvsOmap();
+	std::cout << "Processing collision between " << typeid(object1).name() << " and " << typeid(object2).name() << std::endl;
+	auto it = map.find({ typeid(object1), typeid(object2) });
+	if (it != map.end())
+	{
+		it->second(object1, object2);
+	}
+	
 }

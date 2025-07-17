@@ -55,6 +55,10 @@ private:
 
     void updateComputerPlayerStats();
     void restoreKnockedAccess();
+    void checkCollisions(std::shared_ptr<Enemy> enemy);
+	void checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy);
+	void checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy);
+
     //void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<ComputerPlayer>>& enemies);
     //void updateComputerPlayerTargetsTwo();
 
