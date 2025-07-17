@@ -8,6 +8,7 @@ class ComputerPlayer : public PlayableObject{
 public:
 
     ComputerPlayer(const sf::Vector2f pos, const std::string& name); 
+    ComputerPlayer(PlayerData p);
     virtual ~ComputerPlayer() = default;
     virtual void update(float dt) override;
 
