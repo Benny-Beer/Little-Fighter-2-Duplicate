@@ -44,12 +44,16 @@ private:
     int m_nextLevelIndex = 1; // means level 2
     int m_nextStageIndex = 1;
     bool m_waitingForNextWave = false;
-    float m_waveDelayTimer = 0.f;
-    const float WAVE_DELAY = 2.0f;  
+    bool m_waitingForNextLevel = false;
+    float m_DelayTimer = 0.f;
+    const float WAVE_DELAY = 1.0f;  
+    const float LEVEL_DELAY = 2.0f;
+
 
 
     // ========== Internal state ==========
     HeadsUpDisplay m_stats;
+    int m_numOfLevels;
     bool m_levelFinished = false;
     bool m_playerWon = false;
     void printHp(int hp, const sf::Vector2f& position, bool potential);
@@ -58,6 +62,7 @@ private:
     bool enemyExist() { return m_enemies.size(); }
     bool alliesExist() { return m_allies.size() + m_players.size(); }
     void launchNextStage();
+    void launchNextLevel();
     void updateComputerPlayerStats();
     void restoreKnockedAccess();
     void printStageAlert(const std::string& message);

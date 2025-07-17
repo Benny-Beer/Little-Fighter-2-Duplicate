@@ -1,5 +1,5 @@
-b1
-b1
-b1
+b2
+b5
+b9
 obj
 r b

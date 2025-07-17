@@ -17,7 +17,7 @@ Controller::Controller(sf::RenderWindow& window,
     m_players(std::move(players)),
     m_allies(std::move(allies))
 {   
-
+    m_numOfLevels = ResourceManager::instance().getNumOfLevels();
     //AnimationManager::loadAnimations();
     //=============================================================
     // === this section is hard coded. need to be done in Level ===
@@ -72,17 +72,36 @@ void Controller::handleInput(sf::Event ev)
 void Controller::updateWorld(float deltaTime)
 {
     if (m_waitingForNextWave) {
-        m_waveDelayTimer += deltaTime;
-        if (m_waveDelayTimer >= WAVE_DELAY) {
+        m_DelayTimer += deltaTime;
+        if (m_DelayTimer >= WAVE_DELAY) {
             m_waitingForNextWave = false;
-            m_waveDelayTimer = 0.f;
+            m_DelayTimer = 0.f;
             launchNextStage();
         }
     }
+    else if (m_waitingForNextLevel) {
+        m_DelayTimer += deltaTime;
+        if (m_DelayTimer >= LEVEL_DELAY) {
+            m_waitingForNextLevel = false;
+            m_DelayTimer = 0.f;
+            launchNextLevel();
+        }
+    }
     else if (!m_enemies.size()) {
-        m_waitingForNextWave = true;
-        m_waveDelayTimer = 0.f;
-        m_nextStageIndex++;
+        if (m_nextStageIndex < m_level->numOfStages()) {
+            m_waitingForNextWave = true;
+            m_DelayTimer = 0.f;
+            m_nextStageIndex++;
+        }
+        else if(m_nextLevelIndex < m_numOfLevels) {
+            
+            m_waitingForNextLevel = true;
+            m_DelayTimer = 0.f;
+            m_nextLevelIndex++;
+        }
+        else {
+            // winning
+        }
     }
 
 
@@ -238,7 +257,11 @@ void Controller::render()
     }
     if (m_waitingForNextWave) {
 
-        printStageAlert("Next stage: " + std::to_string(m_nextStageIndex));
+        printStageAlert("Stage: " + std::to_string(m_nextStageIndex));
+    }
+    if (m_waitingForNextLevel) {
+
+        printStageAlert("New level!\n strating level " + std::to_string(m_nextStageIndex) + ".");
     }
     // Draw HUD
     //m_window.draw(m_stats);        TODO: draw() in HUD
@@ -277,12 +300,21 @@ void Controller::setAlly(std::shared_ptr<Ally> ally)
 
 void Controller::launchNextStage()
 {
-    if (m_nextStageIndex < m_level->numOfStages()) {
+    if (m_nextStageIndex <= m_level->numOfStages()) {
         std::erase_if(m_deads, [](const std::shared_ptr<PlayableObject>& obj) {
             return dynamic_cast<Enemy*>(obj.get()) != nullptr;
             });
-        // maybe here print "NEXT STAGE" to screen
         m_enemies = m_level->getAllEnemies();
+    }
+
+}
+
+void Controller::launchNextLevel()
+{
+    if (m_nextLevelIndex <= m_numOfLevels) {
+        m_level = ResourceManager::instance().getLevel(m_nextLevelIndex);
+        m_enemies = m_level->getAllEnemies();
+        m_pickables = m_level->getAllObjects();
     }
 
 }

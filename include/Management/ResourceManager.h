@@ -33,6 +33,7 @@ public:
     const sf::Font& getFont(const std::string& name);
     const std::shared_ptr<PlayerData> getPlayerData(const std::string& name) const;
     std::unique_ptr<Level> getLevel(const int index);
+    int getNumOfLevels();
     const std::vector<std::pair<std::string, std::shared_ptr<PlayerData>>>& getCharacters() const;
     void loadCharacterData(const std::shared_ptr<PlayerData> p);
     void loadCurrentLevel(std::unique_ptr<Level> level);
