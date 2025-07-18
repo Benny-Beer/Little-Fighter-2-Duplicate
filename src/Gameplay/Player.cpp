@@ -9,8 +9,7 @@ Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
     : PlayableObject(pos, name)
 {
 	//setSize(1.2);
-    m_hp = 500;
-    m_potentialHp = 500;
+    resetHP();
 	m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
     m_speed = speed;
     m_name = "player";
@@ -212,4 +211,9 @@ void Player::setAniName(const std::string& name)
 
 bool Player::isAlive() const {
     return m_alive;
+}
+
+void Player::resetHP() {
+    m_hp = 500;
+    m_potentialHp = 500;
 }

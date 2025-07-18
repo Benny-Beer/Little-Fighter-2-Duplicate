@@ -66,10 +66,12 @@ private:
     void updateComputerPlayerStats();
     void restoreKnockedAccess();
     void printStageAlert(const std::string& message);
+    void bringPlayersBack();
+    sf::Vector2f getRandomYPosition(float xPos, float min, float max);
     void checkCollisions(std::shared_ptr<Enemy> enemy);
 	void checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy);
 	void checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy);
-
+    void resetPlayersStats();
     //void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<ComputerPlayer>>& enemies);
     //void updateComputerPlayerTargetsTwo();
 
@@ -178,3 +180,4 @@ private:
 
     }
 };
+

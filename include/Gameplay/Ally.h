@@ -12,7 +12,7 @@ public:
 	Ally(PlayerData p);
 	void update(float dt) override; 
 	void handleCollision() override;
-
+	void resetHP();
 	bool isAlive() const;
 private:
 	//sf::Text m_name;

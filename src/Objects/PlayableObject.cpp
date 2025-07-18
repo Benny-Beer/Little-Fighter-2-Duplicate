@@ -301,3 +301,4 @@ void PlayableObject::updateHp() {
     }
     m_hpClock = m_hpClock % 36;
 }
+

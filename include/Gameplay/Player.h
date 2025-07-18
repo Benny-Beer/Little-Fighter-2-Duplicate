@@ -40,7 +40,7 @@ public:
     //float getSpeed() const;
 
     bool isAlive() const;
-
+    void resetHP();
     /* Keep the player inside the window bounds */
     void clampToWindow(const sf::Vector2u& windowSize);
 

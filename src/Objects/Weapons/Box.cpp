@@ -14,7 +14,10 @@ Box::Box(const sf::Vector2f pos, const std::string& name)
 
 void Box::update(float dt)
 {
-   Object::update(dt);
+    if (!picked()) {
+        std::cout << "Status is: " << getStatus() << "\n";
+        Object::update(dt);
+    }
     if (isExploded())
 
     {

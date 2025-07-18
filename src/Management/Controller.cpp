@@ -1,13 +1,15 @@
 #include "Management/Controller.h"
 #include "Management/CollisionHandling.h"
 #include "Gameplay/Level.h"
-
+#include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window.hpp>
 #include <utility>
 #include <memory>
 #include <iostream>
+#include <random>
+
 
 Controller::Controller(sf::RenderWindow& window,
     std::unique_ptr<Level> level,
@@ -95,10 +97,9 @@ void Controller::updateWorld(float deltaTime)
             m_waitingForNextLevel = true;
             m_nextStageIndex = 1;
             m_DelayTimer = 0.f;
-            m_nextLevelIndex++;
         }
         else {
-            // winning
+            m_playerWon = true;
         }
     }
     //===========================================
@@ -260,7 +261,11 @@ void Controller::render()
     }
     if (m_waitingForNextLevel) {
 
-        printStageAlert("New level!\n strating level " + std::to_string(m_nextStageIndex + 1) + ".");
+        printStageAlert("New level!\n strating level " + std::to_string(m_nextLevelIndex + 1) + ".");
+    }
+    if (m_playerWon)
+    {
+        printStageAlert("Congratulations! \n YOU WON!");
     }
     // Draw HUD
     //m_window.draw(m_stats);        TODO: draw() in HUD
@@ -314,7 +319,9 @@ void Controller::launchNextLevel()
         std::erase_if(m_deads, [](const std::shared_ptr<PlayableObject>& obj) {
             return dynamic_cast<Enemy*>(obj.get()) != nullptr;
             });
+        resetPlayersStats();
         m_level = ResourceManager::instance().getLevel(m_nextLevelIndex);
+        m_nextLevelIndex++;
         m_enemies = m_level->getAllEnemies();
         m_pickables = m_level->getAllObjects();
     }
@@ -431,6 +438,20 @@ void Controller::checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy)
 	}
 }
 
+void Controller::resetPlayersStats()
+{
+    bringPlayersBack();
+
+    for (auto& player : m_players) {
+        player->resetHP();
+        player->setPosition(getRandomYPosition(50, 380, 800));
+    }
+    for (auto& ally : m_allies) {
+        ally->resetHP();
+        ally->setPosition(getRandomYPosition(50, 380, 800));
+    }
+}
+
 
 void Controller::printStageAlert(const std::string& message) {
     //sf::Font& font = ResourceManager::instance().getFont("bigFont"); // ����� ������ ��� ����
@@ -458,3 +479,24 @@ void Controller::printStageAlert(const std::string& message) {
     m_window.draw(alert);
 }
 
+void Controller::bringPlayersBack() {
+        for (auto& dead : m_deads) {
+            dead->resetHP();
+            if (auto player = std::dynamic_pointer_cast<Player>(dead)) {
+                player->setState(std::make_unique<StandingState>(Input::NONE));
+            }
+            else if (auto ally = std::dynamic_pointer_cast<Ally>(dead)) {
+                ally->setState(std::make_unique<IdleState>());
+            }
+        }
+}
+
+
+sf::Vector2f Controller::getRandomYPosition(float xPos, float min, float max) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dist(min, max);
+
+    float y = dist(gen);
+    return sf::Vector2f(xPos, y);
+}

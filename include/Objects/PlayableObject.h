@@ -60,6 +60,7 @@ public:
 	int getHp() { return m_hp; }
 	int getPotentialHp() { return m_potentialHp; }
 	void updateHp();
+	virtual void resetHP() = 0;
 	void setXHit(int xdirHit) { m_xdirHit = xdirHit; }
 
 protected:
