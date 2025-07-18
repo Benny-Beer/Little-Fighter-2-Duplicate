@@ -12,9 +12,8 @@ void KnockedState::enter(PlayableObject& player)
 {
     std::cout << "Player enter:: KnockeState\n";
     player.dropHeldObj();
-    player.setAniName("knocked");
-
     m_elapsedTime = 0.5f;
+    player.resetDirection();
 }
 
 void KnockedState::onHandsAttack(PlayableObject& player)

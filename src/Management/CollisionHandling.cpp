@@ -179,9 +179,12 @@ void playerVsenemy(Object& playerObj, Object& enemyObj)
 
     auto playerDirX = player.getDirection();
 	auto enemyDirX = enemy.getDirection();
-
-	if (playerDirX == enemyDirX) // if they are facing each other, do not attack
-		return;
+	if (player.getPosition().x < enemy.getPosition().x) // if player is on the left side of the enemy
+	    if (playerDirX == enemyDirX) 
+		    return;
+	if (player.getPosition().x > enemy.getPosition().x) // if player is on the right side of the enemy
+        if(playerDirX == 1)
+			return;
 
 	auto playerState = player.getState();
 	auto enemyState = enemy.getState();
@@ -190,11 +193,7 @@ void playerVsenemy(Object& playerObj, Object& enemyObj)
 	{
 		enemy.handleCommand(std::make_unique<HandsAttackCommand>());
 	}
-    /*if (typeid(*enemyState) == typeid(AttackingState))
-    {
-		player.handleCommand(std::make_unique<HandsAttackCommand>());
-    }*/
-		
+    
 }
 
 //PlayableObjec vs PlayebleObject collision

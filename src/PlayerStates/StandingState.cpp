@@ -41,11 +41,12 @@ void StandingState::enter(PlayableObject& player)
 
 void StandingState::onHandsAttack(PlayableObject& player)
 {
+	player.setAniName("gothit");
+	//player.setState(std::make_unique<KnockedState>());
 }
 
 void StandingState::onStoneHit(PlayableObject& player)
 {
-	std::cout << player.getName() << " got  hit by stone\n";
 	player.setAniName("knockedDown");
 	player.setState(std::make_unique<KnockedState>());
 }
@@ -58,4 +59,6 @@ void StandingState::onBoxHit(PlayableObject& player)
 
 void StandingState::onExplosion(PlayableObject& player)
 {
+	player.setAniName("knockedDown");
+	player.setState(std::make_unique<KnockedState>());
 }

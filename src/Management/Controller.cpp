@@ -15,8 +15,8 @@ Controller::Controller(sf::RenderWindow& window,
     std::vector<std::shared_ptr<Ally>> allies)
     : m_window(window),
     m_level(std::move(level)),
-    m_players(std::move(players)),
-    m_allies(std::move(allies))
+    m_players(std::move(players))
+    //m_allies(std::move(allies))
 {   
     m_numOfLevels = ResourceManager::instance().getNumOfLevels();
     //AnimationManager::loadAnimations();
