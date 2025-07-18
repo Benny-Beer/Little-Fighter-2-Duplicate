@@ -17,6 +17,6 @@ public:
     bool isAccessible() const override { return false; }
     void name() {};
 private:
-    float m_recoveryTime = 2.0f;  // Time lying down before recovery
+    float m_recoveryTime = 1.5f;  // Time lying down before recovery
     float m_elapsedTime = 0.0f;
 };

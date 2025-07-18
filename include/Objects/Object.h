@@ -27,6 +27,7 @@ public:
 	sf::Vector2f getPosition() const;
 	void setSize(float scale);
 	sf::Vector2f getGeometricCenter() const;
+	virtual sf::Vector2f getRandomYPosition(float xPos, float min, float max);
 	virtual void adjustBoundsToJump();
 	virtual void adjustBoundsBack();
 protected:

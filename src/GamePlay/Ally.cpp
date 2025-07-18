@@ -17,6 +17,8 @@ Ally::Ally(const sf::Vector2f pos, const std::string& name, float speed)
 
 Ally::Ally(PlayerData p) : ComputerPlayer(p)
 {
+    setPosition(getRandomYPosition(50, 400, 780));
+    m_prevPosition = getPosition();
     m_hp = p.m_hp;
     m_potentialHp = p.m_hp;
     m_speed = p.m_speed;
