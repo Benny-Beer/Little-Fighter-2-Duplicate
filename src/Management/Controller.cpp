@@ -50,7 +50,8 @@ Controller::Controller(sf::RenderWindow& window,
     m_allies.push_back(allyThree);
     m_allies.push_back(allyFour);*/
     m_enemies = m_level->getAllEnemies();
-    m_pickables = m_level->getAllObjects();
+    m_objQueue = m_level->getAllObjects();
+    transferNextPickable();
     updateComputerPlayerStats();
 
     // TODO: initialize HUD (m_stats)
@@ -86,7 +87,17 @@ void Controller::updateWorld(float deltaTime)
             launchNextLevel();
         }
     }
-    else if (!m_enemies.size()) {
+    else if (m_needToWaitForKnocked) {
+        m_DelayTimer += deltaTime;
+        if (m_DelayTimer >= KNOCKED_CHECK_DELAY) {
+            m_canMoveStage = true;
+            m_needToWaitForKnocked = false;
+            m_DelayTimer = 0.f;
+
+        }
+    }
+    else if (m_enemies.empty() && m_canMoveStage) {
+        m_canMoveStage = false;
         if (m_nextStageIndex < m_level->numOfStages()) { // V
             m_waitingForNextWave = true;
             m_DelayTimer = 0.f;
@@ -101,6 +112,9 @@ void Controller::updateWorld(float deltaTime)
         else {
             m_playerWon = true;
         }
+    }
+    else if (m_enemies.empty()) {
+        m_needToWaitForKnocked = true;
     }
     //===========================================
 
@@ -158,6 +172,11 @@ void Controller::updateWorld(float deltaTime)
         }
     }
 
+    m_objectTimer += deltaTime;
+    if (m_newObjectCoolDown <= m_objectTimer) {
+        m_objectTimer = 0.f;
+        transferNextPickable();
+    }
 
     // Update the level itself (enemies, objects, etc.)
      //m_level->update(deltaTime);
@@ -222,7 +241,9 @@ void Controller::render()
         printHp(dead->getPotentialHp(), { 750.f, 30.f + i }, true);
         i += 40.f;
     }
-
+    for (const auto& obj : m_pickables) {
+        obj->draw(m_window);
+    }
     i = 0.f;
 
     for (const auto& player : m_players)
@@ -255,6 +276,7 @@ void Controller::render()
         printHp(enemy->getPotentialHp(), { 930.f, 30.f + i}, true);
         i += 40.f;
     }
+
     if (m_waitingForNextWave) {
 
         printStageAlert("Stage: " + std::to_string(m_nextStageIndex));
@@ -323,7 +345,7 @@ void Controller::launchNextLevel()
         m_level = ResourceManager::instance().getLevel(m_nextLevelIndex);
         m_nextLevelIndex++;
         m_enemies = m_level->getAllEnemies();
-        m_pickables = m_level->getAllObjects();
+        m_objQueue = m_level->getAllObjects();
     }
 
 }
@@ -499,4 +521,11 @@ sf::Vector2f Controller::getRandomYPosition(float xPos, float min, float max) {
 
     float y = dist(gen);
     return sf::Vector2f(xPos, y);
+}
+
+void Controller::transferNextPickable() {
+    if (!m_objQueue.empty()) {
+        m_pickables.push_back(std::move(m_objQueue.back()));
+        m_objQueue.pop_back();
+    }
 }

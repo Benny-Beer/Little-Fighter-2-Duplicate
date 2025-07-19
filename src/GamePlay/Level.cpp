@@ -1,6 +1,7 @@
 #include "Gameplay/Level.h"
 #include <sstream>
 #include <fstream>
+#include <random>
 #include "Management/ResourceManager.h"
 #include "Factory/Factory.h"
 #include "Management/CollisionHandling.h"
@@ -32,7 +33,7 @@ void Level::addSquad(std::string& squadLine)
 
         for (int i = 0; i < count; ++i) {
            
-            auto enemy = Factory<Enemy>::create(std::string(1, type), sf::Vector2f(950.f, 450.f+100*i));
+            auto enemy = Factory<Enemy>::create(std::string(1, type), sf::Vector2f(getRandomBoundedPosition(950, 950, 380, 800)));
 
             if (enemy)
                 newSquad.addEnemy(std::move(enemy));
@@ -54,7 +55,7 @@ void Level::addPickableObjects(const std::string& objectLine)
 
         char type = std::tolower(token[0]);
 
-        auto obj = Factory<PickableObject>::create(std::string(1, type), sf::Vector2f(525.f, 350.f+100*i));
+        auto obj = Factory<PickableObject>::create(std::string(1, type), getRandomBoundedPosition(100, 900, 430, 750));
         if (obj)
         {
             std::cout << "in Level::addPickableObjects if (obj) " << i <<  "\n";
@@ -75,8 +76,8 @@ void Level::render(sf::RenderWindow& window)
     }
 
     //render picObj
-    for (auto& obj : m_pickables)
-        obj->draw(window);
+    //for (auto& obj : m_pickables)
+        //obj->draw(window);
 
 }
 
@@ -152,3 +153,12 @@ void Level::handleCollisionsWithPlayer(PlayableObject& player)
 
 
 
+sf::Vector2f Level::getRandomBoundedPosition(float xMin, float xMax, float yMin, float yMax) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+
+    std::uniform_real_distribution<float> distX(xMin, xMax);
+    std::uniform_real_distribution<float> distY(yMin, yMax);
+
+    return { distX(gen), distY(gen) };
+}

@@ -40,12 +40,16 @@ private:
     std::vector<std::shared_ptr<Ally>> m_allies;  // computer-controlled
     std::vector<std::shared_ptr<Enemy>> m_enemies; // Non-owning pointers to current squad
     std::vector<std::shared_ptr<PickableObject>> m_pickables;
+    std::vector<std::shared_ptr<PickableObject>> m_objQueue;
     std::vector<std::shared_ptr<PlayableObject>> m_deads;
     int m_nextLevelIndex = 1; // means level 2
     int m_nextStageIndex = 1;
     bool m_waitingForNextWave = false;
     bool m_waitingForNextLevel = false;
+    bool m_needToWaitForKnocked = false;
+    bool m_canMoveStage = false;
     float m_DelayTimer = 0.f;
+    const float KNOCKED_CHECK_DELAY = 1.5f;
     const float WAVE_DELAY = 1.0f;  
     const float LEVEL_DELAY = 2.0f;
 
@@ -56,6 +60,9 @@ private:
     int m_numOfLevels;
     bool m_levelFinished = false;
     bool m_playerWon = false;
+    float m_objectTimer = 0.f;
+    float m_newObjectCoolDown = 5.0;
+
     void printHp(int hp, const sf::Vector2f& position, bool potential);
     //void handleDeath(std::shared_ptr<ComputerPlayer> deadOne, std::vector<std::shared_ptr<ComputerPlayer>> livePlayers);
     float distanceBetween(sf::Vector2f a, sf::Vector2f b);
@@ -68,6 +75,7 @@ private:
     void printStageAlert(const std::string& message);
     void bringPlayersBack();
     sf::Vector2f getRandomYPosition(float xPos, float min, float max);
+    void transferNextPickable();
     void checkCollisions(std::shared_ptr<Enemy> enemy);
 	void checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy);
 	void checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy);

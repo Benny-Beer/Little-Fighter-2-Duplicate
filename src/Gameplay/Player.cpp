@@ -10,6 +10,7 @@ Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
 {
 	//setSize(1.2);
     resetHP();
+    std::cout <<"speed " << speed << " and pos " << pos.x << "," << pos.y << "\n";
 	m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
     m_speed = speed;
     m_name = "player";
@@ -20,6 +21,8 @@ Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
 
 Player::Player(PlayerData data) : PlayableObject(data.m_animationSheet)
 {
+    setPosition(getRandomYPosition(50, 400, 780));
+    m_prevPosition = getPosition();
     m_hp = data.m_hp;
     m_potentialHp = data.m_hp;
     m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);

@@ -24,6 +24,7 @@ public:
 	int numOfStages() { return m_enemies.size(); };
 	
 private:
+	sf::Vector2f getRandomBoundedPosition(float xMin, float xMax, float yMin, float yMax);
 	std::vector<Squad> m_enemies;
 	std::vector<std::shared_ptr<PickableObject>> m_pickables;
 	int m_phase = -1;

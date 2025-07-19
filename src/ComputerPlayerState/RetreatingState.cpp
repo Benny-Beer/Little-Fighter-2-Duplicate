@@ -33,11 +33,10 @@ void RetreatingState::update(PlayableObject& player, float deltaTime) {
     float length = std::sqrt(retreatDirection.x * retreatDirection.x + retreatDirection.y * retreatDirection.y);
     if (length != 0) {
         retreatDirection /= length;
-        retreatDirection *= 3.f;
     }
-    player.move(retreatDirection * player.getSpeed() * deltaTime);
+    player.move(retreatDirection * player.getSpeed() * 2.f * deltaTime);
 
-    if (m_elapsedTime >= m_retreatDuration) {
+    if (m_elapsedTime >= m_retreatDuration || m_safeZone == player.getPosition()) {
         // Done retreating — return to idle (or other smart decision)
         player.setState(std::make_unique<IdleState>());
         return;
