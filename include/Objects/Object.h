@@ -5,6 +5,7 @@
 #include "Management/AnimationManager.h"
 #include "Factory/Factory.h"
 #include "Management/WorldBounds.h"
+#include "Consts/Consts.h"
 #include "iostream"
 
 class Object {
@@ -42,6 +43,6 @@ protected:
 private:
 	const sf::Texture* m_texture = nullptr;
 	sf::Sprite m_sprite;
-	WorldBounds m_bounds = sf::FloatRect(-25, 380, 1050, 420); // x of leftUpCorner, y of leftUpCorner, width, height  
+	WorldBounds m_bounds = WORLD_BOUNDS; // x of leftUpCorner, y of leftUpCorner, width, height  
 	Animation m_animation;
 };

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Consts/Consts.h"
 #include "PlayableObjectStates/ComputerPlayerState/ComputerPlayerState.h"
 
 class KnockedDownState : public ComputerPlayerState {
@@ -17,6 +17,6 @@ public:
     bool isAccessible() const override { return false; }
     void name() {};
 private:
-    float m_recoveryTime = 1.5f;  // Time lying down before recovery
+    float m_recoveryTime = KNOCKED_RECOVERY_TIME;  // Time lying down before recovery
     float m_elapsedTime = 0.0f;
 };

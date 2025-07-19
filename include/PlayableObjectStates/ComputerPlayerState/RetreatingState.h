@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/System/Vector2.hpp>
-
+#include "Objects/Object.h"
 #include "PlayableObjectStates/ComputerPlayerState/ComputerPlayerState.h"
 
 class RetreatingState : public ComputerPlayerState {
@@ -18,7 +18,7 @@ public:
 
 private:
     // time of retreating can also be determined according to hp level, ect.
-    float m_retreatDuration = 1.0f; // Duration of retreating
+    float m_retreatDuration = RETREAT_DURATION; // Duration of retreating
     float m_elapsedTime = 0.0f;
     sf::Vector2f m_safeZone;
 };
