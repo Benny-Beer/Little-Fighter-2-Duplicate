@@ -22,6 +22,7 @@ Ally::Ally(PlayerData p) : ComputerPlayer(p)
     m_potentialHp = p.m_hp;
     m_speed = p.m_speed;
     m_name = p.m_name;
+    m_icon = p.m_chracterIcon;
     changeState(std::make_unique<IdleState>());
 }
 

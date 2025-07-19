@@ -12,7 +12,7 @@ enum class Direction
 class PlayableObject : public Object{
 public:
 	PlayableObject(sf::Vector2f pos, const std::string& name) : Object(pos, name), m_prevPosition(pos) {}
-	PlayableObject(std::shared_ptr<sf::Texture> textSheet) : Object(textSheet), m_prevPosition(sf::Vector2f(1000,800)) {}
+	PlayableObject(std::shared_ptr<sf::Texture> textSheet, std::shared_ptr<sf::Texture> icon) : Object(textSheet),m_icon(icon), m_prevPosition(sf::Vector2f(1000, 800)) {}
 	void setState(std::unique_ptr<PlayableObjectState> newState); 
 	virtual void handleCommand(std::unique_ptr<ICommand> command);
 	virtual void pickUpObject(std::shared_ptr<PickableObject> obj);
@@ -57,10 +57,10 @@ public:
 	void setSafeZone(const sf::Vector2f& zone) { m_safeZone = zone; }
 	sf::Vector2f getSafeZone() const { return m_safeZone; }
 	void reduceHp(int amountToReduce);
-	int getHp() { return m_hp; }
-	int getPotentialHp() { return m_potentialHp; }
+	int getHp()const  { return m_hp; }
+	int getPotentialHp() const { return m_potentialHp; }
 	void updateHp();
-
+	std::shared_ptr<sf::Texture> getIcon() const;
 protected:
 	int m_hp;
 	int m_potentialHp;
@@ -74,6 +74,7 @@ protected:
 	sf::Vector2f m_prevPosition;
 	//bool m_underAttack = false;
 	bool m_needItem = true;
+	std::shared_ptr<sf::Texture> m_icon;
 	std::unique_ptr<PlayableObjectState> m_state;
 	std::unique_ptr<AttackBehavior> m_attack;
 	std::shared_ptr<PickableObject> m_heldObject = nullptr;
@@ -81,5 +82,5 @@ protected:
 	sf::Vector2f m_direction{ 0.f,0.f };
 	sf::Vector2f m_safeZone = { 0.f, 0.f };
 	float m_attackRange = 50.f;
-
+	
 };

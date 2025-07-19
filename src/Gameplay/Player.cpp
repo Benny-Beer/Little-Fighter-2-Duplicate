@@ -19,7 +19,7 @@ Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
 
 }
 
-Player::Player(PlayerData data) : PlayableObject(data.m_animationSheet)
+Player::Player(PlayerData data) : PlayableObject(data.m_animationSheet,data.m_chracterIcon)
 {
     m_hp = data.m_hp;
     m_potentialHp = data.m_hp;

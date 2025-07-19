@@ -1,79 +1,145 @@
 #include "UI/HUD.h"
-#include "Gameplay/Player.h"
-#include "Gameplay/Ally.hpp"
-#include "Object/PlayableObject.h"
 #include <SFML/Graphics.hpp>
-#include <memory>
-
-HUD::HUD() {
-    m_frame.setSize(sf::Vector2f(800, 1000));
-    m_frame.setFillColor(sf::Color(0,0,102));
-    m_frame.setOrigin(0.f, 0.f);
+#include <Objects/PlayableObject.h>
+#include <iostream>
+HUD::HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<PlayableObject>>& members) {
+    // Step 1: HUD frame setup (top 15% of screen, blue color)
+    float frameWidth = static_cast<float>(screenSize.x);
+    float frameHeight = static_cast<float>(screenSize.y * 0.15f);
+    m_frame.setSize(sf::Vector2f(frameWidth, frameHeight));
     m_frame.setPosition(0.f, 0.f);
-}
+    m_frame.setFillColor(sf::Color(0,0,102));
 
-void HUD::updatePlayer(const std::shared_ptr<Player>& player) {
-    // The main player goes in the first frame
-    // If you want to reuse an existing frame, you could store it
-    CharacterFrame frame(player);
-    frame.update(player);
-    // You would usually store it to a vector or member here
-    // For now, this is a placeholder
-}
+    
+    int numFrames = 3;
+    float spacing = 20.f; 
+    float totalSpacing = spacing * (numFrames + 1);
+    float characterWidth = (frameWidth - totalSpacing) / numFrames;
+    float characterHeight = frameHeight * 0.8f;
+    float yOffset = (frameHeight - characterHeight) / 2.f;
 
-void HUD::updateAllies(const std::vector<std::shared_ptr<Ally>>& allies) {
-    for (const auto& ally : allies) {
-        CharacterFrame frame(nullptr);  // Player isn't needed to construct ally frame
-        frame.update(ally);
-        // Again, you would store the frame in a member vector to be drawn
+ 
+    for (int i = 0; i < numFrames; ++i) {
+        float x = spacing + i * (characterWidth + spacing);
+        sf::Vector2f size(characterWidth, characterHeight);
+        sf::Vector2f position(x, yOffset);
+        m_characterFrames.emplace_back(size, position, members[i]);
     }
 }
-
+void HUD::update(const std::vector<std::shared_ptr<PlayableObject>>& members)
+{
+    int i = 0;
+    for (auto& frame : m_characterFrames) {
+        if (i < members.size()) {
+           // frame.update(members[i]);
+            //++i;
+        }
+    }
+}
 void HUD::draw(sf::RenderWindow& window) {
     window.draw(m_frame);
-
-    // Here, you'd draw each stored CharacterFrame
-    // For example:
-    // for (auto& frame : m_characterFrames)
-    //     frame.draw(window);
-}
-
-// ------------------ CharacterFrame Implementation --------------------
-
-HUD::CharacterFrame::CharacterFrame(const std::shared_ptr<Player>& player) {
-    // Dummy values for visual layout
-    m_icon.setPosition(10.f, 10.f);
-
-    m_hpBar.setSize(sf::Vector2f(100, 10));
-    m_hpBar.setFillColor(sf::Color::Red);
-    m_hpBar.setPosition(10.f, 50.f);
-
-    m_potentialHpBar.setSize(sf::Vector2f(100, 10));
-    m_potentialHpBar.setFillColor(sf::Color(255, 165, 0));  // Orange
-    m_potentialHpBar.setPosition(10.f, 50.f);
-
-    m_name.setCharacterSize(16);
-    m_name.setFillColor(sf::Color::White);
-    m_name.setPosition(10.f, 70.f);
-
-    // If `player` isn't null, you might pull portrait/name here
-    if (player) {
-        if (auto texture = player->getPortrait()) {
-            m_icon.setTexture(*texture);
-        }
-        m_name.setString(player->getName());
+    for (auto& frame : m_characterFrames) {
+        frame.draw(window);
     }
 }
+
+// ----- CharacterFrame methods -----
+
+HUD::CharacterFrame::CharacterFrame(const sf::Vector2f size, const sf::Vector2f position, const std::shared_ptr<PlayableObject>& member) {
+    m_frame.setSize(size);
+    m_frame.setOrigin(0.5f, 0.5f);
+    m_frame.setPosition(position);
+    m_frame.setFillColor(sf::Color(20, 20, 140));
+    m_frame.setOutlineThickness(-3.f);
+    m_frame.setOutlineColor(sf::Color(0, 0, 70));
+
+    // Set icon texture
+    m_icon.setTexture(*member->getIcon());
+    m_icon.setPosition(position.x + size.x * .03f, position.y + size.y * .1f);
+    sf::IntRect texRect = m_icon.getTextureRect();
+
+    float targetHeight = size.y * 0.7f;
+    float aspectRatio = static_cast<float>(texRect.width) / texRect.height;
+    float targetWidth = targetHeight * aspectRatio;
+
+    m_icon.setScale(targetWidth / texRect.width, targetHeight / texRect.height);
+
+    //set HealthBar
+    sf::Vector2f iconBound = m_icon.getGlobalBounds().getSize();
+    sf::Vector2f fullBarSize(size.x - iconBound.x - 50.f, 20.f);
+    sf::Vector2f barPosition(m_icon.getPosition().x + iconBound.x + 20.f, m_icon.getPosition().y);
+    
+    m_hpBar.setFillColor(sf::Color(225, 0, 0));
+    m_hpBar.setPosition(barPosition);
+    m_hpBar.setSize(fullBarSize);
+  /*
+    m_potentialHpBar.setFillColor(sf::Color(0, 80, 0));
+    m_potentialHpBar.setPosition(barPosition);
+    m_potentialHpBar.setSize(fullBarSize);
+    
+    m_hpBarPlaceholder.setFillColor(sf::Color(225, 0, 0));
+    m_hpBarPlaceholder.setPosition(barPosition);
+    m_hpBarPlaceholder.setSize(fullBarSize);
+    */
+}
+
 
 void HUD::CharacterFrame::update(const std::shared_ptr<PlayableObject>& character) {
-    if (!character) return;
+    //update the size of the relevnt hp bar
+    float maxHp, potentialHp, currHp;
 
-    // Example values — replace with your actual accessors
-    float hpRatio = static_cast<float>(character->getCurrentHP()) / character->getMaxHP();
-    m_hpBar.setSize(sf::Vector2f(100.f * hpRatio, 10.f));
+    maxHp = getMaxHp();
+    potentialHp = character->getPotentialHp();
+    currHp = character->getHp();
 
-    m_name.setString(character->getName());
-    if (auto texture = character->getPortrait()) {
-        m_icon.setTexture(*texture);
-    }
+    std::cout << "n\n\n currHp\n\n\n" << currHp << std::endl;
+    sf::Vector2f newSize;
+    //set the size of potentialHp bar
+    newSize.x = potentialHp / maxHp * m_hpBarPlaceholder.getGlobalBounds().width;
+    newSize.y = m_hpBarPlaceholder.getGlobalBounds().height;
+    m_potentialHpBar.setSize(newSize);
+    //calculate curr a % of potential
+    newSize.x = currHp / potentialHp * m_hpBarPlaceholder.getGlobalBounds().width;
+    newSize.y = m_hpBarPlaceholder.getGlobalBounds().height;
+    m_hpBar.setSize(newSize);
+    
+}
+
+void HUD::CharacterFrame::draw(sf::RenderWindow& window) {
+    window.draw(m_frame);
+    window.draw(m_icon);
+    window.draw(m_hpBarPlaceholder);
+    window.draw(m_potentialHpBar);
+    window.draw(m_hpBar);
+}
+
+float HUD::CharacterFrame::getMaxHp() const
+{
+    return m_maxHp;
+}
+
+void HUD::CharacterFrame::setMaxlHp(const float amount)
+{
+    m_maxHp = amount;
+}
+
+
+float HUD::CharacterFrame::getPotentialHp() const
+{
+    return m_potentialHp;
+}
+
+void HUD::CharacterFrame::setPotentialHp(const float amount)
+{
+    m_potentialHp = amount;
+}
+
+float HUD::CharacterFrame::getCurrHp() const
+{
+    return m_currHp;
+}
+
+void HUD::CharacterFrame::setCurrHp(const float amount)
+{
+    m_currHp = amount;
 }

@@ -56,5 +56,4 @@ public:
     const PlayableObjectState* getState() const { return m_state.get(); }
 private:
     bool m_alive = true;
-    std::shared_ptr<sf::Texture> m_icon;
 };

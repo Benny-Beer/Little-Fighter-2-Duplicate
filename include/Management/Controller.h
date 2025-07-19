@@ -7,7 +7,7 @@
 #include "Gameplay/Level.h"
 #include "Gameplay/Player.h"
 #include "Gameplay/Ally.h"
-#include "UI/HeadsUpDisplay.h"
+#include "UI/HUD.h"
 
 
 class Controller
@@ -32,7 +32,7 @@ public:
     // Returns whether the level has ended, and who won
     bool isLevelFinished() const;
     bool didWin() const;
-
+    std::vector<std::shared_ptr<PlayableObject>> getPlayerAndAllies();
 private:
     sf::RenderWindow& m_window;
     std::unique_ptr<Level> m_level;
@@ -44,7 +44,7 @@ private:
 
 
     // ========== Internal state ==========
-    HeadsUpDisplay m_stats;
+    HUD m_stats;
     bool m_levelFinished = false;
     bool m_playerWon = false;
     void printHp(int hp, const sf::Vector2f& position, bool potential);

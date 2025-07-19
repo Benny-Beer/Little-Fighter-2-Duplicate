@@ -9,20 +9,34 @@ class PlayableObject;
 
 class HUD {
 public:
-	HUD();
-	void updatePlayer(const std::shared_ptr<Player>& player);
-	void updateAllies(const std::vector<std::shared_ptr<Ally>>& allies);
+	HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<PlayableObject>>& members);
+	void update(const std::vector<std::shared_ptr<PlayableObject>>& members);
 	void draw(sf::RenderWindow& window);
 private:
 	sf::RectangleShape m_frame;
 	class CharacterFrame {
 	public:
-		CharacterFrame(const std::shared_ptr<Player>& player);
+		CharacterFrame(const sf::Vector2f size, const sf::Vector2f position, const std::shared_ptr<PlayableObject>& member);
 		void update(const std::shared_ptr<PlayableObject>& character);
+		void draw(sf::RenderWindow& window);
+		float getMaxHp() const;
+		void setMaxlHp(const float amount);
+		float getPotentialHp() const;
+		void setPotentialHp(const float amount);
+		float getCurrHp() const;
+		void setCurrHp(const float amount);
+		
 	private:
+		sf::RectangleShape m_frame;
 		sf::Sprite m_icon;
 		sf::Text m_name;
 		sf::RectangleShape m_hpBar;
 		sf::RectangleShape m_potentialHpBar;
+		sf::RectangleShape m_hpBarPlaceholder;
+		float m_maxHp = -1;
+		float m_potentialHp = -1;
+		float m_currHp = -1;
 	};
+	std::vector<HUD::CharacterFrame> m_characterFrames;
+	
 };

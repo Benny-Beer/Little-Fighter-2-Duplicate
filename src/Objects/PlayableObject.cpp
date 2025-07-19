@@ -308,3 +308,8 @@ void PlayableObject::updateHp() {
     }
     m_hpClock = m_hpClock % 36;
 }
+
+std::shared_ptr<sf::Texture> PlayableObject::getIcon() const
+{
+    return m_icon;
+}
