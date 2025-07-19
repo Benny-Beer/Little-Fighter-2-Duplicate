@@ -1,5 +1,6 @@
 #pragma once
 #include "Gameplay/Enemy.h"
+#include "Consts/Consts.h"
 
 class Bandit : public Enemy {
 public:
@@ -12,5 +13,5 @@ private:
 
 	//used in move()
 	sf::Vector2f m_direction{ 0.f,0.f };
-	float m_attackRange = 60.f;
+	float m_attackRange = ENEMY_ATTACK_RANGE;
 };

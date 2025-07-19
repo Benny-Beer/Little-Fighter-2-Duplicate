@@ -24,16 +24,17 @@ void Rock::update(float dt)
 
         // עדכון מיקום:
         sf::Vector2f pos = getPosition();
+        std::cout << "Y is:" << pos.y << "\n";
         pos.x += m_velocity.x * dt;
         pos.y += m_velocity.y * dt;
 
         // òãëåï îäéøåú Y òí Gravity:
         m_velocity.y += m_gravity * dt;
-
+        std::cout << "\n\n\n\n\n\nnow here out of ground y\n\n\n\n\n\n";
         // äàí ðçúðå?
-        if (pos.y >= m_groundY)
+        if (pos.y >= m_groundY - 12.f)
         {
-            std::cout << "now here\n";
+            std::cout << "\n\n\n\n\n\nnow here ground y\n\n\n\n\n\n";
             setHolder(nullptr);
             pos.y = m_groundY;
             m_isFlying = false;  // äôñé÷ ìòåó
