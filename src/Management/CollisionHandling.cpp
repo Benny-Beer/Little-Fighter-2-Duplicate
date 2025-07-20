@@ -218,28 +218,28 @@ void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
     }
 }
 
-void enemyVSAlly(Object& enemyObj, Object& allyObj) {
-	ComputerPlayer& enemy = static_cast<ComputerPlayer&>(enemyObj);
-	auto& ally = static_cast<ComputerPlayer&>(allyObj);
+void enemyVSAlly(Object& Obj1, Object& Obj2) {
+	auto& attacker  = static_cast<ComputerPlayer&>(Obj1);
+	auto& attacked = static_cast<ComputerPlayer&>(Obj2);
 
-	if (ally.getHitCooldown() > 0.f)
+	if (attacked.getHitCooldown() > 0.f)
 		return;
-    if (enemy.getPosition().x < ally.getPosition().x)
+    if (attacker.getPosition().x < attacked.getPosition().x)
     {
-        if (enemy.getDirection() < 0)
+        if (attacker.getDirection() < 0)
             return;
     }
-    else if (enemy.getPosition().x < ally.getPosition().x)
+    else if (attacker.getPosition().x < attacked.getPosition().x)
     {
-        if (enemy.getDirection() > 0)
+        if (attacker.getDirection() > 0)
             return;
     }
 
-	auto enemyState = enemy.getState();
+	auto enemyState = attacker.getState();
 	if (typeid(*enemyState) == typeid(AttackingState))
 	{
-		ally.handleCommand(std::make_unique<HandsAttackCommand>());
-		ally.setHitCooldown(0.2f);
+		attacked.handleCommand(std::make_unique<HandsAttackCommand>());
+		attacked.setHitCooldown(0.2f);
 	}
 }
 
