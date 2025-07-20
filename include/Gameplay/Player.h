@@ -56,6 +56,11 @@ public:
 
 	//int getDirection() const { return static_cast<int>(m_dir); } 
     const PlayableObjectState* getState() const { return m_state.get(); }
+
+    virtual void onStoneHit();
+    virtual void onBoxHit();
+    virtual void onHandsAttack();
+    virtual void onExplosion();
 private:
     bool m_alive = true;
 };

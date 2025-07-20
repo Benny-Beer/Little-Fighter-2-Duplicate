@@ -46,5 +46,8 @@ protected:
 private:
     float distance(const sf::Vector2f& a, const sf::Vector2f& b);
     void updateDirection();
-
+    virtual void onStoneHit();
+    virtual void onBoxHit();
+    virtual void onHandsAttack();
+    virtual void onExplosion();
 };

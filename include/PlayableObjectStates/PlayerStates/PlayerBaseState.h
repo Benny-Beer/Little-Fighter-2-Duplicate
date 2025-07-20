@@ -66,10 +66,11 @@ class PlayableObject;
 class PlayerBaseState : public PlayableObjectState {
 public:
     virtual ~PlayerBaseState() = default;
-    //virtual void enter(Player& player) = 0;
-    //virtual void update(Player& player, float dt) {};
     void name() override {};
-	virtual void onBoxHit(PlayableObject& player) override {};
+    void onHandsAttack(PlayableObject& player) override {};
+    void onStoneHit(PlayableObject& player) override {};
+    void onBoxHit(PlayableObject& player) override {};
+    void onExplosion(PlayableObject& player) override {};
 
 protected:
     Input m_input;

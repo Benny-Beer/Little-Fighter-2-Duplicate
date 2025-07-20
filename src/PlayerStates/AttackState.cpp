@@ -1,6 +1,8 @@
 #include "PlayableObjectStates/PlayerStates/AttackState.h"
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include "EventCommands/HandsAttackCommand.h"
+#include "PlayableObjectStates/PlayerStates/KnockedState.h"
+
 #include "GamePlay/Player.h"
 #include <iostream>
 
@@ -41,4 +43,28 @@ void AttackState::update(PlayableObject& player, float dt)
         player.setStrategyName("");
         player.setState(std::make_unique<StandingState>(Input::NONE));
     }
+}
+
+void AttackState::onHandsAttack(PlayableObject& player)
+{
+    player.setAniName("gothit");
+    player.setState(std::make_unique<KnockedState>());
+}
+
+void AttackState::onStoneHit(PlayableObject& player)
+{
+    player.setAniName("knockedDown");
+    player.setState(std::make_unique<KnockedState>());
+}
+
+void AttackState::onBoxHit(PlayableObject& player)
+{
+    player.setAniName("knockedDown");
+    player.setState(std::make_unique<KnockedState>());
+}
+
+void AttackState::onExplosion(PlayableObject& player)
+{
+    player.setAniName("knockedDown");
+    player.setState(std::make_unique<KnockedState>());
 }

@@ -4,6 +4,8 @@
 #include "PlayableObjectStates/PlayerStates/WalkingState.h"
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include "PlayableObjectStates/PlayerStates/AttackState.h"
+#include "PlayableObjectStates/PlayerStates/KnockedState.h"
+
 #include "Gameplay/Player.h"
 
 class PlayableObject;
@@ -60,4 +62,28 @@ void CollideWithObject::update(PlayableObject& player, float dt)
 		m_pickupPending = false;
 		player.setState(std::make_unique<StandingState>(Input::NONE));
 	}
+}
+
+void CollideWithObject::onHandsAttack(PlayableObject& player)
+{
+	player.setAniName("gothit");
+	player.setState(std::make_unique<KnockedState>());
+}
+
+void CollideWithObject::onStoneHit(PlayableObject& player)
+{
+	player.setAniName("knockedDown");
+	player.setState(std::make_unique<KnockedState>());
+}
+
+void CollideWithObject::onBoxHit(PlayableObject& player)
+{
+	player.setAniName("knockedDown");
+	player.setState(std::make_unique<KnockedState>());
+}
+
+void CollideWithObject::onExplosion(PlayableObject& player)
+{
+	player.setAniName("knockedDown");
+	player.setState(std::make_unique<KnockedState>());
 }

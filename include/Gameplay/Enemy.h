@@ -11,8 +11,13 @@ public:
 	void handleCollision() override;
 	void resetHP();
 	bool isAlive() const;
+	float getHitCooldown() const; 
+	void setHitCooldown(float cooldown); 
 private:
 	//sf::Text m_name;
 	bool m_alive = true;
+	// Enemy.h
+	float m_hitCooldown = 0.f;
+
 
 };

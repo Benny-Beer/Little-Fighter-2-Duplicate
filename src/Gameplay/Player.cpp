@@ -2,6 +2,7 @@
 #include <algorithm>            // std::clamp
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include "PlayableObjectStates/PlayerStates/PlayerBaseState.h"
+#include "PlayableObjectStates/ComputerPlayerState/DeadState.h"
 #include "Management/AnimationManager.h"
 #include "Objects/ObjectStates/HeldObjState.h"
 
@@ -184,6 +185,49 @@ void Player::setAttack(std::unique_ptr<AttackBehavior> attack)
 void Player::setAniName(const std::string& name)
 {
      m_aniName = name;
+}
+
+void Player::onStoneHit()
+{
+    moveSprite({ static_cast<float>(m_xdirHit) * 100, 0.f });
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onStoneHit(*this);
+}
+
+void Player::onBoxHit()
+{
+    moveSprite({ static_cast<float>(m_xdirHit) * 100, 0.f });
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onBoxHit(*this);
+}
+
+void Player::onHandsAttack()
+{
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onHandsAttack(*this);
+}
+
+void Player::onExplosion()
+{
+    moveSprite({ static_cast<float>(m_direction.x) * 100, 0.f });
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onExplosion(*this);
 }
 
 //void Player::setStrategyName(const std::string& name)

@@ -17,9 +17,12 @@ Enemy::Enemy(const sf::Vector2f pos, const std::string& name, float speed)
 
 void Enemy::update(float dt)
 {
-    //m_prevPosition = getPosition();
 
-    ComputerPlayer::update(dt);  // æä îôòéì àú äÎstate
+    //m_prevPosition = getPosition();
+    if (m_hitCooldown > 0.f)
+        m_hitCooldown -= dt;
+
+    ComputerPlayer::update(dt);  // Ã¦Ã¤ Ã®Ã´Ã²Ã©Ã¬ Ã Ãº Ã¤ÃŽstate
     //std::cout << "Player Pos is: " << getPosition().x << "," << getPosition().y << "\n";
 
     if (m_currentAnimationName != m_aniName + m_strategyName) {
@@ -35,7 +38,7 @@ void Enemy::update(float dt)
 }
 
 void Enemy::handleCollision() {
-    // òãééï ìà îåâãø îä ÷åøä áäúðâùåú, àæ ðùàéø øé÷ áéðúééí
+    // Ã²Ã£Ã©Ã©Ã¯ Ã¬Ã  Ã®Ã¥Ã¢Ã£Ã¸ Ã®Ã¤ Ã·Ã¥Ã¸Ã¤ Ã¡Ã¤ÃºÃ°Ã¢Ã¹Ã¥Ãº, Ã Ã¦ Ã°Ã¹Ã Ã©Ã¸ Ã¸Ã©Ã· Ã¡Ã©Ã°ÃºÃ©Ã©Ã­
 }
 
 
@@ -45,7 +48,20 @@ bool Enemy::isAlive() const {
     return m_alive;
 }
 
+
+float Enemy::getHitCooldown() const
+{
+    return m_hitCooldown;
+}
+
+void Enemy::setHitCooldown(float cooldown)
+{
+    m_hitCooldown = cooldown;
+}
+
+
 void Enemy::resetHP() {
     m_hp = 100;
     m_potentialHp = 100;
 }
+
