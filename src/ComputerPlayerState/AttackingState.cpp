@@ -17,11 +17,10 @@
 
 AttackingState::AttackingState(std::shared_ptr<Object> target)
     : m_target(std::move(target)) {
-    m_attackCooldown = 0.2f; // Start immediately
+    m_attackCooldown = ATTACK_COOLDOWN; // Start immediately
 }
 
 void AttackingState::enter(PlayableObject& player) {
-    std::cout << "enter:: AttackingState\n";
 
     //auto target = std::dynamic_pointer_cast<PlayableObject>(m_target);
     
@@ -29,13 +28,13 @@ void AttackingState::enter(PlayableObject& player) {
     alignAttacker(player);
     player.setAniName("attacking");
     player.attack();
-    player.adjustRange(50.f);
+    player.adjustRange(HANDS_ATTACK_RANGE);
     player.setStrategyName("");
 
     player.wantItem();
     
-    if (auto target = std::dynamic_pointer_cast<PlayableObject>(m_target))
-        target->handleCommand(std::make_unique<HandsAttackCommand>());
+    //if (auto target = std::dynamic_pointer_cast<PlayableObject>(m_target))
+    //    target->handleCommand(std::make_unique<HandsAttackCommand>());
     // I think we need switch-case here according to the attack
     //player.setDiraction(m_input);     
     
@@ -55,7 +54,6 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
             m_target = player.getTarget();
         }
     }
-    std::cout << 95 << "\n";
 
     //std::cout << player.getName() <<" - MY TARGET NAME IS: " << m_target->getName() << std::endl;
     player.setAniName("attacking");
@@ -71,10 +69,9 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
     //std::cout << "[AttackingState] " << player.getName() << " distance to " << m_target->getName() << ":" << distance << std::endl;
 
     // Check if still in attack range
-    const float attackRange = 150.f;
+    //const float attackRange = 150.f;
     if (distance > player.getAttackRange()) {
         // Too far — switch back to approach state
-        std::cout << "here? range is: " << player.getAttackRange() << "\n";
         player.setState(std::make_unique<ApproachingEnemyState>(m_target));
         return;
     }
@@ -118,7 +115,7 @@ void AttackingState::alignAttacker(PlayableObject& player)
 
     // ùåîøéí òì àåúå X, îééùøéí ìÎY, áîøç÷ attackRange îäéøéá
     float dx = playerPos.x - targetPos.x;
-    float sign = (dx >= 0) ? -1.f : 1.f; // àéæä öã ùì äîåú÷ó?
+    float sign = (dx >= 0) ? LEFT : RIGHT; // àéæä öã ùì äîåú÷ó?
     // float alignedX = targetPos.x + sign * 80.f; --> MAKING PROBLEM OF ATTACK AMINATION TO THE WRONG SIDE
     float alignedY = targetPos.y; // ééùåø îãåé÷, àå áúåê èåìøðñ ÷èï
 
@@ -126,16 +123,13 @@ void AttackingState::alignAttacker(PlayableObject& player)
 }
 
 void AttackingState::name() {
-    std::cout << "AttackingState" << std::endl;
 }
 
 void AttackingState::onHandsAttack(PlayableObject& player)
 {
-    std::cout << "im in attacking\n";
     player.setState(std::make_unique<BlockingState>());
 }
 void AttackingState::onStoneHit(PlayableObject& player) {
-    std::cout << player.getName() << " inAttackingState::onStoneHit\n";
 	player.setState(std::make_unique<GotHitState>());
 
 }

@@ -17,7 +17,6 @@ std::unique_ptr<JumpPhaseBase> RisingPhase::update(PlayableObject& player, float
     player.move(dt);
     if (m_clock.getElapsedTime().asSeconds() >= m_duration)
     {
-        std::cout << "in Jumping::update, m_clock.getElapsedTime().asSeconds() >= m_duration\n";
         return std::make_unique<HangingPhase>(0.2f, m_groundY);
 
 

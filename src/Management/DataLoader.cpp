@@ -66,7 +66,6 @@ bool DataLoader::loadCharacterDat()
 
 	ResourceManager::instance().loadCharacterData(p);
 
-	std::cout << p->toString() << std::endl;
 	++m_currentIndex;
 	return true;
 }

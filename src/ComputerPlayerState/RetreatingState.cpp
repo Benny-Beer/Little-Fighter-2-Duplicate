@@ -7,16 +7,9 @@
 RetreatingState::RetreatingState() = default;
 
 void RetreatingState::enter(PlayableObject& player) {
-    std::cout << "enter:: RetreatingState\n";
     player.dropHeldObj();
 
-    //Animation retreatingAnim(player.getTexture(),
-    //    0, 0,          // x, y
-    //    80, 80,        // width, height
-    //    4,             // מספר פריימים
-    //    0.2f);         // זמן בין פריימים
 
-    //player.setAnimation(retreatingAnim);
     player.setAniName("running");
     m_safeZone = player.getSafeZone();
 
@@ -33,11 +26,10 @@ void RetreatingState::update(PlayableObject& player, float deltaTime) {
     float length = std::sqrt(retreatDirection.x * retreatDirection.x + retreatDirection.y * retreatDirection.y);
     if (length != 0) {
         retreatDirection /= length;
-        retreatDirection *= 3.f;
     }
-    player.move(retreatDirection * player.getSpeed() * deltaTime);
+    player.move(retreatDirection * player.getSpeed() * 2.f * deltaTime);
 
-    if (m_elapsedTime >= m_retreatDuration) {
+    if (m_elapsedTime >= m_retreatDuration || m_safeZone == player.getPosition()) {
         // Done retreating — return to idle (or other smart decision)
         player.setState(std::make_unique<IdleState>());
         return;
@@ -53,12 +45,10 @@ void RetreatingState::onHandsAttack(PlayableObject& player) {
 }
 
 void RetreatingState::onStoneHit(PlayableObject& player) {
-    std::cout << " RetreatingState::onStoneHit\n";
     player.setState(std::make_unique<KnockedDownState>());
 }
 void RetreatingState::onBoxHit(PlayableObject& player)
 {
-    std::cout << " RetreatingState::onBoxeHit\n";
     player.setState(std::make_unique<KnockedDownState>());
 }
 void RetreatingState::onExplosion(PlayableObject& player) {

@@ -7,16 +7,9 @@
 BlockingState::BlockingState() = default;
 
 void BlockingState::enter(PlayableObject& player) {
-    std::cout << "enter:: BlockingState\n";
     player.dropHeldObj();
 
-    Animation blockingAnim(player.getTexture(),
-        480, 400,          // x, y
-        80, 80,        // width, height
-        2,             // מספר פריימים
-        0.2f);         // זמן בין פריימים
-
-    player.setAnimation(blockingAnim);
+    player.setAniName("blocking");
     //player.setDiraction(m_input); 
     m_elapsedTime = 0.0f;
     // need information that the player is now blocking - ?
@@ -24,7 +17,6 @@ void BlockingState::enter(PlayableObject& player) {
 }
 
 void BlockingState::update(PlayableObject& player, float deltaTime) {
-    std::cout << player.getName() << "in BlockingState\n";
 
     m_elapsedTime += deltaTime;
 
@@ -39,7 +31,6 @@ void BlockingState::exit(ComputerPlayer& player) {
 }
 
 void BlockingState::name() {
-    std::cout << "BlockingState" << std::endl;
 }
 void BlockingState::onHandsAttack(PlayableObject& player) {
    

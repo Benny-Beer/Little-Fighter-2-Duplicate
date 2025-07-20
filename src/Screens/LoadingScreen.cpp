@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Screens/LoadingScreen.h"
+#include "Management/LevelLoader.h"
 #include "Screens/CharacterSelectScreen.h"
 #include "Screens/IScreen.h"
 #include <SFML/System.hpp>
@@ -11,12 +12,13 @@
 #include <stdexcept>
 
 LoadingScreen::LoadingScreen(sf::RenderWindow& window, GameManager& manager) : IScreen(window, manager),
-																			   m_dataLoader(DataLoader("data/data.txt"))
+																			   m_dataLoader(DataLoader("data/data.txt")),
+																			m_levelsLoader(LevelLoader("levelsData/levels.txt", sf::Vector2f(m_window.getSize())))
 {
+	AnimationManager::loadAnimations();
 	sf::Vector2f screenSize(static_cast <sf::Vector2f> (m_window.getSize()));
 	m_backGround = Background(screenSize, ResourceManager::instance().getTexture("screen_backgrounds/Loading_bg"));
 	m_startButton = Button("  to character\n select screen", sf::Vector2f(screenSize.x / 4, screenSize.y / 4), sf::Vector2f(screenSize.x / 2, screenSize.y / 2), sf::Color::Transparent, 30);
-	std::cout << "LoadingState created, m_manager ptr: " << &m_manager << std::endl;
 
 	if (m_font.getInfo().family.empty()) {
 		if (!m_font.loadFromFile("C:/Windows/Fonts/arialbd.ttf")) {
@@ -52,6 +54,9 @@ void LoadingScreen::update(sf::Time deltaTime) {
 	if (m_dataLoader.loadCharacterDat()) {
 		m_currentlyLoading.setString(m_dataLoader.getCurrentlyLoadingFile());
 	}
+	else if (m_levelsLoader.loadNewLevel()) {
+		m_currentlyLoading.setString(m_levelsLoader.getCurrentlyLoadingFile());
+	}
 	else {
 		m_canSwitchScreen = true;
 	}
@@ -74,5 +79,5 @@ void LoadingScreen::render() {
 	m_startButton.draw(m_window, sf::RenderStates::Default);
 	m_window.draw(m_chienese);
 	m_window.draw(m_currentlyLoading);
-	sf::sleep(sf::milliseconds(500.f));
+	sf::sleep(sf::milliseconds(250.f));
 }

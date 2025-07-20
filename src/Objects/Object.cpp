@@ -1,4 +1,5 @@
 #include "Objects/Object.h"
+#include <random>
 
 Object::Object(const sf::Vector2f pos, const std::string& name)
 {
@@ -151,4 +152,13 @@ sf::Vector2f Object::getGeometricCenter() const {
 		getPosition().x,
 		getPosition().y - getSize().y / 2.f
 	};
+}
+
+sf::Vector2f Object::getRandomYPosition(float xPos, float min, float max) {
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dist(min, max);
+
+	float y = dist(gen);
+	return sf::Vector2f(xPos, y);
 }

@@ -5,8 +5,7 @@
 Enemy::Enemy(const sf::Vector2f pos, const std::string& name, float speed)
     : ComputerPlayer(pos, name)
 {
-    m_hp = 100;
-    m_potentialHp = 100;
+    resetHP();
     m_speed = speed;
     // Starts with IdleState
     changeState(std::make_unique<IdleState>());
@@ -18,9 +17,10 @@ Enemy::Enemy(const sf::Vector2f pos, const std::string& name, float speed)
 
 void Enemy::update(float dt)
 {
+
     //m_prevPosition = getPosition();
 
-    ComputerPlayer::update(dt);  // æä îôòéì àú äÎstate
+    ComputerPlayer::update(dt);  // Ã¦Ã¤ Ã®Ã´Ã²Ã©Ã¬ Ã Ãº Ã¤Ãstate
     //std::cout << "Player Pos is: " << getPosition().x << "," << getPosition().y << "\n";
 
     if (m_currentAnimationName != m_aniName + m_strategyName) {
@@ -36,7 +36,7 @@ void Enemy::update(float dt)
 }
 
 void Enemy::handleCollision() {
-    // òãééï ìà îåâãø îä ÷åøä áäúğâùåú, àæ ğùàéø øé÷ áéğúééí
+    // Ã²Ã£Ã©Ã©Ã¯ Ã¬Ã  Ã®Ã¥Ã¢Ã£Ã¸ Ã®Ã¤ Ã·Ã¥Ã¸Ã¤ Ã¡Ã¤ÃºÃ°Ã¢Ã¹Ã¥Ãº, Ã Ã¦ Ã°Ã¹Ã Ã©Ã¸ Ã¸Ã©Ã· Ã¡Ã©Ã°ÃºÃ©Ã©Ã­
 }
 
 
@@ -45,3 +45,9 @@ void Enemy::handleCollision() {
 bool Enemy::isAlive() const {
     return m_alive;
 }
+
+void Enemy::resetHP() {
+    m_hp = ENEMY_HP;
+    m_potentialHp = ENEMY_HP;
+}
+

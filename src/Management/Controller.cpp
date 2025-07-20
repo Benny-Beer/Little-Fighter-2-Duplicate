@@ -1,13 +1,15 @@
 #include "Management/Controller.h"
 #include "Management/CollisionHandling.h"
 #include "Gameplay/Level.h"
-
+#include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window.hpp>
 #include <utility>
 #include <memory>
 #include <iostream>
+#include <random>
+
 
 Controller::Controller(sf::RenderWindow& window,
     std::unique_ptr<Level> level,
@@ -19,11 +21,19 @@ Controller::Controller(sf::RenderWindow& window,
     m_allies(std::move(allies)),
     m_stats(HUD(window.getSize(), getPlayerAndAllies()))
 {   
-    AnimationManager::loadAnimations();
+    m_numOfLevels = ResourceManager::instance().getNumOfLevels();
+    //AnimationManager::loadAnimations();
+    //=============================================================
     // === this section is hard coded. need to be done in Level ===
-    std::string objectLine = "r b r";
+    // add pickable (rock)
 
-    m_level->addPickableObjects(objectLine);
+
+ 
+   // std::string objectLine = "r b r";
+
+
+
+   // m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
     std::string sq = "b10";
     m_level->addSquad(sq);
@@ -35,12 +45,14 @@ Controller::Controller(sf::RenderWindow& window,
     auto allyThree = std::make_shared<Ally>(sf::Vector2f(100, 650), "davis_ani", 60.f);
     auto allyFour = std::make_shared<Ally>(sf::Vector2f(100, 750), "davis_ani", 60.f);*/
 
+
    // m_allies.push_back(ally);
     /*m_allies.push_back(allyTwo);
     m_allies.push_back(allyThree);
     m_allies.push_back(allyFour);*/
     m_enemies = m_level->getAllEnemies();
-    m_pickables = m_level->getAllObjects();
+    m_objQueue = m_level->getAllObjects();
+    transferNextPickable();
     updateComputerPlayerStats();
 
     std::vector<std::shared_ptr<PlayableObject>> members;
@@ -60,6 +72,55 @@ void Controller::handleInput(sf::Event ev)
 
 void Controller::updateWorld(float deltaTime)
 {
+
+    //===========================================
+    //===== MOVE INSIDE FUNC ====================
+    if (m_waitingForNextWave) {
+        m_DelayTimer += deltaTime;
+        if (m_DelayTimer >= WAVE_DELAY) {
+            m_waitingForNextWave = false;
+            m_DelayTimer = 0.f;
+            launchNextStage();
+        }
+    }
+    else if (m_waitingForNextLevel) {
+        m_DelayTimer += deltaTime;
+        if (m_DelayTimer >= LEVEL_DELAY) {
+            m_waitingForNextLevel = false;
+            m_DelayTimer = 0.f;
+            launchNextLevel();
+        }
+    }
+    else if (m_needToWaitForKnocked) {
+        m_DelayTimer += deltaTime;
+        if (m_DelayTimer >= KNOCKED_CHECK_DELAY) {
+            m_canMoveStage = true;
+            m_needToWaitForKnocked = false;
+            m_DelayTimer = 0.f;
+
+        }
+    }
+    else if (m_enemies.empty() && m_canMoveStage) {
+        m_canMoveStage = false;
+        if (m_nextStageIndex < m_level->numOfStages()) { // V
+            m_waitingForNextWave = true;
+            m_DelayTimer = 0.f;
+            m_nextStageIndex++;
+        }
+        else if (m_nextLevelIndex < m_numOfLevels) { // V
+            
+            m_waitingForNextLevel = true;
+            m_nextStageIndex = 1;
+            m_DelayTimer = 0.f;
+        }
+        else {
+            m_playerWon = true;
+        }
+    }
+    else if (m_enemies.empty()) {
+        m_needToWaitForKnocked = true;
+    }
+    //===========================================
 
     for (auto& player : m_players)
     {
@@ -90,8 +151,6 @@ void Controller::updateWorld(float deltaTime)
     }
 	m_level->update(deltaTime);
     std::erase_if(m_pickables, [](std::shared_ptr<PickableObject>& obj) {
-		std::cout << "im here in Controller erase_if\n";
-		std::cout << obj->getName() << " isUsed: " << obj->isUsed() << "\n";
         return obj->isUsed();
         });
 
@@ -115,6 +174,11 @@ void Controller::updateWorld(float deltaTime)
         }
     }
 
+    m_objectTimer += deltaTime;
+    if (m_newObjectCoolDown <= m_objectTimer) {
+        m_objectTimer = 0.f;
+        transferNextPickable();
+    }
 
     // Update the level itself (enemies, objects, etc.)
      //m_level->update(deltaTime);
@@ -173,16 +237,20 @@ void Controller::render()
     for (const auto& dead : m_deads)
     {
         dead->draw(m_window);
+        // until we'll have HUD
         printHp(dead->getHp(), { 750.f, 10.f + i }, false);
         printHp(dead->getPotentialHp(), { 750.f, 30.f + i }, true);
         i += 40.f;
     }
-
+    for (const auto& obj : m_pickables) {
+        obj->draw(m_window);
+    }
     i = 0.f;
 
     for (const auto& player : m_players)
     {
         player->draw(m_window);
+        // until we'll have HUD
         printHp(player->getHp(), { 480.f, 10.f + i }, false);
         printHp(player->getPotentialHp(), { 480.f, 30.f + i }, true);
         i += 40.f;
@@ -211,6 +279,18 @@ void Controller::render()
         i += 40.f;
     }
 
+    if (m_waitingForNextWave) {
+
+        printStageAlert("Stage: " + std::to_string(m_nextStageIndex));
+    }
+    if (m_waitingForNextLevel) {
+
+        printStageAlert("New level!\n strating level " + std::to_string(m_nextLevelIndex + 1) + ".");
+    }
+    if (m_playerWon)
+    {
+        printStageAlert("Congratulations! \n YOU WON!");
+    }
     // Draw HUD
 	m_stats.draw(m_window);
 
@@ -245,6 +325,32 @@ void Controller::setAlly(std::shared_ptr<Ally> ally)
 //    render();
 //}
 
+
+void Controller::launchNextStage()
+{
+    if (m_nextStageIndex <= m_level->numOfStages()) {
+        std::erase_if(m_deads, [](const std::shared_ptr<PlayableObject>& obj) {
+            return dynamic_cast<Enemy*>(obj.get()) != nullptr;
+            });
+        m_enemies = m_level->getAllEnemies();
+    }
+
+}
+
+void Controller::launchNextLevel()
+{
+    if (m_nextLevelIndex <= m_numOfLevels) {
+        std::erase_if(m_deads, [](const std::shared_ptr<PlayableObject>& obj) {
+            return dynamic_cast<Enemy*>(obj.get()) != nullptr;
+            });
+        resetPlayersStats();
+        m_level = ResourceManager::instance().getLevel(m_nextLevelIndex);
+        m_nextLevelIndex++;
+        m_enemies = m_level->getAllEnemies();
+        m_objQueue = m_level->getAllObjects();
+    }
+
+}
 
 // Responsibile for target & safe zone assignment, death handling. 
 // (for each of the computer players)
@@ -343,18 +449,24 @@ void Controller::checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy)
 {
     for (auto& ally : m_allies) {
         if (ally->collide(*enemy))
+        {
             processCollision(*ally, *enemy);
+			processCollision(*enemy, *ally);
+        }
     }
 }
 
 void Controller::checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy)
 {
 	for (auto& player : m_players) {
-		if (player->collide(*enemy))
-			processCollision(*player, *enemy);
+        if (player->collide(*enemy))
+        {
+            enemy->setXHit(player->getDirection());
+            processCollision(*player, *enemy);
+			processCollision(*enemy, *player);
+        }
 	}
 }
-
 std::vector<std::shared_ptr<PlayableObject>> Controller::getPlayerAndAllies() {
     std::vector<std::shared_ptr<PlayableObject>> result;
     for (const auto& p : m_players)
@@ -365,3 +477,70 @@ std::vector<std::shared_ptr<PlayableObject>> Controller::getPlayerAndAllies() {
     return result;
 }
 
+void Controller::resetPlayersStats()
+{
+    bringPlayersBack();
+
+    for (auto& player : m_players) {
+        player->resetHP();
+        player->setPosition(getRandomYPosition(50, 380, 800));
+    }
+    for (auto& ally : m_allies) {
+        ally->resetHP();
+        ally->setPosition(getRandomYPosition(50, 380, 800));
+    }
+}
+
+
+void Controller::printStageAlert(const std::string& message) {
+    //sf::Font& font = ResourceManager::instance().getFont("bigFont"); // ����� ������ ��� ����
+    static sf::Font font;
+    static bool loaded = false;
+    if (!loaded) {
+        if (!font.loadFromFile("resources/Fonts/lesterbold.ttf"))
+            return;
+        loaded = true;
+    }
+    sf::Text alert;
+    alert.setFont(font);
+    alert.setString(message);
+    alert.setCharacterSize(64); // ���� ���� ����
+    alert.setFillColor(sf::Color::White); // ��� ���
+    alert.setOutlineColor(sf::Color::Black); // �� ���� ����
+    alert.setOutlineThickness(4.f);
+
+    // ����� ���� ����
+    sf::FloatRect bounds = alert.getLocalBounds();
+    alert.setOrigin(bounds.width / 2, bounds.height / 2);
+    alert.setPosition(m_window.getSize().x / 2.f, m_window.getSize().y / 4.f); // ����� �����
+
+    m_window.draw(alert);
+}
+
+void Controller::bringPlayersBack() {
+        for (auto& dead : m_deads) {
+            dead->resetHP();
+            if (auto player = std::dynamic_pointer_cast<Player>(dead)) {
+                player->setState(std::make_unique<StandingState>(Input::NONE));
+            }
+            else if (auto ally = std::dynamic_pointer_cast<Ally>(dead)) {
+                ally->setState(std::make_unique<IdleState>());
+            }
+        }
+}
+
+
+sf::Vector2f Controller::getRandomYPosition(float xPos, float min, float max) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dist(min, max);
+    float y = dist(gen);
+    return sf::Vector2f(xPos, y);
+}
+
+void Controller::transferNextPickable() {
+    if (!m_objQueue.empty()) {
+        m_pickables.push_back(std::move(m_objQueue.back()));
+        m_objQueue.pop_back();
+    }
+}

@@ -9,10 +9,13 @@ public:
 	Enemy(const sf::Vector2f pos, const std::string& name, float speed = 20.f);
 	void update(float dt) override;
 	void handleCollision() override;
-
-	bool isAlive() const;
+	void resetHP();
+	bool isAlive() const; 
 private:
 	//sf::Text m_name;
 	bool m_alive = true;
+	// Enemy.h
+	
+
 
 };

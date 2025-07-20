@@ -10,14 +10,13 @@
 #include "GamePlay/Level.h" 
 #include<iostream>
 
-GameManager::GameManager() : m_window(sf::VideoMode(1000, 800), "Little Fighter 2")
+GameManager::GameManager() : m_window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Little Fighter 2")
 {
     m_currScreen = std::make_unique<WelcomeScreen>(m_window, *this);
 }
 
 void GameManager::run()
 {
-    std::cout << "Running game, m_currScreen: " << m_currScreen.get() << std::endl;
     sf::Clock clock;
     while (m_window.isOpen())
     {

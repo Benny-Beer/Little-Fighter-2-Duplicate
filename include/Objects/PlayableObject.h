@@ -44,11 +44,10 @@ public:
 	virtual bool needItem();
 
 	// in-game Events:
-	virtual void onStoneHit();
-	virtual void onBoxHit();
-	virtual void onHandsAttack();
-
-	virtual void onExplosion();
+	virtual void onStoneHit() = 0;
+	virtual void onBoxHit() = 0 ;
+	virtual void onHandsAttack() = 0;
+	virtual void onExplosion() = 0;
 
 	void adjustRange(float range);
 	float getAttackRange() const;
@@ -61,6 +60,10 @@ public:
 	int getPotentialHp() const { return m_potentialHp; }
 	void updateHp();
 	std::shared_ptr<sf::Texture> getIcon() const;
+	virtual void resetHP() = 0;
+	void setXHit(int xdirHit) { m_xdirHit = xdirHit; }
+	float getHitCooldown() const;
+	void setHitCooldown(float cooldown);
 protected:
 	int m_hp;
 	int m_potentialHp;
@@ -82,5 +85,9 @@ protected:
 	sf::Vector2f m_direction{ 0.f,0.f };
 	sf::Vector2f m_safeZone = { 0.f, 0.f };
 	float m_attackRange = 50.f;
-	
+	int m_xdirHit = 0;
+	float m_hitCooldown = 0.f;
 };
+
+
+	

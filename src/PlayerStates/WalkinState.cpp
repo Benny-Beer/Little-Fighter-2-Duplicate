@@ -1,5 +1,8 @@
 #include "PlayableObjectStates/PlayerStates/WalkingState.h"
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
+#include "PlayableObjectStates/PlayerStates/AttackState.h"
+#include "PlayableObjectStates/PlayerStates/KnockedState.h"
+#include "PlayableObjectStates/PlayerStates/PlayerGotHitState.h"
 
 #include "Gameplay/Player.h"
 
@@ -33,14 +36,32 @@ std::unique_ptr<PlayableObjectState> WalkingState::handleInput(Input input)
 
 void WalkingState::enter(PlayableObject& player)
 {
-	std::cout << "enter:: WalkingState\n";
 	player.setAniName("walking");
 	player.setDiraction(m_input);
 	
 }
 
+void WalkingState::onHandsAttack(PlayableObject& player)
+{
+	
+	player.setState(std::make_unique<PlayerGotHitState>());
+	
+}
+
+void WalkingState::onBoxHit(PlayableObject& player)
+{
+	player.setAniName("knockedDown");
+	player.setState(std::make_unique<KnockedState>());
+}
+
 void WalkingState::onStoneHit(PlayableObject& player)
 {
-	std::cout << " RetreatingState::onStoneHit\n";
-	//player.setState(std::make_unique<KnockedDownState>());
+	player.setAniName("knockedDown");
+	player.setState(std::make_unique<KnockedState>());
+}
+
+void WalkingState::onExplosion(PlayableObject& player)
+{
+	player.setAniName("knockedDown");
+	player.setState(std::make_unique<KnockedState>());
 }

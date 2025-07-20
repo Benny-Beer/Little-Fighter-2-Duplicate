@@ -1,6 +1,8 @@
 #include "PlayableObjectStates/PlayerStates/AttackState.h"
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include "EventCommands/HandsAttackCommand.h"
+#include "PlayableObjectStates/PlayerStates/KnockedState.h"
+
 #include "GamePlay/Player.h"
 #include <iostream>
 
@@ -25,13 +27,10 @@ std::unique_ptr<PlayableObjectState> AttackState::handleInput(Input input)
 
 void AttackState::enter(PlayableObject& player)
 {
-    std::cout << "enter:: AttackState Player\n";
     
     player.setAniName("attacking");
-    std::cout << "after setAniName\n";
     player.attack();
     //player.handleCommand(std::make_unique<HandsAttackCommand>());
-    std::cout << "after attack()\n";
 }
 
 void AttackState::update(PlayableObject& player, float dt)
@@ -41,4 +40,28 @@ void AttackState::update(PlayableObject& player, float dt)
         player.setStrategyName("");
         player.setState(std::make_unique<StandingState>(Input::NONE));
     }
+}
+
+void AttackState::onHandsAttack(PlayableObject& player)
+{
+    player.setAniName("gothit");
+    player.setState(std::make_unique<KnockedState>());
+}
+
+void AttackState::onStoneHit(PlayableObject& player)
+{
+    player.setAniName("knockedDown");
+    player.setState(std::make_unique<KnockedState>());
+}
+
+void AttackState::onBoxHit(PlayableObject& player)
+{
+    player.setAniName("knockedDown");
+    player.setState(std::make_unique<KnockedState>());
+}
+
+void AttackState::onExplosion(PlayableObject& player)
+{
+    player.setAniName("knockedDown");
+    player.setState(std::make_unique<KnockedState>());
 }

@@ -12,7 +12,6 @@ std::unique_ptr<JumpPhaseBase> HangingPhase::update(PlayableObject& player, floa
     (void)dt;
     if (m_clock.getElapsedTime().asSeconds() >= m_duration)
     {
-        std::cout << "HangingPhase, finished\n";
         return std::make_unique<FallingPhase>(700.f, m_groundY);
     }
 

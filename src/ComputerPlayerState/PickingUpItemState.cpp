@@ -44,9 +44,8 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
     float distance = std::sqrt(std::pow(playerPos.x - itemPos.x, 2) +
         std::pow(playerPos.y - itemPos.y, 2));
 
-    const float pickupRange = 40.f;
 
-    if (distance <= pickupRange) {
+    if (distance <= PICK_UP_RANGE) {
         // Pick up item
         player.pickUpObject(m_targetItem);
         player.tookItem();
@@ -68,7 +67,6 @@ void PickingUpItemState::exit(ComputerPlayer& player) {
 }
 
 void PickingUpItemState::name() {
-    std::cout << "PickingUpItemState" << std::endl;
 }
 
 void PickingUpItemState::onHandsAttack(PlayableObject& player) {
@@ -77,7 +75,6 @@ void PickingUpItemState::onHandsAttack(PlayableObject& player) {
 }
 
 void PickingUpItemState::onStoneHit(PlayableObject& player) {
-    std::cout << "inPickingUpItemState::onStoneHit\n";
     player.setState(std::make_unique<GotHitState>());
 }
 void PickingUpItemState::onBoxHit(PlayableObject& player)

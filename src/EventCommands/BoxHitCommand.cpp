@@ -2,7 +2,7 @@
 
 void BoxHitCommand::execute(PlayableObject& player)
 {
-	player.reduceHp(30);
+	player.reduceHp(BIG_WEAPON_DAMAGE);
 	player.onBoxHit();
 }
 std::unique_ptr<ICommand> BoxHitCommand::clone() const {

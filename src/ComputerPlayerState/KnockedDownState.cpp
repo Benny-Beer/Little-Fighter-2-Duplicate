@@ -5,7 +5,6 @@
 KnockedDownState::KnockedDownState() = default;
 
 void KnockedDownState::enter(PlayableObject& player) {
-    std::cout << player.getName() << " enter:: KnockedDownState\n";
     player.dropHeldObj();
 
     player.setAniName("knocked");

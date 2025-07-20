@@ -5,7 +5,6 @@
 void IdleObjState::enter(PickableObject& obj)
 {
 	// Set the object to idle state
-	std::cout << "Entering Idle State for object: " << obj.getName() << std::endl;
 	obj.setStateName("idle");
 }
 

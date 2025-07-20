@@ -2,6 +2,8 @@
 #include <algorithm>            // std::clamp
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include "PlayableObjectStates/PlayerStates/PlayerBaseState.h"
+#include "PlayableObjectStates/ComputerPlayerState/DeadState.h"
+#include "PlayableObjectStates/PlayerStates/PlayerDeadState.h"
 #include "Management/AnimationManager.h"
 #include "Objects/ObjectStates/HeldObjState.h"
 
@@ -9,8 +11,7 @@ Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
     : PlayableObject(pos, name)
 {
 	//setSize(1.2);
-    m_hp = 500;
-    m_potentialHp = 500;
+    resetHP();
 	m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
     m_speed = speed;
     m_name = "player";
@@ -21,6 +22,8 @@ Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
 
 Player::Player(PlayerData data) : PlayableObject(data.m_animationSheet,data.m_chracterIcon)
 {
+    setPosition(getRandomYPosition(50, Y_BOUND + 20.f, Y_BOUND + BOUNDS_HEIGHT - 20.f));
+    m_prevPosition = getPosition();
     m_hp = data.m_hp;
     m_potentialHp = data.m_hp;
     m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
@@ -48,6 +51,9 @@ void Player::handleInput(sf::Event event)
 
 void Player::update(float dt)
 {
+    if (m_hitCooldown > 0.f)
+        m_hitCooldown -= dt;
+
     Object::update(dt);
     if (m_currentAnimationName != m_aniName + m_strategyName) {
         setAnimation(AnimationManager::getAnimation(m_aniName + m_strategyName, getTexture()));
@@ -185,6 +191,49 @@ void Player::setAniName(const std::string& name)
      m_aniName = name;
 }
 
+void Player::onStoneHit()
+{
+    moveSprite({ static_cast<float>(m_xdirHit) * 100, 0.f });
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<PlayerDeadState>());
+    }
+    m_state->onStoneHit(*this);
+}
+
+void Player::onBoxHit()
+{
+    moveSprite({ static_cast<float>(m_xdirHit) * 100, 0.f });
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<PlayerDeadState>());
+    }
+    m_state->onBoxHit(*this);
+}
+
+void Player::onHandsAttack()
+{
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<PlayerDeadState>());
+    }
+    m_state->onHandsAttack(*this);
+}
+
+void Player::onExplosion()
+{
+    moveSprite({ static_cast<float>(m_direction.x) * 100, 0.f });
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<PlayerDeadState>());
+    }
+    m_state->onExplosion(*this);
+}
+
 //void Player::setStrategyName(const std::string& name)
 //{
 //    m_strategyName = name;
@@ -213,4 +262,9 @@ void Player::setAniName(const std::string& name)
 
 bool Player::isAlive() const {
     return m_alive;
+}
+
+void Player::resetHP() {
+    m_hp = PLAYER_HP;
+    m_potentialHp = PLAYER_HP;
 }

@@ -8,8 +8,6 @@
 #include "Gameplay/Player.h"
 #include "Gameplay/Ally.h"
 #include "UI/HUD.h"
-
-
 class Controller
 {
 public:
@@ -20,7 +18,7 @@ public:
         std::vector<std::shared_ptr<Ally>> allies);       // AI-controlled allies
 
     // Called each frame from InGameState
-    void updateAndRender(float deltaTime);
+    //void updateAndRender(float deltaTime);
 
     // ========== Core logic ==========
     void handleInput(sf::Event ev);                  // Input for human-controlled players
@@ -40,25 +38,39 @@ private:
     std::vector<std::shared_ptr<Ally>> m_allies;  // computer-controlled
     std::vector<std::shared_ptr<Enemy>> m_enemies; // Non-owning pointers to current squad
     std::vector<std::shared_ptr<PickableObject>> m_pickables;
+    std::vector<std::shared_ptr<PickableObject>> m_objQueue;
     std::vector<std::shared_ptr<PlayableObject>> m_deads;
-
-
+    int m_nextLevelIndex = 1; // means level 2
+    int m_nextStageIndex = 1;
+    bool m_waitingForNextWave = false;
+    bool m_waitingForNextLevel = false;
+    bool m_needToWaitForKnocked = false;
+    bool m_canMoveStage = false;
+    float m_DelayTimer = 0.f;
     // ========== Internal state ==========
     HUD m_stats;
     bool m_levelFinished = false;
     bool m_playerWon = false;
+    float m_objectTimer = 0.f;
+    float m_newObjectCoolDown = OBJECT_COOLDOWN;
+
     void printHp(int hp, const sf::Vector2f& position, bool potential);
     //void handleDeath(std::shared_ptr<ComputerPlayer> deadOne, std::vector<std::shared_ptr<ComputerPlayer>> livePlayers);
     float distanceBetween(sf::Vector2f a, sf::Vector2f b);
     bool enemyExist() { return m_enemies.size(); }
     bool alliesExist() { return m_allies.size() + m_players.size(); }
-
+    void launchNextStage();
+    void launchNextLevel();
     void updateComputerPlayerStats();
     void restoreKnockedAccess();
+    void printStageAlert(const std::string& message);
+    void bringPlayersBack();
+    sf::Vector2f getRandomYPosition(float xPos, float min, float max);
+    void transferNextPickable();
     void checkCollisions(std::shared_ptr<Enemy> enemy);
 	void checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy);
 	void checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy);
-
+    void resetPlayersStats();
     //void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<ComputerPlayer>>& enemies);
     //void updateComputerPlayerTargetsTwo();
 
@@ -111,24 +123,23 @@ private:
             if (!player->getState()->isAccessible()/*player->getHp() <= 0*/) {
                 removeAccess(player, vec1);
             }
-            else {
+            if(vec3.empty())
                 updateSafeZone(player, vec2);
-            }
+            else
+                updateSafeZone(player, vec2, vec3);
+
         }
     }
 
-    template<typename T>
-    void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<T>>& enemies) {
-        static_assert(std::is_base_of<ComputerPlayer, T>::value, "T must derive from ComputerPlayer");
-
-        const float gridSize = 50.f;
-        const sf::FloatRect searchBounds(50.f, 450.f, 900.f, 300.f);
-
+    template<typename T1, typename T2 = Object>
+    void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<T1>>& enemies, std::vector<std::shared_ptr<T2>> optionalVec = {}) {
+        static_assert(std::is_base_of<ComputerPlayer, T1>::value, "T1 must derive from ComputerPlayer");
+        //static_assert(std::is_base_of<ComputerPlayer, T2>::value, "T2 must derive from ComputerPlayer");
         float bestScore = std::numeric_limits<float>::max();
-        sf::Vector2f bestPoint;
+        sf::Vector2f bestPoint = { 700.f, 500.f };
 
-        for (float x = searchBounds.left; x < searchBounds.left + searchBounds.width; x += gridSize) {
-            for (float y = searchBounds.top; y < searchBounds.top+searchBounds.height; y += gridSize) {
+        for (float x = SEARCHING_BOUNDS.left; x < SEARCHING_BOUNDS.left + SEARCHING_BOUNDS.width; x += GRID_SIZE) {
+            for (float y = SEARCHING_BOUNDS.top; y < SEARCHING_BOUNDS.top + SEARCHING_BOUNDS.height; y += GRID_SIZE) {
                 sf::Vector2f point(x, y);
                 float dangerScore = 0.f;
 
@@ -141,14 +152,25 @@ private:
                     else
                         dangerScore += 1000.f; // very close - very dangerous
                 }
+                if (dangerScore < bestScore) {
+                    bestScore = dangerScore;
+                    bestPoint = point;
+                }
 
+                for (const auto& enemy : optionalVec) {
+                    if (!enemy) continue;
+                    float dist = distanceBetween(point, enemy->getPosition());
+                    if (dist > 1.f)
+                        dangerScore += 1.f / dist;
+                    else
+                        dangerScore += 1000.f; // very close - very dangerous
+                }
                 if (dangerScore < bestScore) {
                     bestScore = dangerScore;
                     bestPoint = point;
                 }
             }
         }
-
         self->setSafeZone(bestPoint); 
     }
 
@@ -158,12 +180,8 @@ private:
         auto it = std::find(livePlayers.begin(), livePlayers.end(), deadOne);
         if (it != livePlayers.end()) {
             m_deads.push_back(*it);
-            std::cout << m_deads[0]->getName() << std::endl;
-
             livePlayers.erase(it);
-
-            
         }
-
     }
 };
+

@@ -40,7 +40,6 @@ using objectVsObjectMap = std::map<KeyOO, ObjectCollisionFunc>;
 template <typename T>
 void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
-	std::cout << "in playerPickableObject\n";
     Player& player = static_cast<Player&>(playerObj);
     auto& object = pickableObj;
     if (player.isHoldingWeapon(object))
@@ -70,7 +69,6 @@ void enemyAttackingAlly(Object& playerObj, std::shared_ptr<PickableObject> picka
 	if(pickableObj->thrown())
     {
         pickableObj->collide();
-		std::cout << "in computerPlayerPickable before handle command\n";
         ally.handleCommand((pickableObj->getHitCommand()));
     }
     else if (pickableObj->isExploded())
@@ -81,12 +79,10 @@ void enemyAttackingAlly(Object& playerObj, std::shared_ptr<PickableObject> picka
 }
 
 void enemyAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableObj) {
-    std::cout << pickableObj->getStatus() << std::endl;
     auto& enemy = static_cast<Enemy&>(playerObj);
     if (pickableObj->thrown() )
     {
         pickableObj->collide();
-        std::cout << "in computerPlayerPickable before handle command\n";
         enemy.handleCommand((pickableObj->getHitCommand()->clone()));
     }
     else if (pickableObj->isExploded())
@@ -102,7 +98,6 @@ void playerAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableO
     if (pickableObj->thrown())
     {
 		pickableObj->collide();
-        std::cout << "in computerPlayerPickable before handle command\n";
         player.handleCommand((pickableObj->getHitCommand()));
     }
     else if (pickableObj->isExploded())
@@ -161,7 +156,7 @@ void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
     static HitMap map = initializeCollisionMap();
     Object* holder = obj2->getHolder();
     std::type_index holderType = holder ? typeid(*holder) : typeid(void);
-    std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << " and holder was " << holderType.name() << std::endl;
+    std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << " IN STATUS: " << obj2->getStatus() << " and holder was " << holderType.name() << std::endl;
 	auto it = map.find({ typeid(obj1), typeid(*obj2), holderType });
     if (it != map.end())
     {
@@ -176,18 +171,54 @@ void playerVsenemy(Object& playerObj, Object& enemyObj)
 	Player& player = static_cast<Player&>(playerObj);
 	Enemy& enemy = static_cast<Enemy&>(enemyObj);
 
+    if (enemy.getHitCooldown() > 0.f)
+        return; //
+    auto playerDirX = player.getDirection();
+	auto enemyDirX = enemy.getDirection();
+	if (player.getPosition().x < enemy.getPosition().x) // if player is on the left side of the enemy
+	    if (playerDirX == enemyDirX) 
+		    return;
+	if (player.getPosition().x > enemy.getPosition().x) // if player is on the right side of the enemy
+        if(playerDirX == 1)
+			return;
+
 	auto playerState = player.getState();
-	auto enemyState = enemy.getState();
 
 	if (typeid(*playerState) == typeid(AttackState))
 	{
 		enemy.handleCommand(std::make_unique<HandsAttackCommand>());
-	}
-    /*if (typeid(*enemyState) == typeid(AttackingState))
+        enemy.setHitCooldown(0.5f);
+	}    
+}
+
+void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
+    Player& player = static_cast<Player&>(playerObj);
+    Enemy& enemy = static_cast<Enemy&>(enemyObj);
+
+    if (player.getHitCooldown() > 0.f)
+        return;
+
+    auto enemyState = enemy.getState();
+    if (typeid(*enemyState) == typeid(AttackingState))
     {
-		player.handleCommand(std::make_unique<HandsAttackCommand>());
-    }*/
-		
+        player.handleCommand(std::make_unique<HandsAttackCommand>());
+        player.setHitCooldown(0.3f);
+    }
+}
+
+void enemyVSAlly(Object& enemyObj, Object& allyObj) {
+	ComputerPlayer& enemy = static_cast<ComputerPlayer&>(enemyObj);
+	auto& ally = static_cast<ComputerPlayer&>(allyObj);
+
+	if (ally.getHitCooldown() > 0.f)
+		return;
+
+	auto enemyState = enemy.getState();
+	if (typeid(*enemyState) == typeid(AttackingState))
+	{
+		ally.handleCommand(std::make_unique<HandsAttackCommand>());
+		ally.setHitCooldown(0.2f);
+	}
 }
 
 //PlayableObjec vs PlayebleObject collision
@@ -197,6 +228,9 @@ objectVsObjectMap initializeOvsOmap(){
     objectVsObjectMap map;
 
     map[{typeid(Player), typeid(Bandit)}] = &playerVsenemy;
+	map[{typeid(Bandit), typeid(Player)}] = &enemyVSPlayer;
+    map[{typeid(Bandit), typeid(Ally)}] = &enemyVSAlly;
+	map[{typeid(Ally), typeid(Bandit)}] = &enemyVSAlly;
 
     return map;
 }

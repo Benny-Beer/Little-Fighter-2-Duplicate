@@ -23,6 +23,7 @@ void AnimationManager::loadAnimations() {
     s_animationMap["walkingk"] = WALKING_WITH_KNIFE;
     s_animationMap["attackingk"] = ATTACKING_WITH_KNIFE;
     s_animationMap["knocked"] = KNOCKED_DOWN;
+    s_animationMap["blocking"] = BLOCKING;
 
     s_animationMap["r"] = ROCK;
 	s_animationMap["b"] = ROCK;

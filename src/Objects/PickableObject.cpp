@@ -5,8 +5,7 @@
 PickableObject::PickableObject(const sf::Vector2f pos, const std::string& name, std::unique_ptr<ICommand> cmd)
 	:Object(pos, name), m_name(name), m_command(std::move(cmd)), m_range(250.f)
 {
-	sf::Vector2f offset(2.f, -62.f);
-	m_offset = offset;
+	m_offset = OBJ_OFFSET;
 }
 
 const std::string& PickableObject::getName()
@@ -24,9 +23,6 @@ void PickableObject::move(sf::Vector2f goal)
 
 std::unique_ptr<ICommand> PickableObject::getHitCommand()
 {
-	 std::cout << "PickableObject::getHitCommand() called\n";
-	 std::cout << getName() << std::endl;
-	 std::cout << "command name is: " << typeid(*m_command).name() << std::endl;
 	 return std::move(m_command->clone());
 }
 
@@ -58,9 +54,15 @@ void PickableObject::setState(std::unique_ptr<ObjectBaseState> state)
 	}
 }
 
+const int PickableObject::getXDirThrow() const
+{
+	return m_xDirThrow; 
+}
+
 void PickableObject::putBack()
 {
     m_status = ON_EARTH;
+	setHolder(nullptr);
     m_justDropped = true;
     m_dropTarget = getPosition() - (m_offset + m_offset);
 }
@@ -101,8 +103,7 @@ void PickableObject::drop(float dt)
 {
     sf::Vector2f dir = m_dropTarget - getPosition();
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
-    const float SPEED = 400.f;
-    float moveDist = SPEED * dt;
+    float moveDist = OBJ_DROP_SPEED * dt;
 
     if (distance <= moveDist || distance == 0.f) {
         // מזיז ישר ליעד וסוגר תנועה
