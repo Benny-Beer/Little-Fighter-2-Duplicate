@@ -11,29 +11,22 @@ Rock::Rock(const sf::Vector2f pos, const std::string& name)
 
 void Rock::update(float dt)
 {
-    /*if (!m_command)
-    {
-        m_command = std::make_unique<StoneHitCommand>();
-    }*/
+
     BigWeapon::update(dt);
     if (m_isFlying)
     {
-
-        // עדכון מיקום:
         sf::Vector2f pos = getPosition();
         pos.x += m_velocity.x * dt;
         pos.y += m_velocity.y * dt;
 
-        // òãëåï îäéøåú Y òí Gravity:
         m_velocity.y += m_gravity * dt;
-        // äàí ðçúðå?
         if (pos.y >= m_groundY - 12.f)
         {
             setHolder(nullptr);
             pos.y = m_groundY;
-            m_isFlying = false;  // äôñé÷ ìòåó
+            m_isFlying = false;  
             m_velocity = { 0.f, 0.f };
-            m_status = ON_EARTH; // Change status to ON_EARTH
+            m_status = ON_EARTH;
             setAnimation(AnimationManager::getAnimation("r", getTexture()));
 
 

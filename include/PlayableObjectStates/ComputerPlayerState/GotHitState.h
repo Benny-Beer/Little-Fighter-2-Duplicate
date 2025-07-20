@@ -13,7 +13,7 @@ public:
     void onHandsAttack(PlayableObject& player) override;
     void onStoneHit(PlayableObject& player) override;
     void onExplosion(PlayableObject& player) override;
-    //bool isAccessible() const override { return false; }
+
     void name() {};
 private:
     float m_recoveryTime = HIT_RECOVERY_TIME;  // Time lying down before recovery

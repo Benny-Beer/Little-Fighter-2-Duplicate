@@ -48,7 +48,6 @@ std::unique_ptr<PlayableObjectState> CollideWithObject::handleInput(Input input)
 void CollideWithObject::enter(PlayableObject& player)
 {
 
-	//player.setDiraction(m_input);
 }
 
 void CollideWithObject::update(PlayableObject& player, float dt)

@@ -13,14 +13,10 @@ void RetreatingState::enter(PlayableObject& player) {
     player.setAniName("running");
     m_safeZone = player.getSafeZone();
 
-    //player.setDiraction(m_input);     m_elapsedTime = 0.f;
 }
 
 void RetreatingState::update(PlayableObject& player, float deltaTime) {
     m_elapsedTime += deltaTime;
-
-    // Move away from nearest visible threat (for now just move left/up)
-    // You can enhance this to analyze real threats nearby
     
     sf::Vector2f retreatDirection = m_safeZone - player.getPosition();
     float length = std::sqrt(retreatDirection.x * retreatDirection.x + retreatDirection.y * retreatDirection.y);
@@ -37,7 +33,7 @@ void RetreatingState::update(PlayableObject& player, float deltaTime) {
 }
 
 void RetreatingState::exit(ComputerPlayer& player) {
-    // Cleanup if needed
+
 }
 
 void RetreatingState::onHandsAttack(PlayableObject& player) {

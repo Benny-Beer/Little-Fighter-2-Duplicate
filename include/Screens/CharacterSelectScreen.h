@@ -6,7 +6,7 @@
 #include "UI/Background.h"
 
 
-struct PlayerData;//forward declaration
+struct PlayerData;
 
 class CharacterSelectScreen : public IScreen {
 public:

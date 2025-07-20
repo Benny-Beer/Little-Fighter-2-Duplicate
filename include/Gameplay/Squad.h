@@ -2,7 +2,8 @@
 #include <vector>
 #include "SFML/Graphics.hpp"
 #include "Gameplay/Enemy.h"
-//groop of enemies for every level faze
+
+// group of enemies for every level phaze
 class Squad {
 public:
 	void render(sf::RenderWindow& window);

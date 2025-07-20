@@ -24,7 +24,6 @@ public:
 	void draw(sf::RenderWindow& window) const;
 	bool collide(Object& other) const;
 	sf::FloatRect buildMyRect();
-//	virtual void update(float dt);
 	sf::Vector2f getPosition() const;
 	void setSize(float scale);
 	sf::Vector2f getGeometricCenter() const;

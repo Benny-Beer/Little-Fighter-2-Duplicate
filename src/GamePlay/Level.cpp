@@ -33,7 +33,7 @@ void Level::addSquad(std::string& squadLine)
 
         for (int i = 0; i < count; ++i) {
            
-            auto enemy = Factory<Enemy>::create(std::string(1, type), sf::Vector2f(getRandomBoundedPosition(X_BOUND+BOUNDS_WIDTH-75.f, X_BOUND + BOUNDS_WIDTH - 75.f, Y_BOUND, Y_BOUND+BOUNDS_HEIGHT))); // 
+            auto enemy = Factory<Enemy>::create(std::string(1, type), sf::Vector2f(getRandomBoundedPosition(X_BOUND+BOUNDS_WIDTH-75.f, X_BOUND + BOUNDS_WIDTH - 75.f, Y_BOUND, Y_BOUND+BOUNDS_HEIGHT))); 
 
             if (enemy)
                 newSquad.addEnemy(std::move(enemy));
@@ -48,8 +48,7 @@ void Level::addPickableObjects(const std::string& objectLine)
     std::istringstream iss(objectLine);
     std::string token;
 
-    // change i logic later (for pickable position)
-    int i = 1;
+
     while (iss >> token) {
         if (token.empty()) continue;
 
@@ -60,7 +59,7 @@ void Level::addPickableObjects(const std::string& objectLine)
         {
             m_pickables.push_back(std::move(obj));
         }
-        i++;
+
     }
 }
 
@@ -74,25 +73,12 @@ void Level::render(sf::RenderWindow& window)
         m_enemies[index].render(window); 
     }
 
-    //render picObj
-    //for (auto& obj : m_pickables)
-        //obj->draw(window);
 
 }
 
 void Level::update(float dt)
 {
-    //int index = static_cast<int>(m_phase);
 
-    ////just for demo need to pass player position
-    //if (index < m_enemies.size()) {
-    //    m_enemies[index].update(dt);
-    //}
-
-    //for (auto& obj : m_pickables)
-    //{
-    //    obj->update(dt);
-    //}
 
     std::erase_if(m_pickables, [](std::shared_ptr<PickableObject>& obj) {
         return obj->isUsed();
@@ -132,7 +118,7 @@ std::vector<std::shared_ptr<PickableObject>> Level::getAllObjects() {
 
 bool Level::areAllEnemiesDefeated() const
 {
-    return false; // TODO: create logic to know if there is still living enemies
+    return false;
 }
 
 void Level::handleCollisionsWithPlayer(PlayableObject& player)

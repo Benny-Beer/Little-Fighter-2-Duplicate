@@ -34,9 +34,8 @@ using ObjectCollisionFunc = void(*)(Object&, Object&);
 using objectVsObjectMap = std::map<KeyOO, ObjectCollisionFunc>;
 
 
-//
-// פונקציה גנרית — template — לאיסוף חפץ
-//
+
+// picking object generic func
 template <typename T>
 void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
@@ -45,7 +44,6 @@ void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pic
     if (player.isHoldingWeapon(object))
         return;
     
-    //not so nice!!!!!
 	if (typeid(*player.getState()) == typeid(JumpingState) || typeid(*player.getState()) == typeid(AttackState))
 	{
 		return;
@@ -55,7 +53,7 @@ void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pic
 }
 
 //
-// wrapper בשביל להכניס למפה
+// wrapper to insert into map
 //
 template <typename T>
 void playerPickableObjectWrapper(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
@@ -118,8 +116,8 @@ HitMap initializeCollisionMap()
 
     map[{typeid(Player), typeid(Rock), typeid(void)}] = &playerPickableObjectWrapper<Rock>;
     map[{typeid(Player), typeid(Box), typeid(void)}] = &playerPickableObjectWrapper<Box>;
+
     //Box
-    //map[{ typeid(Ally), typeid(Box), typeid(Bandit)}] = &enemyAttackingAlly;
     map[{ typeid(Bandit), typeid(Box), typeid(Ally)}] = &enemyAttackingAlly;
     map[{ typeid(Bandit), typeid(Box), typeid(Player)}] = &enemyAttacked;
     map[{ typeid(Player), typeid(Box), typeid(Bandit)}] = &enemyAttacked;
@@ -131,14 +129,14 @@ HitMap initializeCollisionMap()
     map[{ typeid(Player), typeid(Rock), typeid(Bandit)}] = &playerAttacked;
     map[{ typeid(Ally), typeid(Rock), typeid(Bandit)}] = &enemyAttacked;
 
-    //map[{ typeid(Ally), typeid(Rock), typeid(Bandit)}] = &enemyAttackingAlly;
-    //map[{ typeid(Player), typeid(Rock), typeid(Bandit)}] = &playerAttackingEnemy;
+
     //Box
     map[{ typeid(Ally), typeid(Box), typeid(Ally)}] = &friendlyFire;
     map[{ typeid(Ally), typeid(Box), typeid(Player)}] = &friendlyFire;
     map[{ typeid(Player), typeid(Box), typeid(Ally)}] = &friendlyFire;
     map[{ typeid(Bandit), typeid(Box), typeid(Bandit)}] = &friendlyFire;
     map[{ typeid(Player), typeid(Box), typeid(Player)}] = &friendlyFire;
+
     //Rock
     map[{ typeid(Ally), typeid(Rock), typeid(Ally)}] = &friendlyFire;
     map[{ typeid(Ally), typeid(Rock), typeid(Player)}] = &friendlyFire;

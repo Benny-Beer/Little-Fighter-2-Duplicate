@@ -37,8 +37,6 @@ public:
 		return nullptr; 
 	};
 	std::string getStrategyName();
-	//virtual bool isAttacked() const;
-	//virtual void attack();
 	virtual void tookItem();
 	virtual void wantItem();
 	virtual bool needItem();
@@ -75,7 +73,6 @@ protected:
 	std::string m_currentAnimationName;
 	std::string m_name;
 	sf::Vector2f m_prevPosition;
-	//bool m_underAttack = false;
 	bool m_needItem = true;
 	std::unique_ptr<PlayableObjectState> m_state;
 	std::unique_ptr<AttackBehavior> m_attack;

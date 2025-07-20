@@ -115,22 +115,7 @@ void PlayableObject::setStrategyName(const std::string& name)
 }
 
 void PlayableObject::takeDamage(int damageAmount) {
-  /*  // Reduce health
-    m_health -= damageAmount;
 
-    // Clamp health to non-negative
-    if (m_health < 0)
-        m_health = 0;
-
-    // Optionally: play a hurt animation or effect
-    setAnimation("Hurt");
-
-    // Optionally: apply knockback or visual feedback
-    applyKnockback();
-
-    // Check for death
-    if (m_health == 0)
-        onDeath(); */
 }
 
 void PlayableObject::resetDirection()
@@ -148,14 +133,10 @@ void PlayableObject::updateScale()
 
 
     if (dx > 0.01f)
-        setScale(1);  // moving right
+        setScale(RIGHT);  // moving right
     else if (dx < -0.01f)
-        setScale(-1); // moving left
+        setScale(LEFT); // moving left
 
-
-    //int dir = static_cast<int>(m_dir);
-    //dir *= -1;
-    //m_dir = static_cast<Direction>(dir);
 }
 
 bool PlayableObject::isHoldingWeapon(std::shared_ptr<PickableObject> obj) const

@@ -1,8 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
-class GameManager; //forward declaration
-
+class GameManager; 
 class IScreen {
 public:
 	virtual ~IScreen() = default;

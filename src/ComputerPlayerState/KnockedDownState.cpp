@@ -18,13 +18,13 @@ void KnockedDownState::update(PlayableObject& player, float deltaTime) {
     m_elapsedTime += deltaTime;
 
     if (m_elapsedTime >= m_recoveryTime) {
-        // need information that the player is controllable again - ?
+        
         player.setState(std::make_unique<IdleState>());
     }
 }
 
 void KnockedDownState::exit(ComputerPlayer& player) {
-    //player.setControllable(true); // Restore control in any case
+    
 }
 
 void KnockedDownState::onHandsAttack(PlayableObject& player) {

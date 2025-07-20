@@ -19,10 +19,8 @@ public:
     Controller(sf::RenderWindow& window,
         std::unique_ptr<Level> level,
         std::vector<std::shared_ptr<Player>> players,     // human-controlled
-        std::vector<std::shared_ptr<Ally>> allies);       // AI-controlled allies
+        std::vector<std::shared_ptr<Ally>> allies);       // CP-controlled allies
 
-    // Called each frame from InGameState
-    //void updateAndRender(float deltaTime);
 
     // ========== Core logic ==========
     void handleInput(sf::Event ev);                  // Input for human-controlled players
@@ -64,7 +62,6 @@ private:
     float m_newObjectCoolDown = OBJECT_COOLDOWN;
 
     void printHp(int hp, const sf::Vector2f& position, bool potential);
-    //void handleDeath(std::shared_ptr<ComputerPlayer> deadOne, std::vector<std::shared_ptr<ComputerPlayer>> livePlayers);
     float distanceBetween(sf::Vector2f a, sf::Vector2f b);
     bool enemyExist() { return m_enemies.size(); }
     bool alliesExist() { return m_allies.size() + m_players.size(); }
@@ -80,8 +77,6 @@ private:
 	void checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy);
 	void checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy);
     void resetPlayersStats();
-    //void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<ComputerPlayer>>& enemies);
-    //void updateComputerPlayerTargetsTwo();
 
     template<typename Container>
     void checkClosest(const Container& container, const sf::Vector2f& enemyPos,
@@ -143,8 +138,6 @@ private:
     template<typename T1, typename T2 = Object>
     void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<T1>>& enemies, std::vector<std::shared_ptr<T2>> optionalVec = {}) {
         static_assert(std::is_base_of<ComputerPlayer, T1>::value, "T1 must derive from ComputerPlayer");
-        //static_assert(std::is_base_of<ComputerPlayer, T2>::value, "T2 must derive from ComputerPlayer");
-
 
 
         float bestScore = std::numeric_limits<float>::max();

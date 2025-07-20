@@ -55,28 +55,3 @@ void GameManager::switchScreen(std::unique_ptr<IScreen> nextScreen)
 {
     m_nextScreen = std::move(nextScreen);
 }
-/*
-void GameManager::readLevels(std::string path)
-{
-    std::ifstream file(path);
-    std::string line;
-    
-    while (std::getline(file, line)) {
-        if (line.empty()) continue; // remove empty lines from beggining
-
-        Level level(line);
-
-        while (std::getline(file, line)) {
-            // objects
-            if (line.rfind("Objects: ", 0) == 0) {
-                level.addPickableObjects(line.substr(9));
-                break; 
-            }
-            // squads
-            if (!line.empty())
-                level.addSquad(line);
-        }
-
-        m_levels.push_back(std::move(level));
-    }
-**/

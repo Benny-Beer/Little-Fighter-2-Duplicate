@@ -20,7 +20,6 @@ void PlayerGotHitState::update(PlayableObject& player, float dt)
 	m_elapsedTime += dt;
 
 	if (m_elapsedTime >= m_recoveryTime) {
-		// need information that the player is controllable again - ?
 		player.setState(std::make_unique<StandingState>(Input::NONE));
 	}
 }

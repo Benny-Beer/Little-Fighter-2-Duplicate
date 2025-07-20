@@ -16,6 +16,5 @@ public:
 	void resetHP();
 	bool isAlive() const;
 private:
-	//sf::Text m_name;
 	bool m_alive = true;
 };

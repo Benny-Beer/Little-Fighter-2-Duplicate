@@ -22,23 +22,20 @@ void Box::update(float dt)
     }
     if (m_isFlying)
     {
-        // òãëåï îé÷åí:
         sf::Vector2f pos = getPosition();
         pos.x += m_velocity.x * dt;
         pos.y += m_velocity.y * dt;
 
-        // òãëåï îäéøåú Y òí Gravity:
         m_velocity.y += m_gravity * dt;
 
-        // äàí ðçúðå?
         if (pos.y >= m_groundY)
         {
 			explode(); 
             pos.y = m_groundY;
-            m_isFlying = false;  // äôñé÷ ìòåó
+            m_isFlying = false;
             m_velocity = { 0.f, 0.f };
             
-			setState(std::make_unique<ExplodingObjState>()); // Change state to ExplodingObjState
+			setState(std::make_unique<ExplodingObjState>());
             
         }
 

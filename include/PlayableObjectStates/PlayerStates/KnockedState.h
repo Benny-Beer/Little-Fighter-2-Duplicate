@@ -9,7 +9,6 @@ public:
     virtual void enter(PlayableObject& player) override;
     virtual void update(PlayableObject& player, float dt) override;
 
-    //void exit(PlayableObject& player) override;
 	bool isAccessible() const override { return false; }
     void onHandsAttack(PlayableObject& player) override;
     void onStoneHit(PlayableObject& player) override;

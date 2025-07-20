@@ -18,7 +18,6 @@ void DataLoader::parseDataIndex()
 	if(!file.is_open()) throw std::runtime_error("Failed to open file: " + m_pathToIndex);
 
 	std::string line, token, type, path;
-	//add a if not empty line clause and if path is not empty before adding to vector
 	while (std::getline(file, line)) {
 		std::stringstream ss(line);
 		while (ss >> token) {
