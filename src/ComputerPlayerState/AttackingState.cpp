@@ -34,8 +34,8 @@ void AttackingState::enter(PlayableObject& player) {
 
     player.wantItem();
     
-    if (auto target = std::dynamic_pointer_cast<PlayableObject>(m_target))
-        target->handleCommand(std::make_unique<HandsAttackCommand>());
+    //if (auto target = std::dynamic_pointer_cast<PlayableObject>(m_target))
+    //    target->handleCommand(std::make_unique<HandsAttackCommand>());
     // I think we need switch-case here according to the attack
     //player.setDiraction(m_input);     
     

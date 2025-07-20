@@ -195,6 +195,11 @@ void playerVsenemy(Object& playerObj, Object& enemyObj)
 		enemy.handleCommand(std::make_unique<HandsAttackCommand>());
         enemy.setHitCooldown(3.0f);
 	}
+    else if (typeid(*enemyState) == typeid(AttackingState))
+    {
+        player.handleCommand(std::make_unique<HandsAttackCommand>());
+       // player.setHitCooldown(3.0f);
+    }
     
 }
 

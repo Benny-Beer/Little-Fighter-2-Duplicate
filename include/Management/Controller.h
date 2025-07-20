@@ -132,20 +132,23 @@ private:
             if (!player->getState()->isAccessible()/*player->getHp() <= 0*/) {
                 removeAccess(player, vec1);
             }
-            else {
+            if(vec3.empty())
                 updateSafeZone(player, vec2);
-            }
+            else
+                updateSafeZone(player, vec2, vec3);
+
         }
     }
 
-    template<typename T>
-    void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<T>>& enemies) {
-        static_assert(std::is_base_of<ComputerPlayer, T>::value, "T must derive from ComputerPlayer");
+    template<typename T1, typename T2 = Object>
+    void updateSafeZone(std::shared_ptr<ComputerPlayer> self, std::vector<std::shared_ptr<T1>>& enemies, std::vector<std::shared_ptr<T2>> optionalVec = {}) {
+        static_assert(std::is_base_of<ComputerPlayer, T1>::value, "T1 must derive from ComputerPlayer");
+        //static_assert(std::is_base_of<ComputerPlayer, T2>::value, "T2 must derive from ComputerPlayer");
 
 
 
         float bestScore = std::numeric_limits<float>::max();
-        sf::Vector2f bestPoint;
+        sf::Vector2f bestPoint = { 700.f, 500.f };
 
         for (float x = SEARCHING_BOUNDS.left; x < SEARCHING_BOUNDS.left + SEARCHING_BOUNDS.width; x += GRID_SIZE) {
             for (float y = SEARCHING_BOUNDS.top; y < SEARCHING_BOUNDS.top + SEARCHING_BOUNDS.height; y += GRID_SIZE) {
@@ -161,6 +164,21 @@ private:
                     else
                         dangerScore += 1000.f; // very close - very dangerous
                 }
+                if (dangerScore < bestScore) {
+                    bestScore = dangerScore;
+                    bestPoint = point;
+                }
+
+                for (const auto& enemy : optionalVec) {
+                    if (!enemy) continue;
+
+                    float dist = distanceBetween(point, enemy->getPosition());
+                    if (dist > 1.f)
+                        dangerScore += 1.f / dist;
+                    else
+                        dangerScore += 1000.f; // very close - very dangerous
+                }
+
 
                 if (dangerScore < bestScore) {
                     bestScore = dangerScore;
