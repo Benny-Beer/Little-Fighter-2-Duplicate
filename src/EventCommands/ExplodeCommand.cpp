@@ -2,7 +2,7 @@
 
 void ExplodeCommand::execute(PlayableObject& player)
 {
-	player.reduceHp(2);
+	player.reduceHp(EXPLOSION_DAMAGE);
 	player.onExplosion();
 }
 std::unique_ptr<ICommand> ExplodeCommand::clone() const {

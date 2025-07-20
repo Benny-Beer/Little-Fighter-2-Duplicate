@@ -21,6 +21,6 @@ public:
     void name();
 private:
     std::shared_ptr<Object> m_target; // the target for attacking
-    float m_attackCooldown = ATTACK_COLDOWN; // time betweeen attacks
+    float m_attackCooldown = ATTACK_COOLDOWN; // time betweeen attacks
     void alignAttacker(PlayableObject& player);
 };

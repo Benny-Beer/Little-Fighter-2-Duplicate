@@ -29,7 +29,7 @@ inline const AnimationInfo ATTACKING_WITH_KNIFE = { 0, 0, 58, 58, 1, 0.2f, false
 inline const AnimationInfo WALKING_WITH_KNIFE = { 0, 0, 58, 58, 2, 0.2f, true };
 inline const AnimationInfo HELD = { 146, 98, 42, 46, 0, 0.7f, true };
 inline const AnimationInfo BOX_EXPLOIDING = { 58, 0, 58, 58, 2, 0.2f, false };
-inline const AnimationInfo BLOCKING = { 0, 0, 58, 58, 1, 0.2f, false };
+inline const AnimationInfo BLOCKING = { 480, 400, 80, 80, 2, 0.2f, false };
 inline const AnimationInfo KNOCKEDDOWN = { 240, 240, 80, 80, 2, 0.2f, false };
 
 inline const AnimationInfo GOTHIT = { 480, 320, 80, 80, 3, 0.2f, false };

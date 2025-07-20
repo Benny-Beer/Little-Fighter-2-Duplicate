@@ -237,6 +237,7 @@ void Controller::render()
     for (const auto& dead : m_deads)
     {
         dead->draw(m_window);
+        // until we'll have HUD
         printHp(dead->getHp(), { 750.f, 10.f + i }, false);
         printHp(dead->getPotentialHp(), { 750.f, 30.f + i }, true);
         i += 40.f;
@@ -249,6 +250,7 @@ void Controller::render()
     for (const auto& player : m_players)
     {
         player->draw(m_window);
+        // until we'll have HUD
         printHp(player->getHp(), { 480.f, 10.f + i }, false);
         printHp(player->getPotentialHp(), { 480.f, 30.f + i }, true);
         i += 40.f;
@@ -488,7 +490,6 @@ void Controller::printStageAlert(const std::string& message) {
             return;
         loaded = true;
     }
-    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nim here hey\n";
     sf::Text alert;
     alert.setFont(font);
     alert.setString(message);

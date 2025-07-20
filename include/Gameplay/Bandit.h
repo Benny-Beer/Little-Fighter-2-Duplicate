@@ -13,5 +13,5 @@ private:
 
 	//used in move()
 	sf::Vector2f m_direction{ 0.f,0.f };
-	float m_attackRange = ENEMY_ATTACK_RANGE;
+	float m_attackRange = HANDS_ATTACK_RANGE;
 };

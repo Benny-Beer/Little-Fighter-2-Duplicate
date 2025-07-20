@@ -33,12 +33,12 @@ void PlayableObject::setDiraction(Input input)
     switch (input)
     {
     case PRESS_LEFT:
-        m_direction.x = -1.f;
+        m_direction.x = LEFT;
         m_dir = Direction::LEFT;
         setScale(-1);
         break;
     case PRESS_RIGHT:
-        m_direction.x = 1.f;
+        m_direction.x = RIGHT;
         m_dir = Direction::RIGHT;
         setScale(1);
         break;
@@ -52,7 +52,7 @@ void PlayableObject::setDiraction(Input input)
         break;
     case PRESS_JUMP:
     case PRESS_UP:
-        m_direction.y = -1.f;
+        m_direction.y = LEFT;
         break;
     case PRESS_FALLING:
     case RELEASE_UP:
@@ -64,7 +64,7 @@ void PlayableObject::setDiraction(Input input)
             m_direction.y = 0.f;
         break;
     case PRESS_DOWN:
-        m_direction.y = 1.f;
+        m_direction.y = RIGHT;
         break;
     default:
         break;
@@ -98,7 +98,7 @@ std::shared_ptr<PickableObject> PlayableObject::getHeldObj() const
 void PlayableObject::dropHeldObj() {
     std::cout << "\nin dropHeldObj \n\n";
 ;    if (m_heldObject) {
-        m_attackRange = 50.f;
+        m_attackRange = HANDS_ATTACK_RANGE;
         m_strategyName = "";
         m_heldObject->putBack();
         m_heldObject->setHolder(nullptr);

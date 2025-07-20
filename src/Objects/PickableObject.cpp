@@ -5,8 +5,7 @@
 PickableObject::PickableObject(const sf::Vector2f pos, const std::string& name, std::unique_ptr<ICommand> cmd)
 	:Object(pos, name), m_name(name), m_command(std::move(cmd)), m_range(250.f)
 {
-	sf::Vector2f offset(2.f, -62.f);
-	m_offset = offset;
+	m_offset = OBJ_OFFSET;
 }
 
 const std::string& PickableObject::getName()
@@ -66,6 +65,7 @@ const int PickableObject::getXDirThrow() const
 void PickableObject::putBack()
 {
     m_status = ON_EARTH;
+	setHolder(nullptr);
     m_justDropped = true;
     m_dropTarget = getPosition() - (m_offset + m_offset);
 }
@@ -106,8 +106,7 @@ void PickableObject::drop(float dt)
 {
     sf::Vector2f dir = m_dropTarget - getPosition();
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
-    const float SPEED = 400.f;
-    float moveDist = SPEED * dt;
+    float moveDist = OBJ_DROP_SPEED * dt;
 
     if (distance <= moveDist || distance == 0.f) {
         // מזיז ישר ליעד וסוגר תנועה

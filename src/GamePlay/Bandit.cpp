@@ -3,9 +3,9 @@
 #include "management/ResourceManager.h"
 
 Bandit::Bandit(const sf::Vector2f pos)
-    :Enemy(pos, "bandit_ani"), m_attackRange(60.f)
+    :Enemy(pos, "bandit_ani"), m_attackRange(HANDS_ATTACK_RANGE)
 {
-    m_speed = 130.f;
+    m_speed = ENEMY_SPEED;
 
 }
 

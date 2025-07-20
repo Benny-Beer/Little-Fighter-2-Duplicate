@@ -61,7 +61,7 @@ void Enemy::setHitCooldown(float cooldown)
 
 
 void Enemy::resetHP() {
-    m_hp = 100;
-    m_potentialHp = 100;
+    m_hp = ENEMY_HP;
+    m_potentialHp = ENEMY_HP;
 }
 
