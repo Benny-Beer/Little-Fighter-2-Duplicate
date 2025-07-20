@@ -61,6 +61,8 @@ public:
 	void updateHp();
 	virtual void resetHP() = 0;
 	void setXHit(int xdirHit) { m_xdirHit = xdirHit; }
+	float getHitCooldown() const;
+	void setHitCooldown(float cooldown);
 
 protected:
 	int m_hp;
@@ -83,6 +85,7 @@ protected:
 	sf::Vector2f m_safeZone = { 0.f, 0.f };
 	float m_attackRange = 50.f;
 	int m_xdirHit = 0;
+	float m_hitCooldown = 0.f;
 };
 
 

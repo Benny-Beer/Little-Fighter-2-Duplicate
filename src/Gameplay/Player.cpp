@@ -50,6 +50,9 @@ void Player::handleInput(sf::Event event)
 
 void Player::update(float dt)
 {
+    if (m_hitCooldown > 0.f)
+        m_hitCooldown -= dt;
+
     Object::update(dt);
     if (m_currentAnimationName != m_aniName + m_strategyName) {
         setAnimation(AnimationManager::getAnimation(m_aniName + m_strategyName, getTexture()));

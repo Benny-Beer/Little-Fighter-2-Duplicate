@@ -19,8 +19,6 @@ void Enemy::update(float dt)
 {
 
     //m_prevPosition = getPosition();
-    if (m_hitCooldown > 0.f)
-        m_hitCooldown -= dt;
 
     ComputerPlayer::update(dt);  // æä îôòéì àú äÎstate
     //std::cout << "Player Pos is: " << getPosition().x << "," << getPosition().y << "\n";
@@ -47,18 +45,6 @@ void Enemy::handleCollision() {
 bool Enemy::isAlive() const {
     return m_alive;
 }
-
-
-float Enemy::getHitCooldown() const
-{
-    return m_hitCooldown;
-}
-
-void Enemy::setHitCooldown(float cooldown)
-{
-    m_hitCooldown = cooldown;
-}
-
 
 void Enemy::resetHP() {
     m_hp = 100;

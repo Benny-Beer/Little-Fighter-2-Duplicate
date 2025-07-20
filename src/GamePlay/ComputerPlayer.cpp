@@ -17,6 +17,9 @@ ComputerPlayer::ComputerPlayer(PlayerData p) : PlayableObject(p.m_animationSheet
 }
 void ComputerPlayer::update(float dt)
 {
+    if (m_hitCooldown > 0.f)
+        m_hitCooldown -= dt;
+
     Object::update(dt);
     m_prevPosition = getPosition();
     if (m_state) {
