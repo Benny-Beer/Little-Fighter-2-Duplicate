@@ -1,4 +1,5 @@
 #pragma once
+#include "Consts/Consts.h"
 #include "PlayableObjectStates/PlayerStates/PlayerBaseState.h"
 
 class AttackState : public PlayerBaseState
@@ -16,6 +17,6 @@ public:
 	void onExplosion(PlayableObject& player) override;
 private:
 	sf::Clock m_clock;
-	float m_attackDuration = 0.15f;
+	float m_attackDuration = ATTACK_DURATION;
 
 };

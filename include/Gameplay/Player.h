@@ -25,7 +25,7 @@ struct PlayerData {
 class Player : public PlayableObject
 {
 public:
-    explicit Player(const sf::Vector2f pos, const std::string& name, float speed = 200.f);
+    explicit Player(const sf::Vector2f pos, const std::string& name, float speed);
     Player(PlayerData data);
 
     void handleInput(sf::Event event);                 // Reads arrow-key state (?) m_direction
@@ -40,7 +40,7 @@ public:
     //float getSpeed() const;
 
     bool isAlive() const;
-
+    void resetHP();
     /* Keep the player inside the window bounds */
     void clampToWindow(const sf::Vector2u& windowSize);
 
