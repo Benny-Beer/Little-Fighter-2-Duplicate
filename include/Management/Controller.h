@@ -61,7 +61,7 @@ private:
     bool m_levelFinished = false;
     bool m_playerWon = false;
     float m_objectTimer = 0.f;
-    float m_newObjectCoolDown = OBJECT_COLDOWN;
+    float m_newObjectCoolDown = OBJECT_COOLDOWN;
 
     void printHp(int hp, const sf::Vector2f& position, bool potential);
     //void handleDeath(std::shared_ptr<ComputerPlayer> deadOne, std::vector<std::shared_ptr<ComputerPlayer>> livePlayers);

@@ -22,7 +22,7 @@ Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
 
 Player::Player(PlayerData data) : PlayableObject(data.m_animationSheet)
 {
-    setPosition(getRandomYPosition(50, 400, 780));
+    setPosition(getRandomYPosition(50, Y_BOUND + 20.f, Y_BOUND + BOUNDS_HEIGHT - 20.f));
     m_prevPosition = getPosition();
     m_hp = data.m_hp;
     m_potentialHp = data.m_hp;
@@ -261,6 +261,6 @@ bool Player::isAlive() const {
 }
 
 void Player::resetHP() {
-    m_hp = 500;
-    m_potentialHp = 500;
+    m_hp = PLAYER_HP;
+    m_potentialHp = PLAYER_HP;
 }

@@ -10,13 +10,7 @@ void RetreatingState::enter(PlayableObject& player) {
     std::cout << "enter:: RetreatingState\n";
     player.dropHeldObj();
 
-    //Animation retreatingAnim(player.getTexture(),
-    //    0, 0,          // x, y
-    //    80, 80,        // width, height
-    //    4,             // מספר פריימים
-    //    0.2f);         // זמן בין פריימים
 
-    //player.setAnimation(retreatingAnim);
     player.setAniName("running");
     m_safeZone = player.getSafeZone();
 

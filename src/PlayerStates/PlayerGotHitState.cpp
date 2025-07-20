@@ -7,6 +7,15 @@ std::unique_ptr<PlayableObjectState> PlayerGotHitState::handleInput(Input input)
 	return nullptr;
 }
 
+
+void PlayerGotHitState::enter(PlayableObject& player)
+{
+	std::cout << "Player enter:: PlayerGotHitState\n";	
+	player.setAniName("gothit");
+	player.dropHeldObj();
+	m_elapsedTime = 0.0f;
+}
+
 void PlayerGotHitState::update(PlayableObject& player, float dt)
 {
 	m_elapsedTime += dt;
@@ -15,12 +24,4 @@ void PlayerGotHitState::update(PlayableObject& player, float dt)
 		// need information that the player is controllable again - ?
 		player.setState(std::make_unique<StandingState>(Input::NONE));
 	}
-}
-
-void PlayerGotHitState::enter(PlayableObject& player)
-{
-	std::cout << "Player enter:: PlayerGotHitState\n";	
-	player.setAniName("gothit");
-	player.dropHeldObj();
-	m_elapsedTime = 0.0f;
 }

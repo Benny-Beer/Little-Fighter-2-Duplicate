@@ -2,7 +2,7 @@
 
 void StoneHitCommand::execute(PlayableObject& player)
 {
-	player.reduceHp(60); 
+	player.reduceHp(BIG_WEAPON_DAMAGE); 
 	player.onStoneHit();
 	std::cout << typeid(player).name() << "ON STONE HIT!!!!!!!!!!!!!\n";
 	std::cout << player.getHp() << " HP LEFT\n";

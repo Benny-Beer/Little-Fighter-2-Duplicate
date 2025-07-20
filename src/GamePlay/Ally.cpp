@@ -17,7 +17,7 @@ Ally::Ally(const sf::Vector2f pos, const std::string& name, float speed)
 
 Ally::Ally(PlayerData p) : ComputerPlayer(p)
 {
-    setPosition(getRandomYPosition(50, 400, 780));
+    setPosition(getRandomYPosition(50, Y_BOUND+20, Y_BOUND+BOUNDS_HEIGHT-20));
     m_prevPosition = getPosition();
     m_hp = p.m_hp;
     m_potentialHp = p.m_hp;
@@ -63,6 +63,6 @@ bool Ally::isAlive() const {
 }
 
 void Ally::resetHP() {
-    m_hp = 500;
-    m_potentialHp = 500;
+    m_hp = ALLY_HP;
+    m_potentialHp = ALLY_HP;
 }

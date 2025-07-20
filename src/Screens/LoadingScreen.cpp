@@ -80,5 +80,5 @@ void LoadingScreen::render() {
 	m_startButton.draw(m_window, sf::RenderStates::Default);
 	m_window.draw(m_chienese);
 	m_window.draw(m_currentlyLoading);
-	sf::sleep(sf::milliseconds(500.f));
+	sf::sleep(sf::milliseconds(250.f));
 }
