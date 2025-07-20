@@ -213,6 +213,16 @@ bool PlayableObject::needItem()
     return m_needItem;
 }
 
+void PlayableObject::startAttackTimer()
+{
+    m_attackTimer = true;
+
+}
+bool PlayableObject::canAttack() {
+    return m_canAttack;
+}
+
+
 void PlayableObject::adjustRange(float range)
 {
     m_attackRange = range;

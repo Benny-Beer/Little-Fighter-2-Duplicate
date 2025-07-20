@@ -17,8 +17,6 @@ Enemy::Enemy(const sf::Vector2f pos, const std::string& name, float speed)
 
 void Enemy::update(float dt)
 {
-
-
     ComputerPlayer::update(dt); 
 
     if (m_currentAnimationName != m_aniName + m_strategyName) {

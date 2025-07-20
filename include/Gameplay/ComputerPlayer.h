@@ -37,6 +37,8 @@ protected:
     std::shared_ptr<Object> m_target = nullptr;
     bool m_controllable = true;
     bool m_blocking = false;
+    bool m_attackTimer = false;
+    
 
 private:
     float distance(const sf::Vector2f& a, const sf::Vector2f& b);
@@ -45,4 +47,7 @@ private:
     virtual void onBoxHit();
     virtual void onHandsAttack();
     virtual void onExplosion();
+    float m_attackWaitingTime = 5.0f;
+    float m_attackCoolDown = 0.f;
+    bool m_canAttack = true;
 };

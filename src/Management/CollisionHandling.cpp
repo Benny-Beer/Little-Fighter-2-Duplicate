@@ -154,7 +154,7 @@ void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
     static HitMap map = initializeCollisionMap();
     Object* holder = obj2->getHolder();
     std::type_index holderType = holder ? typeid(*holder) : typeid(void);
-    std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << " IN STATUS: " << obj2->getStatus() << " and holder was " << holderType.name() << std::endl;
+    //std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << " IN STATUS: " << obj2->getStatus() << " and holder was " << holderType.name() << std::endl;
 	auto it = map.find({ typeid(obj1), typeid(*obj2), holderType });
     if (it != map.end())
     {
@@ -199,6 +199,7 @@ void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
     auto enemyState = enemy.getState();
     if (typeid(*enemyState) == typeid(AttackingState))
     {
+        alignAttacker(enemyObj, playerObj);
         player.handleCommand(std::make_unique<HandsAttackCommand>());
         player.setHitCooldown(0.3f);
     }
@@ -214,6 +215,7 @@ void enemyVSAlly(Object& enemyObj, Object& allyObj) {
 	auto enemyState = enemy.getState();
 	if (typeid(*enemyState) == typeid(AttackingState))
 	{
+        alignAttacker(enemyObj, allyObj);
 		ally.handleCommand(std::make_unique<HandsAttackCommand>());
 		ally.setHitCooldown(0.2f);
 	}
@@ -236,11 +238,23 @@ objectVsObjectMap initializeOvsOmap(){
 void processCollision(Object& object1, Object& object2)
 {
 	static objectVsObjectMap map = initializeOvsOmap();
-	std::cout << "Processing collision between " << typeid(object1).name() << " and " << typeid(object2).name() << std::endl;
+	//std::cout << "Processing collision between " << typeid(object1).name() << " and " << typeid(object2).name() << std::endl;
 	auto it = map.find({ typeid(object1), typeid(object2) });
 	if (it != map.end())
 	{
 		it->second(object1, object2);
 	}
 	
+}
+
+void alignAttacker(Object& enemyObj, Object& playerObj)
+{
+    sf::Vector2f playerPos = enemyObj.getPosition();
+    sf::Vector2f targetPos = playerObj.getPosition();
+
+    float dx = playerPos.x - targetPos.x;
+    float sign = (dx >= 0) ? LEFT : RIGHT;
+    float alignedY = targetPos.y;
+
+    enemyObj.setPosition({ playerPos.x, alignedY });
 }

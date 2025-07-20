@@ -133,12 +133,14 @@ void Player::onBoxHit()
 
 void Player::onHandsAttack()
 {
+
     if (m_hp <= 0) {
         m_hp = 0;
         m_potentialHp = 0;
         setState(std::make_unique<PlayerDeadState>());
     }
     m_state->onHandsAttack(*this);
+    std::cout << typeid(*m_state).name() << "\n";
 }
 
 void Player::onExplosion()

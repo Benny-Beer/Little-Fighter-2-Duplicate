@@ -20,6 +20,20 @@ void ComputerPlayer::update(float dt)
     if (m_hitCooldown > 0.f)
         m_hitCooldown -= dt;
 
+    if (m_attackTimer) {
+
+        m_attackCoolDown += dt;
+
+        if (m_attackCoolDown >= m_attackWaitingTime) {
+            m_canAttack = true;
+            m_attackTimer = false;
+            m_attackCoolDown = 0.f;
+        }
+    }
+    else {
+        m_canAttack = true; 
+    }
+
     Object::update(dt);
     m_prevPosition = getPosition();
     if (m_state) {
@@ -163,3 +177,5 @@ void ComputerPlayer::onExplosion()
     }
     m_state->onExplosion(*this);
 }
+
+

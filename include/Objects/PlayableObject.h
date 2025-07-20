@@ -40,6 +40,9 @@ public:
 	virtual void tookItem();
 	virtual void wantItem();
 	virtual bool needItem();
+	virtual void startAttackTimer();
+
+	virtual bool canAttack();
 
 	// in-game Events:
 	virtual void onStoneHit() = 0;
@@ -83,6 +86,8 @@ protected:
 	float m_attackRange = 50.f;
 	int m_xdirHit = 0;
 	float m_hitCooldown = 0.f;
+	bool m_attackTimer = false;
+	bool m_canAttack = true;
 };
 
 

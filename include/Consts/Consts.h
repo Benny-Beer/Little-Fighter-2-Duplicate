@@ -23,7 +23,7 @@ const float RIGHT = 1.f;
 // PHYSICS (SPEED, GRAVITY, ECT.)
 const sf::Vector2f OBJ_OFFSET(2.f, -62.f);
 const float ALLY_SPEED = 200.f;
-const float ENEMY_SPEED = 170.f;
+const float ENEMY_SPEED = 40.f;
 const float BIG_WEAPON_THROWING_SPEED = 700.f;
 const float BIG_WEAPON_GRAVITY = 1000.f;
 const float OBJ_DROP_SPEED = 400.f;

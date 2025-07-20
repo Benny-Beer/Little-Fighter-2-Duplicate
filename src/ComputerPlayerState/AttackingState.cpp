@@ -6,9 +6,6 @@
 #include "PlayableObjectStates/ComputerPlayerState/RetreatingState.h"
 #include "PlayableObjectStates/ComputerPlayerState/GotHitState.h"
 #include "PlayableObjectStates/ComputerPlayerState/KnockedDownState.h"
-
-
-
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PlayableObject.h"
 #include "EventCommands/HandsAttackCommand.h"
@@ -21,74 +18,63 @@ AttackingState::AttackingState(std::shared_ptr<Object> target)
 }
 
 void AttackingState::enter(PlayableObject& player) {
-
-    alignAttacker(player);
+    std::cout << "im in AttackingState::enter\n";
     player.setAniName("attacking");
     player.attack();
     player.adjustRange(HANDS_ATTACK_RANGE);
     player.setStrategyName("");
-
     player.wantItem();
-    
+    player.startAttackTimer();
     
 }
 
 void AttackingState::update(PlayableObject& player, float deltaTime) {
+    //std::cout << "canAttack: " << player.canAttack() << "\n";
 
-    if (!m_target)
-        return;
+    if (player.canAttack()) {
+        if (!m_target)
+            return;
 
-    if (!player.getTarget()) {
-        player.setState(std::make_unique<IdleState>());
-        return;
-    }
-    if (auto enemy = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
-        if (!enemy->getState()->isAccessible()) {
-            m_target = player.getTarget();
+        if (!player.getTarget()) {
+            player.setState(std::make_unique<IdleState>());
+            return;
+        }
+        if (auto enemy = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
+            if (!enemy->getState()->isAccessible()) {
+                m_target = player.getTarget();
+            }
+        }
+
+        player.setAniName("attacking");
+
+        sf::Vector2f playerPos = player.getPosition();
+
+        sf::Vector2f targetPos = m_target->getPosition();
+
+
+        float distance = std::sqrt(std::pow(playerPos.x - targetPos.x, 2) +
+            std::pow(playerPos.y - targetPos.y, 2));
+
+        if (distance > player.getAttackRange()) {
+            // Too far — switch back to approach state
+            player.setState(std::make_unique<ApproachingEnemyState>(m_target));
+            return;
+        }
+
+
+        // Countdown attack cooldown
+        if (m_attackCooldown > 0) {
+            m_attackCooldown -= deltaTime;
+            return;
         }
     }
-
-    player.setAniName("attacking");
-
-    sf::Vector2f playerPos = player.getPosition();
-
-    sf::Vector2f targetPos = m_target->getPosition();
-
-
-    float distance = std::sqrt(std::pow(playerPos.x - targetPos.x, 2) +
-        std::pow(playerPos.y - targetPos.y, 2));
-
-    if (distance > player.getAttackRange()) {
-        // Too far — switch back to approach state
-        player.setState(std::make_unique<ApproachingEnemyState>(m_target));
-        return;
-    }
-
-
-
-    // Countdown attack cooldown
-    if (m_attackCooldown > 0) {
-        m_attackCooldown -= deltaTime;
-        return;
-    }
-    
 
 }
 
 void AttackingState::exit(ComputerPlayer& player) {
 }
 
-void AttackingState::alignAttacker(PlayableObject& player)
-{
-    sf::Vector2f playerPos = player.getPosition();
-    sf::Vector2f targetPos = m_target->getPosition();
 
-    float dx = playerPos.x - targetPos.x;
-    float sign = (dx >= 0) ? LEFT : RIGHT; 
-    float alignedY = targetPos.y; 
-
-    player.setPosition({ playerPos.x, alignedY }); 
-}
 
 void AttackingState::name() {
 }
