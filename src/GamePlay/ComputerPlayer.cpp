@@ -1,6 +1,7 @@
 #include "GamePlay/ComputerPlayer.h"
 #include "PlayableObjectStates/ComputerPlayerState/IdleState.h"
 #include "PlayableObjectStates/ComputerPlayerState/ApproachingEnemyState.h"
+#include "PlayableObjectStates/ComputerPlayerState/DeadState.h"
 #include "Gameplay/Player.h"
 #include <iostream>
 
@@ -135,3 +136,46 @@ void ComputerPlayer::updateDirection()
     m_dir = m_prevPosition.x < getPosition().x ? Direction::RIGHT : Direction::LEFT;
 }
 
+void ComputerPlayer::onStoneHit()
+{
+    moveSprite({ static_cast<float>(m_xdirHit) * 100, 0.f });
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onStoneHit(*this);
+}
+
+void ComputerPlayer::onBoxHit()
+{
+    moveSprite({ static_cast<float>(m_xdirHit) * 100, 0.f });
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onBoxHit(*this);
+}
+
+void ComputerPlayer::onHandsAttack()
+{
+    moveSprite({ static_cast<float>(m_xdirHit) * 10, 0.f });
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onHandsAttack(*this);
+}
+
+void ComputerPlayer::onExplosion()
+{
+    moveSprite({ static_cast<float>(m_direction.x) * 100, 0.f });
+    if (m_hp <= 0) {
+        m_hp = 0;
+        m_potentialHp = 0;
+        setState(std::make_unique<DeadState>());
+    }
+    m_state->onExplosion(*this);
+}

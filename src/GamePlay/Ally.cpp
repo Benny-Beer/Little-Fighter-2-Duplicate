@@ -7,8 +7,7 @@
 Ally::Ally(const sf::Vector2f pos, const std::string& name, float speed)
     : ComputerPlayer(pos, name)
 {
-    m_hp = 500;
-    m_potentialHp = 500;
+    resetHP();
     m_speed = speed;
     // Starts with IdleState
     changeState(std::make_unique<IdleState>());
@@ -18,6 +17,8 @@ Ally::Ally(const sf::Vector2f pos, const std::string& name, float speed)
 
 Ally::Ally(PlayerData p) : ComputerPlayer(p)
 {
+    setPosition(getRandomYPosition(50, 400, 780));
+    m_prevPosition = getPosition();
     m_hp = p.m_hp;
     m_potentialHp = p.m_hp;
     m_speed = p.m_speed;
@@ -59,4 +60,9 @@ void Ally::handleCollision() {
 
 bool Ally::isAlive() const {
     return m_alive;
+}
+
+void Ally::resetHP() {
+    m_hp = 500;
+    m_potentialHp = 500;
 }

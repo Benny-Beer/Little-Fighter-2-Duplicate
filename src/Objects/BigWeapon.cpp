@@ -9,6 +9,7 @@ BigWeapon::BigWeapon(const sf::Vector2f pos, const std::string& name, std::uniqu
 void BigWeapon::update(float dt)
 {
     if (!picked()) {
+        std::cout << "Status is: " << getStatus() << "\n";
         Object::update(dt);
     }
     if (m_isFlying)

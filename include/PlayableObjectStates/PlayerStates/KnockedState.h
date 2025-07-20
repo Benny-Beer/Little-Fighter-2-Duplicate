@@ -1,4 +1,5 @@
 #pragma once
+#include "Consts/Consts.h"
 #include "PlayableObjectStates/PlayerStates/PlayerBaseState.h"
 
 class KnockedState : public PlayerBaseState {
@@ -16,6 +17,6 @@ public:
     void onExplosion(PlayableObject& player) override;
 
 private:
-    float m_recoveryTime = 2.0f;  // Time lying down before recovery
+    float m_recoveryTime = KNOCKED_RECOVERY_TIME;  // Time lying down before recovery
     float m_elapsedTime = 0.0f;
 };
