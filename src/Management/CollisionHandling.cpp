@@ -224,6 +224,16 @@ void enemyVSAlly(Object& enemyObj, Object& allyObj) {
 
 	if (ally.getHitCooldown() > 0.f)
 		return;
+    if (enemy.getPosition().x < ally.getPosition().x)
+    {
+        if (enemy.getDirection() < 0)
+            return;
+    }
+    else if (enemy.getPosition().x < ally.getPosition().x)
+    {
+        if (enemy.getDirection() > 0)
+            return;
+    }
 
 	auto enemyState = enemy.getState();
 	if (typeid(*enemyState) == typeid(AttackingState))
