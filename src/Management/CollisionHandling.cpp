@@ -201,8 +201,9 @@ void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
     auto enemyState = enemy.getState();
     if (typeid(*enemyState) == typeid(AttackingState))
     {
-        player.handleCommand(std::make_unique<HandsAttackCommand>());
         player.setHitCooldown(0.3f);
+        player.handleCommand(std::make_unique<HandsAttackCommand>());
+        
     }
 }
 
