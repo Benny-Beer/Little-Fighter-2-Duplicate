@@ -255,3 +255,13 @@ void PlayableObject::updateHp() {
     m_hpClock = m_hpClock % 36;
 }
 
+float PlayableObject::getHitCooldown() const
+{
+    return m_hitCooldown;
+}
+
+void PlayableObject::setHitCooldown(float cooldown)
+{
+	m_hitCooldown = cooldown;
+}
+

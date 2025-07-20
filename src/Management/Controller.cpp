@@ -17,8 +17,8 @@ Controller::Controller(sf::RenderWindow& window,
     std::vector<std::shared_ptr<Ally>> allies)
     : m_window(window),
     m_level(std::move(level)),
-    m_players(std::move(players))
-    //m_allies(std::move(allies))
+    m_players(std::move(players))/*,
+    m_allies(std::move(allies))*/
 {   
     m_numOfLevels = ResourceManager::instance().getNumOfLevels();
     //AnimationManager::loadAnimations();
@@ -447,7 +447,11 @@ void Controller::checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy)
 {
     for (auto& ally : m_allies) {
         if (ally->collide(*enemy))
+        {
             processCollision(*ally, *enemy);
+			processCollision(*enemy, *ally);
+        }
+
        
     }
 }
@@ -459,6 +463,7 @@ void Controller::checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy)
         {
             enemy->setXHit(player->getDirection());
             processCollision(*player, *enemy);
+			processCollision(*enemy, *player);
 
         }
 	}

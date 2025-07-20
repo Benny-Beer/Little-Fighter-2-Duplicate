@@ -183,19 +183,42 @@ void playerVsenemy(Object& playerObj, Object& enemyObj)
 			return;
 
 	auto playerState = player.getState();
-	auto enemyState = enemy.getState();
 
 	if (typeid(*playerState) == typeid(AttackState))
 	{
 		enemy.handleCommand(std::make_unique<HandsAttackCommand>());
-        enemy.setHitCooldown(3.0f);
-	}
-    else if (typeid(*enemyState) == typeid(AttackingState))
+        enemy.setHitCooldown(0.5f);
+	}    
+}
+
+void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
+    Player& player = static_cast<Player&>(playerObj);
+    Enemy& enemy = static_cast<Enemy&>(enemyObj);
+
+    if (player.getHitCooldown() > 0.f)
+        return;
+
+    auto enemyState = enemy.getState();
+    if (typeid(*enemyState) == typeid(AttackingState))
     {
         player.handleCommand(std::make_unique<HandsAttackCommand>());
-       // player.setHitCooldown(3.0f);
+        player.setHitCooldown(0.3f);
     }
-    
+}
+
+void enemyVSAlly(Object& enemyObj, Object& allyObj) {
+	ComputerPlayer& enemy = static_cast<ComputerPlayer&>(enemyObj);
+	auto& ally = static_cast<ComputerPlayer&>(allyObj);
+
+	if (ally.getHitCooldown() > 0.f)
+		return;
+
+	auto enemyState = enemy.getState();
+	if (typeid(*enemyState) == typeid(AttackingState))
+	{
+		ally.handleCommand(std::make_unique<HandsAttackCommand>());
+		ally.setHitCooldown(0.2f);
+	}
 }
 
 //PlayableObjec vs PlayebleObject collision
@@ -205,6 +228,9 @@ objectVsObjectMap initializeOvsOmap(){
     objectVsObjectMap map;
 
     map[{typeid(Player), typeid(Bandit)}] = &playerVsenemy;
+	map[{typeid(Bandit), typeid(Player)}] = &enemyVSPlayer;
+    map[{typeid(Bandit), typeid(Ally)}] = &enemyVSAlly;
+	map[{typeid(Ally), typeid(Bandit)}] = &enemyVSAlly;
 
     return map;
 }
