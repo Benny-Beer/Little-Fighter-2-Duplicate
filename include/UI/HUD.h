@@ -27,6 +27,7 @@ private:
 		void setCurrHp(const float amount);
 		
 	private:
+		std::shared_ptr<PlayableObject> m_member;
 		sf::RectangleShape m_frame;
 		sf::Sprite m_icon;
 		sf::Text m_name;
@@ -38,5 +39,6 @@ private:
 		float m_currHp = -1;
 	};
 	std::vector<HUD::CharacterFrame> m_characterFrames;
+	std::vector<std::shared_ptr<PlayableObject>> m_members;
 	
 };

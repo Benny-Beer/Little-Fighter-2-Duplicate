@@ -40,6 +40,7 @@ private:
     std::vector<std::shared_ptr<PickableObject>> m_pickables;
     std::vector<std::shared_ptr<PickableObject>> m_objQueue;
     std::vector<std::shared_ptr<PlayableObject>> m_deads;
+    int m_numOfLevels;
     int m_nextLevelIndex = 1; // means level 2
     int m_nextStageIndex = 1;
     bool m_waitingForNextWave = false;

@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <Objects/PlayableObject.h>
 #include <iostream>
-HUD::HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<PlayableObject>>& members) {
+HUD::HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<PlayableObject>>& members) : m_members(members) {
     // Step 1: HUD frame setup (top 15% of screen, blue color)
     float frameWidth = static_cast<float>(screenSize.x);
     float frameHeight = static_cast<float>(screenSize.y * 0.15f);
@@ -26,14 +26,11 @@ HUD::HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<Playab
         m_characterFrames.emplace_back(size, position, members[i]);
     }
 }
-void HUD::update(const std::vector<std::shared_ptr<PlayableObject>>& members)
+void HUD::update()
 {
     int i = 0;
     for (auto& frame : m_characterFrames) {
-        if (i < members.size()) {
-           // frame.update(members[i]);
-            //++i;
-        }
+        frame.update();
     }
 }
 void HUD::draw(sf::RenderWindow& window) {
