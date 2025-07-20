@@ -176,7 +176,7 @@ void playerVsenemy(Object& playerObj, Object& enemyObj)
     auto playerDirX = player.getDirection();
 	auto enemyDirX = enemy.getDirection();
 	if (player.getPosition().x < enemy.getPosition().x) // if player is on the left side of the enemy
-	    if (playerDirX == enemyDirX) 
+	    if (playerDirX  < 0) 
 		    return;
 	if (player.getPosition().x > enemy.getPosition().x) // if player is on the right side of the enemy
         if(playerDirX == 1)
@@ -197,6 +197,17 @@ void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
 
     if (player.getHitCooldown() > 0.f)
         return;
+
+    if (enemy.getPosition().x < player.getPosition().x)
+    {
+        if (enemy.getDirection() < 0)
+            return;
+    }
+    else if (enemy.getPosition().x < player.getPosition().x)
+    {
+        if (enemy.getDirection() > 0)
+            return;
+    }
 
     auto enemyState = enemy.getState();
     if (typeid(*enemyState) == typeid(AttackingState))
