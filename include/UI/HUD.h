@@ -10,14 +10,14 @@ class PlayableObject;
 class HUD {
 public:
 	HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<PlayableObject>>& members);
-	void update(const std::vector<std::shared_ptr<PlayableObject>>& members);
+	void update();
 	void draw(sf::RenderWindow& window);
 private:
 	sf::RectangleShape m_frame;
 	class CharacterFrame {
 	public:
 		CharacterFrame(const sf::Vector2f size, const sf::Vector2f position, const std::shared_ptr<PlayableObject>& member);
-		void update(const std::shared_ptr<PlayableObject>& character);
+		void update();
 		void draw(sf::RenderWindow& window);
 		float getMaxHp() const;
 		void setMaxlHp(const float amount);

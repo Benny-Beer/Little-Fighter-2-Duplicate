@@ -42,7 +42,7 @@ void HUD::draw(sf::RenderWindow& window) {
 
 // ----- CharacterFrame methods -----
 
-HUD::CharacterFrame::CharacterFrame(const sf::Vector2f size, const sf::Vector2f position, const std::shared_ptr<PlayableObject>& member) {
+HUD::CharacterFrame::CharacterFrame(const sf::Vector2f size, const sf::Vector2f position, const std::shared_ptr<PlayableObject>& member): m_member(member) {
     m_frame.setSize(size);
     m_frame.setOrigin(0.5f, 0.5f);
     m_frame.setPosition(position);
@@ -66,41 +66,46 @@ HUD::CharacterFrame::CharacterFrame(const sf::Vector2f size, const sf::Vector2f 
     sf::Vector2f fullBarSize(size.x - iconBound.x - 50.f, 20.f);
     sf::Vector2f barPosition(m_icon.getPosition().x + iconBound.x + 20.f, m_icon.getPosition().y);
     
-    m_hpBar.setFillColor(sf::Color(225, 0, 0));
+    m_hpBar.setFillColor(sf::Color(255, 0, 0));
     m_hpBar.setPosition(barPosition);
     m_hpBar.setSize(fullBarSize);
-  /*
-    m_potentialHpBar.setFillColor(sf::Color(0, 80, 0));
+  
+    m_potentialHpBar.setFillColor(sf::Color(140, 0, 0));
     m_potentialHpBar.setPosition(barPosition);
     m_potentialHpBar.setSize(fullBarSize);
     
-    m_hpBarPlaceholder.setFillColor(sf::Color(225, 0, 0));
+    m_hpBarPlaceholder.setFillColor(sf::Color(90, 90, 190));
     m_hpBarPlaceholder.setPosition(barPosition);
     m_hpBarPlaceholder.setSize(fullBarSize);
-    */
-}
 
-
-void HUD::CharacterFrame::update(const std::shared_ptr<PlayableObject>& character) {
-    //update the size of the relevnt hp bar
-    float maxHp, potentialHp, currHp;
-
-    maxHp = getMaxHp();
-    potentialHp = character->getPotentialHp();
-    currHp = character->getHp();
-
-    std::cout << "n\n\n currHp\n\n\n" << currHp << std::endl;
-    sf::Vector2f newSize;
-    //set the size of potentialHp bar
-    newSize.x = potentialHp / maxHp * m_hpBarPlaceholder.getGlobalBounds().width;
-    newSize.y = m_hpBarPlaceholder.getGlobalBounds().height;
-    m_potentialHpBar.setSize(newSize);
-    //calculate curr a % of potential
-    newSize.x = currHp / potentialHp * m_hpBarPlaceholder.getGlobalBounds().width;
-    newSize.y = m_hpBarPlaceholder.getGlobalBounds().height;
-    m_hpBar.setSize(newSize);
+	m_maxHp = m_member->getHp();         // Use member!
     
 }
+
+
+void HUD::CharacterFrame::update() {
+    float maxHp = m_maxHp;         // Use member!
+    float potentialHp = m_member->getPotentialHp();
+    float currHp = m_member->getHp();
+
+    if (currHp <= 0) {
+		m_potentialHpBar.setSize(sf::Vector2f(0.f, m_potentialHpBar.getSize().y));
+		m_hpBar.setSize(sf::Vector2f(0.f, m_hpBar.getSize().y));
+    }
+
+    if (maxHp <= 0.f || potentialHp <= 0.f)
+        return;
+
+    float fullWidth = m_hpBarPlaceholder.getGlobalBounds().width;
+    float height = m_hpBarPlaceholder.getGlobalBounds().height;
+
+    // Potential as percent of max
+    m_potentialHpBar.setSize(sf::Vector2f(potentialHp / maxHp * fullWidth, height));
+    
+    // Current as percent of potential
+    m_hpBar.setSize(sf::Vector2f(currHp / potentialHp * fullWidth, height));
+}
+
 
 void HUD::CharacterFrame::draw(sf::RenderWindow& window) {
     window.draw(m_frame);

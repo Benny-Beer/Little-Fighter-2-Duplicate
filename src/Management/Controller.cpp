@@ -184,7 +184,7 @@ void Controller::updateWorld(float deltaTime)
      //m_level->update(deltaTime);
     //      TODO: create uptade() in Level - needs to update m_enemies!
 
-    m_stats.update(getPlayerAndAllies());
+    m_stats.update();
 
     if(m_players.size())
         m_level->handleCollisionsWithPlayer(*m_players.back()); // currently through level, need to transfer into controller
