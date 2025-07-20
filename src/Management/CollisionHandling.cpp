@@ -34,9 +34,8 @@ using ObjectCollisionFunc = void(*)(Object&, Object&);
 using objectVsObjectMap = std::map<KeyOO, ObjectCollisionFunc>;
 
 
-//
-// פונקציה גנרית — template — לאיסוף חפץ
-//
+
+// picking object generic func
 template <typename T>
 void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
@@ -45,7 +44,6 @@ void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pic
     if (player.isHoldingWeapon(object))
         return;
     
-    //not so nice!!!!!
 	if (typeid(*player.getState()) == typeid(JumpingState) || typeid(*player.getState()) == typeid(AttackState))
 	{
 		return;
@@ -55,7 +53,7 @@ void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pic
 }
 
 //
-// wrapper בשביל להכניס למפה
+// wrapper to insert into map
 //
 template <typename T>
 void playerPickableObjectWrapper(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
@@ -118,8 +116,8 @@ HitMap initializeCollisionMap()
 
     map[{typeid(Player), typeid(Rock), typeid(void)}] = &playerPickableObjectWrapper<Rock>;
     map[{typeid(Player), typeid(Box), typeid(void)}] = &playerPickableObjectWrapper<Box>;
+
     //Box
-    //map[{ typeid(Ally), typeid(Box), typeid(Bandit)}] = &enemyAttackingAlly;
     map[{ typeid(Bandit), typeid(Box), typeid(Ally)}] = &enemyAttackingAlly;
     map[{ typeid(Bandit), typeid(Box), typeid(Player)}] = &enemyAttacked;
     map[{ typeid(Player), typeid(Box), typeid(Bandit)}] = &enemyAttacked;
@@ -131,14 +129,14 @@ HitMap initializeCollisionMap()
     map[{ typeid(Player), typeid(Rock), typeid(Bandit)}] = &playerAttacked;
     map[{ typeid(Ally), typeid(Rock), typeid(Bandit)}] = &enemyAttacked;
 
-    //map[{ typeid(Ally), typeid(Rock), typeid(Bandit)}] = &enemyAttackingAlly;
-    //map[{ typeid(Player), typeid(Rock), typeid(Bandit)}] = &playerAttackingEnemy;
+
     //Box
     map[{ typeid(Ally), typeid(Box), typeid(Ally)}] = &friendlyFire;
     map[{ typeid(Ally), typeid(Box), typeid(Player)}] = &friendlyFire;
     map[{ typeid(Player), typeid(Box), typeid(Ally)}] = &friendlyFire;
     map[{ typeid(Bandit), typeid(Box), typeid(Bandit)}] = &friendlyFire;
     map[{ typeid(Player), typeid(Box), typeid(Player)}] = &friendlyFire;
+
     //Rock
     map[{ typeid(Ally), typeid(Rock), typeid(Ally)}] = &friendlyFire;
     map[{ typeid(Ally), typeid(Rock), typeid(Player)}] = &friendlyFire;
@@ -156,7 +154,7 @@ void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
     static HitMap map = initializeCollisionMap();
     Object* holder = obj2->getHolder();
     std::type_index holderType = holder ? typeid(*holder) : typeid(void);
-    std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << " IN STATUS: " << obj2->getStatus() << " and holder was " << holderType.name() << std::endl;
+    //std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << " IN STATUS: " << obj2->getStatus() << " and holder was " << holderType.name() << std::endl;
 	auto it = map.find({ typeid(obj1), typeid(*obj2), holderType });
     if (it != map.end())
     {
@@ -212,6 +210,7 @@ void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
     auto enemyState = enemy.getState();
     if (typeid(*enemyState) == typeid(AttackingState))
     {
+        alignAttacker(enemyObj, playerObj);
         player.setHitCooldown(0.3f);
         player.handleCommand(std::make_unique<HandsAttackCommand>());
         
@@ -238,8 +237,10 @@ void enemyVSAlly(Object& Obj1, Object& Obj2) {
 	auto enemyState = attacker.getState();
 	if (typeid(*enemyState) == typeid(AttackingState))
 	{
-		attacked.handleCommand(std::make_unique<HandsAttackCommand>());
-		attacked.setHitCooldown(0.2f);
+        alignAttacker(enemyObj, allyObj);
+		    ally.handleCommand(std::make_unique<HandsAttackCommand>());
+		    ally.setHitCooldown(0.2f);
+
 	}
 }
 
@@ -260,11 +261,23 @@ objectVsObjectMap initializeOvsOmap(){
 void processCollision(Object& object1, Object& object2)
 {
 	static objectVsObjectMap map = initializeOvsOmap();
-	std::cout << "Processing collision between " << typeid(object1).name() << " and " << typeid(object2).name() << std::endl;
+	//std::cout << "Processing collision between " << typeid(object1).name() << " and " << typeid(object2).name() << std::endl;
 	auto it = map.find({ typeid(object1), typeid(object2) });
 	if (it != map.end())
 	{
 		it->second(object1, object2);
 	}
 	
+}
+
+void alignAttacker(Object& enemyObj, Object& playerObj)
+{
+    sf::Vector2f playerPos = enemyObj.getPosition();
+    sf::Vector2f targetPos = playerObj.getPosition();
+
+    float dx = playerPos.x - targetPos.x;
+    float sign = (dx >= 0) ? LEFT : RIGHT;
+    float alignedY = targetPos.y;
+
+    enemyObj.setPosition({ playerPos.x, alignedY });
 }

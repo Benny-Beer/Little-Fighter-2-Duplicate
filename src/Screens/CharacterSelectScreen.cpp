@@ -4,7 +4,7 @@
 #include "Management/ResourceManager.h"
 #include "Management/GameManager.h"
 #include "Gameplay/Player.h"
-#include <cmath> // for std::sin
+#include <cmath> 
 #include <iostream>
 
 CharacterSelectScreen::CharacterSelectScreen(sf::RenderWindow& window, GameManager& manager)
@@ -18,7 +18,7 @@ CharacterSelectScreen::CharacterSelectScreen(sf::RenderWindow& window, GameManag
         }
     }
     sf::Vector2f screenSize = static_cast<sf::Vector2f>(m_window.getSize());
-    // Background (optional)
+  
     m_backGround = Background(screenSize, sf::Color::Black);
     
     m_frame.setSize(screenSize * 0.9f);

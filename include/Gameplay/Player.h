@@ -28,31 +28,19 @@ public:
 
     void handleInput(sf::Event event);                 // Reads arrow-key state (?) m_direction
     void update(float dt);
-    //void move(float dt);                                // Moves position by m_direction * speed * dt
-    //void setDiraction(Input input);
-               
-    //void draw(sf::RenderWindow& window) override;/* Draws the sprite at current position */
-    void handleCollision() override;    // Stub for future collision handling
+    void handleCollision() override;    
 
     void setSpeed(float speed);
-    //float getSpeed() const;
 
     bool isAlive() const;
     void resetHP();
-    /* Keep the player inside the window bounds */
+    // Keep the player inside the window bounds
     void clampToWindow(const sf::Vector2u& windowSize);
 
-    /*void setAnimation(const Animation& anim);*/
-    //void setState(std::unique_ptr<PlayerBaseState> state);
     void setAttack(std::unique_ptr<AttackBehavior> attack);
-    //void pickUpObject(std::shared_ptr<PickableObject> obj);
 
     void setAniName(const std::string& name);
-    //void setStrategyName(const std::string& name); 
-    //void attack();
 	
-
-	//int getDirection() const { return static_cast<int>(m_dir); } 
     const PlayableObjectState* getState() const { return m_state.get(); }
 
     virtual void onStoneHit();

@@ -5,7 +5,7 @@ Object::Object(const sf::Vector2f pos, const std::string& name)
 {
 	m_texture = &ResourceManager::instance().getTexture(name);
 	m_sprite.setTexture(*m_texture);
-	m_sprite.setOrigin(40.f, 80.f); // 80 / 2
+	m_sprite.setOrigin(40.f, 80.f); 
 	m_sprite.setPosition(pos);
 }
 
@@ -66,8 +66,7 @@ bool Object::collide(Object& other) const
 	sf::FloatRect thisBounds = m_sprite.getGlobalBounds();
 	sf::FloatRect otherBounds = other.getGlobalBounds();
 
-	// ä÷èðä àå äâãìä ùì âáåìåú – ìôé äöåøê ùìê
-	const float buffer = -20.f; // <0: ä÷èðä ùì ä÷åôñä (îãåé÷ú éåúø), >0: äâãìä (øëä éåúø)
+	const float buffer = -20.f; 
 
 	thisBounds.left -= buffer;
 	thisBounds.top -= buffer;
@@ -126,11 +125,11 @@ void Object::setOrigin(float x, float y)
 
 void Object::adjustBoundsToJump()
 {
-	m_bounds = sf::FloatRect(-25, 280, 1050, 520);
+	m_bounds = BOUNDS_WITH_JUMP;
 }
 void Object::adjustBoundsBack()
 {
-	m_bounds = sf::FloatRect(-25, 380, 1050, 420);
+	m_bounds = WORLD_BOUNDS;
 }
 
 
@@ -143,9 +142,6 @@ sf::Sprite& Object::getSprite() {
 	return m_sprite;
 }
 
-//const sf::Sprite& Object::getSprite() const {
-//	return m_sprite;
-//}
 
 sf::Vector2f Object::getGeometricCenter() const {
 	return {

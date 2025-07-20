@@ -37,11 +37,12 @@ public:
 		return nullptr; 
 	};
 	std::string getStrategyName();
-	//virtual bool isAttacked() const;
-	//virtual void attack();
 	virtual void tookItem();
 	virtual void wantItem();
 	virtual bool needItem();
+	virtual void startAttackTimer();
+
+	virtual bool canAttack();
 
 	// in-game Events:
 	virtual void onStoneHit() = 0;
@@ -75,7 +76,6 @@ protected:
 	std::string m_currentAnimationName;
 	std::string m_name;
 	sf::Vector2f m_prevPosition;
-	//bool m_underAttack = false;
 	bool m_needItem = true;
 	std::shared_ptr<sf::Texture> m_icon;
 	std::unique_ptr<PlayableObjectState> m_state;
@@ -87,6 +87,8 @@ protected:
 	float m_attackRange = 50.f;
 	int m_xdirHit = 0;
 	float m_hitCooldown = 0.f;
+	bool m_attackTimer = false;
+	bool m_canAttack = true;
 };
 
 

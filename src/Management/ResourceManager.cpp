@@ -2,7 +2,7 @@
 #include "Gameplay/Player.h"
 #include "Gameplay/Level.h"
 
-/* static */ ResourceManager& ResourceManager::instance()
+ResourceManager& ResourceManager::instance()
 {
     static ResourceManager s_instance;   // Constructed on first use, destroyed on exit.
     return s_instance;

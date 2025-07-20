@@ -10,9 +10,7 @@ void BlockingState::enter(PlayableObject& player) {
     player.dropHeldObj();
 
     player.setAniName("blocking");
-    //player.setDiraction(m_input); 
     m_elapsedTime = 0.0f;
-    // need information that the player is now blocking - ?
 
 }
 
@@ -21,13 +19,12 @@ void BlockingState::update(PlayableObject& player, float deltaTime) {
     m_elapsedTime += deltaTime;
 
     if (m_elapsedTime >= m_blockDuration) {
-        // need information that the player is no longer blocking - ?
         player.setState(std::make_unique<RetreatingState>());
     }
 }
 
 void BlockingState::exit(ComputerPlayer& player) {
-    player.setBlocking(false); // Ensure cleanup even if exited early
+    player.setBlocking(false); 
 }
 
 void BlockingState::name() {

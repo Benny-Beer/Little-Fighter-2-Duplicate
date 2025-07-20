@@ -22,11 +22,8 @@ public:
     bool wasKnockedDown() const;
     bool needsEnemyTracking() const;
     void clearHitFlags();
-    //void setTargetEnemy(PlayableObject* target);
     void setTarget(std::shared_ptr<Object> obj);
-    //sf::Vector2f getPosition();
     std::shared_ptr<Object> getTarget() override;
-    //std::shared_ptr<PickableObject> getObject() override;
     void setBlocking(bool blocking);
     void setControllable(bool control);
     void performAttack(PlayableObject &target);
@@ -35,13 +32,13 @@ public:
 
 
 protected:
-    //std::unique_ptr<ComputerPlayerState> m_state; -->INHERIT IT FROM PLAYABLEOBJECT 
     bool m_wasHit = false;
     bool m_wasKnockedDown = false;
     std::shared_ptr<Object> m_target = nullptr;
-    //sf::Vector2f m_position;
     bool m_controllable = true;
     bool m_blocking = false;
+    bool m_attackTimer = false;
+    
 
 private:
     float distance(const sf::Vector2f& a, const sf::Vector2f& b);
@@ -50,4 +47,7 @@ private:
     virtual void onBoxHit();
     virtual void onHandsAttack();
     virtual void onExplosion();
+    float m_attackWaitingTime = 5.0f;
+    float m_attackCoolDown = 0.f;
+    bool m_canAttack = true;
 };

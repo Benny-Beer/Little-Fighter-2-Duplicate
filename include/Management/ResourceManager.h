@@ -6,7 +6,7 @@
 #include <string>
 #include <stdexcept>
 
-struct PlayerData; // forward declaration
+struct PlayerData; 
 class Level;
 
 struct AssetMeta {

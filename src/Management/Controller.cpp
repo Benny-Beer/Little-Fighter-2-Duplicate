@@ -22,38 +22,11 @@ Controller::Controller(sf::RenderWindow& window,
     m_stats(HUD(window.getSize(), getPlayerAndAllies()))
 {   
     m_numOfLevels = ResourceManager::instance().getNumOfLevels();
-    //AnimationManager::loadAnimations();
-    //=============================================================
-    // === this section is hard coded. need to be done in Level ===
-    // add pickable (rock)
-
-
- 
-   // std::string objectLine = "r b r";
-
-
-
-   // m_level->addPickableObjects(objectLine);
-    // add enemies (one bandit)
-    std::string sq = "b10";
-    m_level->addSquad(sq);
-
-    // creating ally
-
-   // auto ally = std::make_shared<Ally>(sf::Vector2f(100, 450), "davis_ani",60.f);
-   /* auto allyTwo = std::make_shared<Ally>(sf::Vector2f(100, 550), "davis_ani", 60.f);
-    auto allyThree = std::make_shared<Ally>(sf::Vector2f(100, 650), "davis_ani", 60.f);
-    auto allyFour = std::make_shared<Ally>(sf::Vector2f(100, 750), "davis_ani", 60.f);*/
-
-
-   // m_allies.push_back(ally);
-    /*m_allies.push_back(allyTwo);
-    m_allies.push_back(allyThree);
-    m_allies.push_back(allyFour);*/
     m_enemies = m_level->getAllEnemies();
     m_objQueue = m_level->getAllObjects();
     transferNextPickable();
     updateComputerPlayerStats();
+
 
     std::vector<std::shared_ptr<PlayableObject>> members;
     for (const auto& p : m_players) {
@@ -125,7 +98,7 @@ void Controller::updateWorld(float deltaTime)
     for (auto& player : m_players)
     {
         player->update(deltaTime);
-        m_level->handleCollisionsWithPlayer(*player); // currently through level, need to transfer into controller
+        m_level->handleCollisionsWithPlayer(*player); 
 
     }
 
@@ -133,7 +106,7 @@ void Controller::updateWorld(float deltaTime)
     {
 
        ally->update(deltaTime);
-       m_level->handleCollisionsWithPlayer(*ally);//TODO: update() in Ally
+       m_level->handleCollisionsWithPlayer(*ally);
 
     }
     for (auto& enemy : m_enemies)
@@ -168,7 +141,7 @@ void Controller::updateWorld(float deltaTime)
         std::shared_ptr<Player> player = m_players[i];
         if (!player)
             continue;
-        if (!player->getState()->isAccessible()/*player->getHp() <= 0*/) {
+        if (!player->getState()->isAccessible()) {
             removeAccess(player, m_players);
             i--;
         }
@@ -180,14 +153,11 @@ void Controller::updateWorld(float deltaTime)
         transferNextPickable();
     }
 
-    // Update the level itself (enemies, objects, etc.)
-     //m_level->update(deltaTime);
-    //      TODO: create uptade() in Level - needs to update m_enemies!
 
     m_stats.update();
 
     if(m_players.size())
-        m_level->handleCollisionsWithPlayer(*m_players.back()); // currently through level, need to transfer into controller
+        m_level->handleCollisionsWithPlayer(*m_players.back()); 
 
 
 }
@@ -237,7 +207,6 @@ void Controller::render()
     for (const auto& dead : m_deads)
     {
         dead->draw(m_window);
-        // until we'll have HUD
         printHp(dead->getHp(), { 750.f, 10.f + i }, false);
         printHp(dead->getPotentialHp(), { 750.f, 30.f + i }, true);
         i += 40.f;
@@ -250,7 +219,6 @@ void Controller::render()
     for (const auto& player : m_players)
     {
         player->draw(m_window);
-        // until we'll have HUD
         printHp(player->getHp(), { 480.f, 10.f + i }, false);
         printHp(player->getPotentialHp(), { 480.f, 30.f + i }, true);
         i += 40.f;
@@ -261,7 +229,6 @@ void Controller::render()
     {
 
         ally->draw(m_window);
-        // until we'll have HUD
         printHp(ally->getHp(), { 10.f, 10.f + i}, false);
         printHp(ally->getPotentialHp(), { 10.f, 30.f+i }, true);
         i += 40.f;
@@ -273,7 +240,6 @@ void Controller::render()
     for (const auto& enemy : m_enemies)
     {
         enemy->draw(m_window);
-        // until we'll have HUD
         printHp(enemy->getHp(), { 930.f, 10.f + i}, false);
         printHp(enemy->getPotentialHp(), { 930.f, 30.f + i}, true);
         i += 40.f;
@@ -291,7 +257,6 @@ void Controller::render()
     {
         printStageAlert("Congratulations! \n YOU WON!");
     }
-    // Draw HUD
 	m_stats.draw(m_window);
 
 
@@ -301,7 +266,7 @@ void Controller::render()
 void Controller::setPlayer(PlayerData player)
 {
     m_players.push_back(std::make_shared<Player>(player));
-    //add support to multipule players. 
+  
 }
 
 void Controller::setAlly(std::shared_ptr<Ally> ally)
@@ -314,16 +279,6 @@ void Controller::setAlly(std::shared_ptr<Ally> ally)
 	}
 }
 
-//void Controller::updateAndRender(float deltaTime)
-//{
-//    if (m_levelFinished)
-//        return;
-//
-//    handleInput(deltaTime);
-//    updateWorld(deltaTime);
-//    checkLevelEndConditions();
-//    render();
-//}
 
 
 void Controller::launchNextStage()
@@ -493,7 +448,7 @@ void Controller::resetPlayersStats()
 
 
 void Controller::printStageAlert(const std::string& message) {
-    //sf::Font& font = ResourceManager::instance().getFont("bigFont"); // ����� ������ ��� ����
+
     static sf::Font font;
     static bool loaded = false;
     if (!loaded) {
@@ -504,15 +459,15 @@ void Controller::printStageAlert(const std::string& message) {
     sf::Text alert;
     alert.setFont(font);
     alert.setString(message);
-    alert.setCharacterSize(64); // ���� ���� ����
-    alert.setFillColor(sf::Color::White); // ��� ���
-    alert.setOutlineColor(sf::Color::Black); // �� ���� ����
+    alert.setCharacterSize(64); 
+    alert.setFillColor(sf::Color::White); 
+    alert.setOutlineColor(sf::Color::Black);
     alert.setOutlineThickness(4.f);
 
-    // ����� ���� ����
+   
     sf::FloatRect bounds = alert.getLocalBounds();
     alert.setOrigin(bounds.width / 2, bounds.height / 2);
-    alert.setPosition(m_window.getSize().x / 2.f, m_window.getSize().y / 4.f); // ����� �����
+    alert.setPosition(m_window.getSize().x / 2.f, m_window.getSize().y / 4.f); 
 
     m_window.draw(alert);
 }

@@ -9,18 +9,17 @@
 #include "PlayableObjectStates/ComputerPlayerState/BlockingState.h"
 #include "GamePlay/ComputerPlayer.h"
 #include "Objects/PlayableObject.h"
-#include <cmath> // sqrt, etc.
+#include <cmath> 
 #include <iostream>
 
 ApproachingEnemyState::ApproachingEnemyState(std::shared_ptr<Object> target)
     : m_target(std::move(target)) {
-    //std::cout << target->getPosition().x << "." << target->getPosition().y << std::endl;
 }
 
 void ApproachingEnemyState::enter(PlayableObject& player) {
     
     player.setAniName("walking");
-    //player.setDiraction(m_input); 
+
 }
 
 void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
@@ -40,21 +39,14 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
             m_target = player.getTarget();
         }
     }
-    // std::cout << player.getName() << " - MY TARGET NAME IS: " << m_target->getName() << std::endl;
 
-    //if (player.isAttacked()) {
-    //    player.setState(std::make_unique<BlockingState>());
-    //    return;
-    //}
 
     sf::Vector2f playerPos = player.getPosition();
-    //std::shared_ptr<Object> target = player.getTarget();
     sf::Vector2f direction = m_target->getPosition() - playerPos;
 
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-    //std::cout << "[ApproachingEnemyState] " << player.getName() << " distance to " << m_target->getName() << ":" << distance << std::endl;
 
-    if (distance < player.getAttackRange() /* && (playerPos.x - target->getPosition().x) == 0.f*/) {
+    if (distance < player.getAttackRange()) {
         player.setState(std::make_unique<AttackingState>(m_target));
         return;
     }
@@ -63,7 +55,7 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     if (distance != 0) {
         direction /= distance;
     }
-    //
+    
     // Move toward enemy
     float speed = player.getSpeed(); 
     player.move(direction * speed * deltaTime);
@@ -72,18 +64,15 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     {
         player.getHeldObj()->move(player.getPosition());
     }
-   // std::cout << "im at the end\n" << "because " << m_target->getPosition().x << "\n";
 }
 
 void ApproachingEnemyState::exit(ComputerPlayer& player) {
-    // Optional: stop movement, reset animation, etc.
 }
 
 void ApproachingEnemyState::onHandsAttack(PlayableObject& player) {
 
     player.setState(std::make_unique<BlockingState>());
 
-    //player.setState(std::make_unique<BlockingState>());
 }
 
 void ApproachingEnemyState::onStoneHit(PlayableObject& player) {

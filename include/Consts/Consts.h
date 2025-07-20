@@ -12,6 +12,8 @@ const float BOUNDS_WIDTH = 1050.f;
 const float BOUNDS_HEIGHT = 420.f;
 
 const sf::FloatRect WORLD_BOUNDS(X_BOUND, Y_BOUND, BOUNDS_WIDTH, BOUNDS_HEIGHT);
+const sf::FloatRect BOUNDS_WITH_JUMP(X_BOUND, Y_BOUND - 100.f, BOUNDS_WIDTH, BOUNDS_HEIGHT+100.f);
+
 const sf::FloatRect SEARCHING_BOUNDS(X_BOUND + 75.f, Y_BOUND + 70.f, BOUNDS_WIDTH - 150.f, BOUNDS_HEIGHT - 120.f);
 
 // DIRECTIONS
@@ -21,7 +23,7 @@ const float RIGHT = 1.f;
 // PHYSICS (SPEED, GRAVITY, ECT.)
 const sf::Vector2f OBJ_OFFSET(2.f, -62.f);
 const float ALLY_SPEED = 200.f;
-const float ENEMY_SPEED = 170.f;
+const float ENEMY_SPEED = 40.f;
 const float BIG_WEAPON_THROWING_SPEED = 700.f;
 const float BIG_WEAPON_GRAVITY = 1000.f;
 const float OBJ_DROP_SPEED = 400.f;

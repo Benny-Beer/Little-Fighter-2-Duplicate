@@ -30,9 +30,7 @@ Ally::Ally(PlayerData p) : ComputerPlayer(p)
 
 void Ally::update(float dt) {
 
-    //m_prevPosition = getPosition();
-
-    ComputerPlayer::update(dt);  // זה מפעיל את ה־state
+    ComputerPlayer::update(dt);  
     if (m_currentAnimationName != m_aniName + m_strategyName) {
         setAnimation(AnimationManager::getAnimation(m_aniName + m_strategyName, getTexture()));
         m_currentAnimationName = m_aniName + m_strategyName;
@@ -40,12 +38,10 @@ void Ally::update(float dt) {
     updateScale();
     updateAnimation(dt);
     apllySprite();
-    //m_prevPosition = getPosition();
 
 }
 
 void Ally::handleCollision() {
-    // עדיין לא מוגדר מה קורה בהתנגשות, אז נשאיר ריק בינתיים
 }
 
 

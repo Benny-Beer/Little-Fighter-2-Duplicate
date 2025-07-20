@@ -11,12 +11,10 @@ class GameManager {
 public:
 	GameManager();
 	void switchScreen(std::unique_ptr<IScreen> nextState);
-	//void readLevels(std::string path);
 	void run();
 
 private:
 	sf::RenderWindow m_window;
-	//std::vector<Level> m_levels;
 	std::unique_ptr<IScreen> m_currScreen;
 	std::unique_ptr<IScreen> m_nextScreen = nullptr;
 	

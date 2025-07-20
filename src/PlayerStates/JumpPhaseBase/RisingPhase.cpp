@@ -9,9 +9,6 @@ RisingPhase::RisingPhase(float duration, float speed, float groundY)
 }
 
 std::unique_ptr<JumpPhaseBase> RisingPhase::update(PlayableObject& player, float dt) {
-    /*auto pos = player.getPosition();
-    pos.y -= m_speed * dt;
-    player.setPosition(pos);*/
     player.adjustBoundsToJump();
     player.setDiraction(Input::PRESS_JUMP);
     player.move(dt);

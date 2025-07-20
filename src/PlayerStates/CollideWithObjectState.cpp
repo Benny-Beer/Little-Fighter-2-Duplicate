@@ -5,6 +5,7 @@
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include "PlayableObjectStates/PlayerStates/AttackState.h"
 #include "PlayableObjectStates/PlayerStates/KnockedState.h"
+#include "PlayableObjectStates/PlayerStates/PlayerGotHitState.h"
 
 #include "Gameplay/Player.h"
 
@@ -47,8 +48,7 @@ std::unique_ptr<PlayableObjectState> CollideWithObject::handleInput(Input input)
 
 void CollideWithObject::enter(PlayableObject& player)
 {
-
-	//player.setDiraction(m_input);
+	std::cout << "CollideWithObject::enter\n";
 }
 
 void CollideWithObject::update(PlayableObject& player, float dt)
@@ -64,24 +64,20 @@ void CollideWithObject::update(PlayableObject& player, float dt)
 
 void CollideWithObject::onHandsAttack(PlayableObject& player)
 {
-	player.setAniName("gothit");
-	player.setState(std::make_unique<KnockedState>());
+	player.setState(std::make_unique<PlayerGotHitState>());
 }
 
 void CollideWithObject::onStoneHit(PlayableObject& player)
 {
-	player.setAniName("knockedDown");
 	player.setState(std::make_unique<KnockedState>());
 }
 
 void CollideWithObject::onBoxHit(PlayableObject& player)
 {
-	player.setAniName("knockedDown");
 	player.setState(std::make_unique<KnockedState>());
 }
 
 void CollideWithObject::onExplosion(PlayableObject& player)
 {
-	player.setAniName("knockedDown");
 	player.setState(std::make_unique<KnockedState>());
 }

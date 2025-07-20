@@ -20,6 +20,20 @@ void ComputerPlayer::update(float dt)
     if (m_hitCooldown > 0.f)
         m_hitCooldown -= dt;
 
+    if (m_attackTimer) {
+
+        m_attackCoolDown += dt;
+
+        if (m_attackCoolDown >= m_attackWaitingTime) {
+            m_canAttack = true;
+            m_attackTimer = false;
+            m_attackCoolDown = 0.f;
+        }
+    }
+    else {
+        m_canAttack = true; 
+    }
+
     Object::update(dt);
     m_prevPosition = getPosition();
     if (m_state) {
@@ -28,7 +42,6 @@ void ComputerPlayer::update(float dt)
     }
     updateHp();
     updateDirection();
-    //m_state->name();
 
 }
 void ComputerPlayer::changeState(std::unique_ptr<ComputerPlayerState> newState) {
@@ -83,32 +96,17 @@ float ComputerPlayer::distance(const sf::Vector2f& a, const sf::Vector2f& b) {
     return std::sqrt(dx * dx + dy * dy);
 }
 
-//void ComputerPlayer::setTargetEnemy(PlayableObject* target) {
-//    m_target = target;
-//}
 
 void ComputerPlayer::setTarget(std::shared_ptr<Object> obj) {
     m_target = obj;
 }
-//sf::Vector2f ComputerPlayer::getPosition()
-//{
-//   return m_position;
-//}
+
 
 std::shared_ptr<Object> ComputerPlayer::getTarget()
 {
     return m_target;
 }
-//std::shared_ptr<PickableObject> ComputerPlayer::getObject()
-//{
-//    //if (!m_targetObject)
-//    //    std::cout << "THERE IS NO OBJECT!\n";
-//    //else {
-//    //    std::cout << "THERE IS OBJECT!\n";
-//
-//    //}
-//    return m_targetObject;
-//}
+
 
 void ComputerPlayer::setBlocking(bool blocking)
 {
@@ -122,19 +120,17 @@ void ComputerPlayer::setControllable(bool control)
 
 void ComputerPlayer::performAttack(PlayableObject& target)
 {
-    // TODO: implement his properly (attack only if collision it true)
-    // std::cout << "[ComputerPlayer] attacking now" << std::endl;
+
 }
 
 void ComputerPlayer::pickUp(PickableObject& pickable)
 {
-    // TODO: implement his properly (pick only if collision it true)
+
 
 }
 
 void ComputerPlayer::updateDirection()
 {
-    //std::cout << m_prevPosition.x << " ," << getPosition().x << std::endl;
     m_dir = m_prevPosition.x < getPosition().x ? Direction::RIGHT : Direction::LEFT;
 }
 
@@ -181,3 +177,5 @@ void ComputerPlayer::onExplosion()
     }
     m_state->onExplosion(*this);
 }
+
+
