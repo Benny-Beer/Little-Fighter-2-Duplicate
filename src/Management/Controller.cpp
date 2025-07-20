@@ -17,16 +17,22 @@ Controller::Controller(sf::RenderWindow& window,
     std::vector<std::shared_ptr<Ally>> allies)
     : m_window(window),
     m_level(std::move(level)),
-    m_players(std::move(players))
+    m_players(std::move(players)),
+    m_allies(std::move(allies)),
+    m_stats(HUD(window.getSize(), getPlayerAndAllies()))
 {   
     m_numOfLevels = ResourceManager::instance().getNumOfLevels();
-
     m_enemies = m_level->getAllEnemies();
     m_objQueue = m_level->getAllObjects();
     transferNextPickable();
     updateComputerPlayerStats();
 
 
+    std::vector<std::shared_ptr<PlayableObject>> members;
+    for (const auto& p : m_players) {
+        members.push_back(p); // implicit upcast is OK here
+    }
+  
 }
 
 void Controller::handleInput(sf::Event ev)
@@ -148,6 +154,8 @@ void Controller::updateWorld(float deltaTime)
     }
 
 
+    m_stats.update();
+
     if(m_players.size())
         m_level->handleCollisionsWithPlayer(*m_players.back()); 
 
@@ -249,6 +257,7 @@ void Controller::render()
     {
         printStageAlert("Congratulations! \n YOU WON!");
     }
+	m_stats.draw(m_window);
 
 
             
@@ -399,8 +408,6 @@ void Controller::checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy)
             processCollision(*ally, *enemy);
 			processCollision(*enemy, *ally);
         }
-
-       
     }
 }
 
@@ -412,9 +419,17 @@ void Controller::checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy)
             enemy->setXHit(player->getDirection());
             processCollision(*player, *enemy);
 			processCollision(*enemy, *player);
-
         }
 	}
+}
+std::vector<std::shared_ptr<PlayableObject>> Controller::getPlayerAndAllies() {
+    std::vector<std::shared_ptr<PlayableObject>> result;
+    for (const auto& p : m_players)
+        result.push_back(std::static_pointer_cast<PlayableObject>(p));
+    for (const auto& a : m_allies)
+        result.push_back(std::static_pointer_cast<PlayableObject>(a));
+    
+    return result;
 }
 
 void Controller::resetPlayersStats()
@@ -474,7 +489,6 @@ sf::Vector2f Controller::getRandomYPosition(float xPos, float min, float max) {
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_real_distribution<float> dist(min, max);
-
     float y = dist(gen);
     return sf::Vector2f(xPos, y);
 }
