@@ -2,10 +2,8 @@
 #include "Objects/PlayableObject.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
-
 #include <string>
 #include "PlayableObjectStates/PlayerStates/PlayerBaseState.h"
-
 #include "Objects/PickableObject.h"
 #include "Attacks/AttackBehavior.h"
 

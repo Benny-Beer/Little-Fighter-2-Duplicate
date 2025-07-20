@@ -17,8 +17,9 @@ Controller::Controller(sf::RenderWindow& window,
     std::vector<std::shared_ptr<Ally>> allies)
     : m_window(window),
     m_level(std::move(level)),
-    m_players(std::move(players))/*,
-    m_allies(std::move(allies))*/
+    m_players(std::move(players)),
+    m_allies(std::move(allies)),
+    m_stats(HUD(window.getSize(), getPlayerAndAllies()))
 {   
     m_numOfLevels = ResourceManager::instance().getNumOfLevels();
     //AnimationManager::loadAnimations();
@@ -34,9 +35,8 @@ Controller::Controller(sf::RenderWindow& window,
 
    // m_level->addPickableObjects(objectLine);
     // add enemies (one bandit)
-   // std::string sq = "b4";
-  //  m_level->addSquad(sq);
-
+    std::string sq = "b10";
+    m_level->addSquad(sq);
 
     // creating ally
 
@@ -45,7 +45,8 @@ Controller::Controller(sf::RenderWindow& window,
     auto allyThree = std::make_shared<Ally>(sf::Vector2f(100, 650), "davis_ani", 60.f);
     auto allyFour = std::make_shared<Ally>(sf::Vector2f(100, 750), "davis_ani", 60.f);*/
 
-    //m_allies.push_back(ally);
+
+   // m_allies.push_back(ally);
     /*m_allies.push_back(allyTwo);
     m_allies.push_back(allyThree);
     m_allies.push_back(allyFour);*/
@@ -54,8 +55,11 @@ Controller::Controller(sf::RenderWindow& window,
     transferNextPickable();
     updateComputerPlayerStats();
 
-    // TODO: initialize HUD (m_stats)
-
+    std::vector<std::shared_ptr<PlayableObject>> members;
+    for (const auto& p : m_players) {
+        members.push_back(p); // implicit upcast is OK here
+    }
+  
 }
 
 void Controller::handleInput(sf::Event ev)
@@ -180,9 +184,7 @@ void Controller::updateWorld(float deltaTime)
      //m_level->update(deltaTime);
     //      TODO: create uptade() in Level - needs to update m_enemies!
 
-    // Update HUD/stats with current data
-    //m_stats.update(m_players, m_allies, *m_level);
-    //      TODO: create uptade() in HUD
+    m_stats.update();
 
     if(m_players.size())
         m_level->handleCollisionsWithPlayer(*m_players.back()); // currently through level, need to transfer into controller
@@ -290,7 +292,7 @@ void Controller::render()
         printStageAlert("Congratulations! \n YOU WON!");
     }
     // Draw HUD
-    //m_window.draw(m_stats);        TODO: draw() in HUD
+	m_stats.draw(m_window);
 
 
             
@@ -451,8 +453,6 @@ void Controller::checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy)
             processCollision(*ally, *enemy);
 			processCollision(*enemy, *ally);
         }
-
-       
     }
 }
 
@@ -464,9 +464,17 @@ void Controller::checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy)
             enemy->setXHit(player->getDirection());
             processCollision(*player, *enemy);
 			processCollision(*enemy, *player);
-
         }
 	}
+}
+std::vector<std::shared_ptr<PlayableObject>> Controller::getPlayerAndAllies() {
+    std::vector<std::shared_ptr<PlayableObject>> result;
+    for (const auto& p : m_players)
+        result.push_back(std::static_pointer_cast<PlayableObject>(p));
+    for (const auto& a : m_allies)
+        result.push_back(std::static_pointer_cast<PlayableObject>(a));
+    
+    return result;
 }
 
 void Controller::resetPlayersStats()
@@ -526,7 +534,6 @@ sf::Vector2f Controller::getRandomYPosition(float xPos, float min, float max) {
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_real_distribution<float> dist(min, max);
-
     float y = dist(gen);
     return sf::Vector2f(xPos, y);
 }

@@ -20,7 +20,7 @@ Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
 
 }
 
-Player::Player(PlayerData data) : PlayableObject(data.m_animationSheet)
+Player::Player(PlayerData data) : PlayableObject(data.m_animationSheet,data.m_chracterIcon)
 {
     setPosition(getRandomYPosition(50, Y_BOUND + 20.f, Y_BOUND + BOUNDS_HEIGHT - 20.f));
     m_prevPosition = getPosition();
@@ -29,6 +29,7 @@ Player::Player(PlayerData data) : PlayableObject(data.m_animationSheet)
     m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
     m_speed = data.m_speed;
     m_name = data.m_name;
+    m_icon = data.m_chracterIcon;
     this -> setState(std::make_unique<StandingState>(RELEASE_RIGHT));
     m_state->enter(*this);
 }
