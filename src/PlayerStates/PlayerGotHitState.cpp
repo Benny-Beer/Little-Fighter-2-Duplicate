@@ -2,11 +2,6 @@
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include "Objects/PlayableObject.h"
 
-PlayerGotHitState::PlayerGotHitState(Input input)
-{
-	m_input = input;
-}
-
 std::unique_ptr<PlayableObjectState> PlayerGotHitState::handleInput(Input input)
 {
 	return nullptr;
@@ -24,6 +19,8 @@ void PlayerGotHitState::update(PlayableObject& player, float dt)
 
 void PlayerGotHitState::enter(PlayableObject& player)
 {
+	std::cout << "Player enter:: PlayerGotHitState\n";	
+	player.setAniName("gothit");
 	player.dropHeldObj();
-	m_elapsedTime = 0.5f;
+	m_elapsedTime = 0.0f;
 }

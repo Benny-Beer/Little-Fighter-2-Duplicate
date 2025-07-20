@@ -426,8 +426,12 @@ void Controller::checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy)
 void Controller::checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy)
 {
 	for (auto& player : m_players) {
-		if (player->collide(*enemy))
-			processCollision(*player, *enemy);
+        if (player->collide(*enemy))
+        {
+            enemy->setXHit(player->getDirection());
+            processCollision(*player, *enemy);
+
+        }
 	}
 }
 

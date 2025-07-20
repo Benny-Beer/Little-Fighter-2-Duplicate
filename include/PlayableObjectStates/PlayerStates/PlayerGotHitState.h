@@ -6,7 +6,7 @@
 class PlayerGotHitState : public PlayerBaseState
 {
 public:
-	PlayerGotHitState(Input input);
+	PlayerGotHitState() = default;
 	virtual std::unique_ptr<PlayableObjectState> handleInput(Input input) override;
 	virtual void update(PlayableObject& player, float dt) override;
 	virtual void enter(PlayableObject& player) override;

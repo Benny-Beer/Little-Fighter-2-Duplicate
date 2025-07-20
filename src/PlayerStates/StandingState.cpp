@@ -3,6 +3,8 @@
 #include "PlayableObjectStates/PlayerStates/JumpingState.h"
 #include "PlayableObjectStates/PlayerStates/AttackState.h"
 #include "PlayableObjectStates/PlayerStates/KnockedState.h"
+#include "PlayableObjectStates/PlayerStates/PlayerGotHitState.h"
+
 #include "Gameplay/Player.h"
 #include <iostream>
 StandingState::StandingState(Input input)
@@ -41,8 +43,8 @@ void StandingState::enter(PlayableObject& player)
 
 void StandingState::onHandsAttack(PlayableObject& player)
 {
-	player.setAniName("gothit");
-	//player.setState(std::make_unique<KnockedState>());
+	//player.setAniName("gothit");
+	player.setState(std::make_unique<PlayerGotHitState>());
 }
 
 void StandingState::onStoneHit(PlayableObject& player)

@@ -1,6 +1,5 @@
 #include "Objects/PlayableObject.h"
 #include "Objects/PickableObject.h"
-#include "PlayableObjectStates/ComputerPlayerState/DeadState.h"
 
 
 void PlayableObject::setState(std::unique_ptr<PlayableObjectState> newState)
@@ -102,6 +101,7 @@ void PlayableObject::dropHeldObj() {
         m_attackRange = 50.f;
         m_strategyName = "";
         m_heldObject->putBack();
+        m_heldObject->setHolder(nullptr);
         m_heldObject = nullptr;
     }
     auto attack = Factory<AttackBehavior>::createAttackBehavior(m_strategyName, m_heldObject, this);
@@ -202,50 +202,6 @@ void PlayableObject::move(float dt)
         m_heldObject->move(getPosition());
     }
 
-}
-void PlayableObject::onHandsAttack()
-{
-
-
-    if (m_hp <= 0) {
-        m_hp = 0;
-        m_potentialHp = 0;
-        setState(std::make_unique<DeadState>());
-    }
-    m_state->onHandsAttack(*this);
-
-}
-void PlayableObject::onStoneHit()
-{
-	moveSprite({ static_cast<float>(m_xdirHit)*100, 0.f });
-    if (m_hp <= 0) {
-        m_hp = 0;
-        m_potentialHp = 0;
-        setState(std::make_unique<DeadState>());
-    }
-    m_state->onStoneHit(*this);
-}
-
-void PlayableObject::onBoxHit()
-{
-    moveSprite({ static_cast<float>(m_xdirHit) * 100, 0.f });
-    if (m_hp <= 0) {
-        m_hp = 0;
-        m_potentialHp = 0;
-        setState(std::make_unique<DeadState>());
-    }
-    m_state->onBoxHit(*this);
-}
-
-void PlayableObject::onExplosion()
-{
-    moveSprite({ static_cast<float>(m_direction.x) * 100, 0.f });
-    if (m_hp <= 0) {
-        m_hp = 0;
-        m_potentialHp = 0;
-        setState(std::make_unique<DeadState>());
-    }
-	m_state->onExplosion(*this);
 }
 
 void PlayableObject::setAniName(const std::string& name)

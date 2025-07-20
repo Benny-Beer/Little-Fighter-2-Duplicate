@@ -44,8 +44,8 @@ void WalkingState::enter(PlayableObject& player)
 
 void WalkingState::onHandsAttack(PlayableObject& player)
 {
-	player.setAniName("gothit");
-	player.setState(std::make_unique<PlayerGotHitState>(Input::NONE));
+	
+	player.setState(std::make_unique<PlayerGotHitState>());
 	
 }
 

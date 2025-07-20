@@ -173,10 +173,11 @@ void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
 
 void playerVsenemy(Object& playerObj, Object& enemyObj)
 {
-
 	Player& player = static_cast<Player&>(playerObj);
 	Enemy& enemy = static_cast<Enemy&>(enemyObj);
 
+    if (enemy.getHitCooldown() > 0.f)
+        return; //
     auto playerDirX = player.getDirection();
 	auto enemyDirX = enemy.getDirection();
 	if (player.getPosition().x < enemy.getPosition().x) // if player is on the left side of the enemy
@@ -192,6 +193,7 @@ void playerVsenemy(Object& playerObj, Object& enemyObj)
 	if (typeid(*playerState) == typeid(AttackState))
 	{
 		enemy.handleCommand(std::make_unique<HandsAttackCommand>());
+        enemy.setHitCooldown(3.0f);
 	}
     
 }
