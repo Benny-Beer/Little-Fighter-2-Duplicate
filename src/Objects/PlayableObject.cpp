@@ -1,7 +1,6 @@
 #include "Objects/PlayableObject.h"
 #include "Objects/PickableObject.h"
 
-
 void PlayableObject::setState(std::unique_ptr<PlayableObjectState> newState)
 {
     m_state = std::move(newState);
@@ -145,14 +144,10 @@ void PlayableObject::updateScale()
 {
     sf::Vector2f pos = getPosition();
     float dx = pos.x - m_prevPosition.x;
-
-
     if (dx > 0.01f)
         setScale(1);  // moving right
     else if (dx < -0.01f)
         setScale(-1); // moving left
-
-
     //int dir = static_cast<int>(m_dir);
     //dir *= -1;
     //m_dir = static_cast<Direction>(dir);
@@ -179,7 +174,6 @@ void PlayableObject::move(const sf::Vector2f& delta) {
 void PlayableObject::move(float dt)
 {
     m_prevPosition = getPosition();
-
     sf::Vector2f velocity = m_direction;
 
     // Normalize diagonal movement (to prevent faster diagonal movement)
@@ -189,7 +183,6 @@ void PlayableObject::move(float dt)
         velocity.x *= invSqrt2;
         velocity.y *= invSqrt2;
     }
-
     // Apply speed and delta time
     sf::Vector2f delta(velocity.x * m_speed * dt,
         velocity.y * m_speed * dt);
@@ -200,23 +193,19 @@ void PlayableObject::move(float dt)
     }
 
 }
-
 void PlayableObject::setAniName(const std::string& name)
 {
     m_aniName = name;
 }
-
 std::string PlayableObject::getName() const
 {
     return m_name;
 }
-
 void PlayableObject::reduceHp(int amountToReduce)
 {
     m_hp -= amountToReduce;
     m_potentialHp -= amountToReduce / 3;
 }
-
 void PlayableObject::tookItem()
 {
     m_needItem = false;
@@ -225,27 +214,21 @@ void PlayableObject::wantItem()
 {
     m_needItem = true;
 }
-
-
 bool PlayableObject::needItem()
 {
     return m_needItem;
 }
-
 void PlayableObject::adjustRange(float range)
 {
     m_attackRange = range;
 }
-
 float PlayableObject::getAttackRange() const
 {
     return m_attackRange;
 }
-
 std::string PlayableObject::getStrategyName() {
     return m_strategyName;
 }
-
 void PlayableObject::updateHp() {
     m_hpClock += 1;
     if (m_hpClock == 36 && m_hp < m_potentialHp)
@@ -254,12 +237,15 @@ void PlayableObject::updateHp() {
     }
     m_hpClock = m_hpClock % 36;
 }
+std::shared_ptr<sf::Texture> PlayableObject::getIcon() const
+{
+    return m_icon;
+}
 
 float PlayableObject::getHitCooldown() const
 {
     return m_hitCooldown;
 }
-
 void PlayableObject::setHitCooldown(float cooldown)
 {
 	m_hitCooldown = cooldown;

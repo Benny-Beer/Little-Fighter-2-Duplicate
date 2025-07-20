@@ -1,0 +1,145 @@
+#include "UI/HUD.h"
+#include <SFML/Graphics.hpp>
+#include <Objects/PlayableObject.h>
+#include <iostream>
+HUD::HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<PlayableObject>>& members) {
+    // Step 1: HUD frame setup (top 15% of screen, blue color)
+    float frameWidth = static_cast<float>(screenSize.x);
+    float frameHeight = static_cast<float>(screenSize.y * 0.15f);
+    m_frame.setSize(sf::Vector2f(frameWidth, frameHeight));
+    m_frame.setPosition(0.f, 0.f);
+    m_frame.setFillColor(sf::Color(0,0,102));
+
+    
+    int numFrames = 3;
+    float spacing = 20.f; 
+    float totalSpacing = spacing * (numFrames + 1);
+    float characterWidth = (frameWidth - totalSpacing) / numFrames;
+    float characterHeight = frameHeight * 0.8f;
+    float yOffset = (frameHeight - characterHeight) / 2.f;
+
+ 
+    for (int i = 0; i < numFrames; ++i) {
+        float x = spacing + i * (characterWidth + spacing);
+        sf::Vector2f size(characterWidth, characterHeight);
+        sf::Vector2f position(x, yOffset);
+        m_characterFrames.emplace_back(size, position, members[i]);
+    }
+}
+void HUD::update(const std::vector<std::shared_ptr<PlayableObject>>& members)
+{
+    int i = 0;
+    for (auto& frame : m_characterFrames) {
+        if (i < members.size()) {
+           // frame.update(members[i]);
+            //++i;
+        }
+    }
+}
+void HUD::draw(sf::RenderWindow& window) {
+    window.draw(m_frame);
+    for (auto& frame : m_characterFrames) {
+        frame.draw(window);
+    }
+}
+
+// ----- CharacterFrame methods -----
+
+HUD::CharacterFrame::CharacterFrame(const sf::Vector2f size, const sf::Vector2f position, const std::shared_ptr<PlayableObject>& member) {
+    m_frame.setSize(size);
+    m_frame.setOrigin(0.5f, 0.5f);
+    m_frame.setPosition(position);
+    m_frame.setFillColor(sf::Color(20, 20, 140));
+    m_frame.setOutlineThickness(-3.f);
+    m_frame.setOutlineColor(sf::Color(0, 0, 70));
+
+    // Set icon texture
+    m_icon.setTexture(*member->getIcon());
+    m_icon.setPosition(position.x + size.x * .03f, position.y + size.y * .1f);
+    sf::IntRect texRect = m_icon.getTextureRect();
+
+    float targetHeight = size.y * 0.7f;
+    float aspectRatio = static_cast<float>(texRect.width) / texRect.height;
+    float targetWidth = targetHeight * aspectRatio;
+
+    m_icon.setScale(targetWidth / texRect.width, targetHeight / texRect.height);
+
+    //set HealthBar
+    sf::Vector2f iconBound = m_icon.getGlobalBounds().getSize();
+    sf::Vector2f fullBarSize(size.x - iconBound.x - 50.f, 20.f);
+    sf::Vector2f barPosition(m_icon.getPosition().x + iconBound.x + 20.f, m_icon.getPosition().y);
+    
+    m_hpBar.setFillColor(sf::Color(225, 0, 0));
+    m_hpBar.setPosition(barPosition);
+    m_hpBar.setSize(fullBarSize);
+  /*
+    m_potentialHpBar.setFillColor(sf::Color(0, 80, 0));
+    m_potentialHpBar.setPosition(barPosition);
+    m_potentialHpBar.setSize(fullBarSize);
+    
+    m_hpBarPlaceholder.setFillColor(sf::Color(225, 0, 0));
+    m_hpBarPlaceholder.setPosition(barPosition);
+    m_hpBarPlaceholder.setSize(fullBarSize);
+    */
+}
+
+
+void HUD::CharacterFrame::update(const std::shared_ptr<PlayableObject>& character) {
+    //update the size of the relevnt hp bar
+    float maxHp, potentialHp, currHp;
+
+    maxHp = getMaxHp();
+    potentialHp = character->getPotentialHp();
+    currHp = character->getHp();
+
+    std::cout << "n\n\n currHp\n\n\n" << currHp << std::endl;
+    sf::Vector2f newSize;
+    //set the size of potentialHp bar
+    newSize.x = potentialHp / maxHp * m_hpBarPlaceholder.getGlobalBounds().width;
+    newSize.y = m_hpBarPlaceholder.getGlobalBounds().height;
+    m_potentialHpBar.setSize(newSize);
+    //calculate curr a % of potential
+    newSize.x = currHp / potentialHp * m_hpBarPlaceholder.getGlobalBounds().width;
+    newSize.y = m_hpBarPlaceholder.getGlobalBounds().height;
+    m_hpBar.setSize(newSize);
+    
+}
+
+void HUD::CharacterFrame::draw(sf::RenderWindow& window) {
+    window.draw(m_frame);
+    window.draw(m_icon);
+    window.draw(m_hpBarPlaceholder);
+    window.draw(m_potentialHpBar);
+    window.draw(m_hpBar);
+}
+
+float HUD::CharacterFrame::getMaxHp() const
+{
+    return m_maxHp;
+}
+
+void HUD::CharacterFrame::setMaxlHp(const float amount)
+{
+    m_maxHp = amount;
+}
+
+
+float HUD::CharacterFrame::getPotentialHp() const
+{
+    return m_potentialHp;
+}
+
+void HUD::CharacterFrame::setPotentialHp(const float amount)
+{
+    m_potentialHp = amount;
+}
+
+float HUD::CharacterFrame::getCurrHp() const
+{
+    return m_currHp;
+}
+
+void HUD::CharacterFrame::setCurrHp(const float amount)
+{
+    m_currHp = amount;
+}
