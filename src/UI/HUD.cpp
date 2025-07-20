@@ -103,7 +103,7 @@ void HUD::CharacterFrame::update() {
     m_potentialHpBar.setSize(sf::Vector2f(potentialHp / maxHp * fullWidth, height));
     
     // Current as percent of potential
-    m_hpBar.setSize(sf::Vector2f(currHp / potentialHp * fullWidth, height));
+    m_hpBar.setSize(sf::Vector2f(currHp / maxHp * fullWidth, height));
 }
 
 

@@ -203,46 +203,36 @@ void Controller::render()
     // Draw background, enemies, pickable objects, etc.
     m_level->render(m_window);
 
-    float i = 0.f;
     for (const auto& dead : m_deads)
     {
         dead->draw(m_window);
-        printHp(dead->getHp(), { 750.f, 10.f + i }, false);
-        printHp(dead->getPotentialHp(), { 750.f, 30.f + i }, true);
-        i += 40.f;
+
     }
     for (const auto& obj : m_pickables) {
         obj->draw(m_window);
     }
-    i = 0.f;
+
 
     for (const auto& player : m_players)
     {
         player->draw(m_window);
-        printHp(player->getHp(), { 480.f, 10.f + i }, false);
-        printHp(player->getPotentialHp(), { 480.f, 30.f + i }, true);
-        i += 40.f;
+
     }
 
-    i = 0.f;
+  
     for (const auto& ally : m_allies)
     {
 
         ally->draw(m_window);
-        printHp(ally->getHp(), { 10.f, 10.f + i}, false);
-        printHp(ally->getPotentialHp(), { 10.f, 30.f+i }, true);
-        i += 40.f;
+
     }
     
 
 
-    i = 0.f;
     for (const auto& enemy : m_enemies)
     {
         enemy->draw(m_window);
-        printHp(enemy->getHp(), { 930.f, 10.f + i}, false);
-        printHp(enemy->getPotentialHp(), { 930.f, 30.f + i}, true);
-        i += 40.f;
+ 
     }
 
     if (m_waitingForNextWave) {
@@ -340,29 +330,6 @@ float Controller::distanceBetween(sf::Vector2f a, sf::Vector2f b) {
 }
 
 
-// until we'll have HUD
-void Controller::printHp(int hp, const sf::Vector2f& position, bool potential)
-{
-    static sf::Font font;
-    static bool loaded = false;
-    if (!loaded) {
-        if (!font.loadFromFile("resources/Fonts/lesterbold.ttf")) 
-            return;
-        loaded = true;
-    }
-
-    sf::Text text;
-    text.setFont(font);
-    if(potential)
-        text.setString("P-HP: " + std::to_string(hp));
-    else
-        text.setString("HP: " + std::to_string(hp));
-    text.setCharacterSize(15);
-    text.setFillColor(sf::Color::Red);
-    text.setPosition(position);
-
-    m_window.draw(text);
-}
 
 void Controller::restoreKnockedAccess() {
     auto it = m_deads.begin();
