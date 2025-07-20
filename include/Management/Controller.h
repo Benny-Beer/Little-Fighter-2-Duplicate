@@ -196,7 +196,6 @@ private:
         auto it = std::find(livePlayers.begin(), livePlayers.end(), deadOne);
         if (it != livePlayers.end()) {
             m_deads.push_back(*it);
-            std::cout << m_deads[0]->getName() << std::endl;
 
             livePlayers.erase(it);
 

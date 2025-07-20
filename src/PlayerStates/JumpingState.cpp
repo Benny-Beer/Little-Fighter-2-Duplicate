@@ -12,7 +12,6 @@ JumpingState::JumpingState(Input input)
 std::unique_ptr<PlayableObjectState> JumpingState::handleInput(Input input)
 {
 
-    std::cout << input << std::endl;
 
 
     return nullptr;
@@ -20,7 +19,6 @@ std::unique_ptr<PlayableObjectState> JumpingState::handleInput(Input input)
 
 void JumpingState::enter(PlayableObject& player)
 {
-    std::cout << "enter:: JumpingState\n";
 
     player.setAniName("jumping");
 

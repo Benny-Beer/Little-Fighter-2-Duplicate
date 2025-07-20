@@ -24,7 +24,6 @@ std::unique_ptr<PlayableObjectState> StandingState::handleInput(Input input)
 	case Input::PRESS_JUMP:
 		return std::make_unique<JumpingState>(input);
 	case Input::PRESS_ATTACK:
-		std::cout << "recognized enter\n";
 		return std::make_unique<AttackState>();
 
 	default:
@@ -35,7 +34,6 @@ std::unique_ptr<PlayableObjectState> StandingState::handleInput(Input input)
 
 void StandingState::enter(PlayableObject& player)
 {
-	std::cout << "enter:: StandingState\n";
 	player.setAniName("standing");
 	
 	player.resetDirection();

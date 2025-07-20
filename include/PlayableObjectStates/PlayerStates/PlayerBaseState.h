@@ -27,7 +27,6 @@ inline Input getEventType(const sf::Event& event)
         case sf::Keyboard::RShift:
             return PRESS_JUMP;
         default:
-            std::cout << "non pressed\n";
             return NONE;
         }
     }
@@ -49,12 +48,10 @@ inline Input getEventType(const sf::Event& event)
         case sf::Keyboard::LShift:
             return ADD_OBJ;
         default:
-            std::cout << "non pressed\n";
             return NONE;
 
         }
     }
-    std::cout << "non pressed\n";
     return NONE;
 }
 

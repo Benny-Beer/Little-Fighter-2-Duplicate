@@ -58,7 +58,6 @@ void Level::addPickableObjects(const std::string& objectLine)
         auto obj = Factory<PickableObject>::create(std::string(1, type), getRandomBoundedPosition(X_BOUND + 125.f, X_BOUND + BOUNDS_WIDTH-125.f, Y_BOUND+50.f, Y_BOUND + BOUNDS_HEIGHT-50.f));
         if (obj)
         {
-            std::cout << "in Level::addPickableObjects if (obj) " << i <<  "\n";
             m_pickables.push_back(std::move(obj));
         }
         i++;
@@ -96,8 +95,6 @@ void Level::update(float dt)
     //}
 
     std::erase_if(m_pickables, [](std::shared_ptr<PickableObject>& obj) {
-        std::cout << "im here in Level erase_if\n";
-        std::cout << obj->getName() << " isUsed: " << obj->isUsed() << "\n";
         return obj->isUsed();
         });
         

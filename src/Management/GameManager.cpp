@@ -17,7 +17,6 @@ GameManager::GameManager() : m_window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 void GameManager::run()
 {
-    std::cout << "Running game, m_currScreen: " << m_currScreen.get() << std::endl;
     sf::Clock clock;
     while (m_window.isOpen())
     {

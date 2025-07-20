@@ -23,9 +23,6 @@ void PickableObject::move(sf::Vector2f goal)
 
 std::unique_ptr<ICommand> PickableObject::getHitCommand()
 {
-	 std::cout << "PickableObject::getHitCommand() called\n";
-	 std::cout << getName() << std::endl;
-	 std::cout << "command name is: " << typeid(*m_command).name() << std::endl;
 	 return std::move(m_command->clone());
 }
 

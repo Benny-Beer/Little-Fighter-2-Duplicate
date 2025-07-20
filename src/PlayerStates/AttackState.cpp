@@ -27,13 +27,10 @@ std::unique_ptr<PlayableObjectState> AttackState::handleInput(Input input)
 
 void AttackState::enter(PlayableObject& player)
 {
-    std::cout << "enter:: AttackState Player\n";
     
     player.setAniName("attacking");
-    std::cout << "after setAniName\n";
     player.attack();
     //player.handleCommand(std::make_unique<HandsAttackCommand>());
-    std::cout << "after attack()\n";
 }
 
 void AttackState::update(PlayableObject& player, float dt)

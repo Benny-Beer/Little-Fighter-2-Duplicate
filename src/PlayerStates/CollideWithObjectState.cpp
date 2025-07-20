@@ -20,7 +20,6 @@ std::unique_ptr<PlayableObjectState> CollideWithObject::handleInput(Input input)
 {
 	if (input == Input::ADD_OBJ)
 	{
-		std::cout << "Handling ADD_OBJ\n";
 		m_pickupPending = true;
 		return nullptr;
 	}
@@ -48,7 +47,6 @@ std::unique_ptr<PlayableObjectState> CollideWithObject::handleInput(Input input)
 
 void CollideWithObject::enter(PlayableObject& player)
 {
-	std::cout << "enter::CollideWithObject\n";
 
 	//player.setDiraction(m_input);
 }

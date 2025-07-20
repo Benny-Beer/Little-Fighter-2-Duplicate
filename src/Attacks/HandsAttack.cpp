@@ -7,7 +7,6 @@ HandsAttack::HandsAttack()
 
 void HandsAttack::attack()
 {
-	std::cout << "in HandsAttack\n";
 }
 
 bool HandsAttack::m_register = Factory<AttackBehavior>::registerAttackBehavior("h",

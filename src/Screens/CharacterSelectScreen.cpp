@@ -155,7 +155,6 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
 {
     if (ev.type == sf::Event::KeyPressed) {
         if (ev.key.code == sf::Keyboard::Enter && !m_selectionMode) {
-            std::cout << "Enter pressed - character selected" << std::endl;
             m_selectionMode = true;
             m_placeholderText.setString("");
             m_profileSprite.setTexture(*m_characters[m_currentIndex].second->m_profilePic);
@@ -175,7 +174,6 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
         }
 
         else if (m_selectionMode) {
-            std::cout << "Index: " << m_currentIndex << " / " << m_characters.size() << "\n";
 
             if (ev.key.code == sf::Keyboard::Right) {
                 m_currentIndex = (m_currentIndex + 1) % m_characters.size();
@@ -189,7 +187,6 @@ void CharacterSelectScreen::handleEvents(sf::Event& ev)
             m_characterDescription.setString(m_characters[m_currentIndex].second->m_description);
 
             if (ev.key.code == sf::Keyboard::Enter) {
-                std::cout << "Enter pressed in selection mode" << std::endl;
 
                 std::vector<std::shared_ptr<Ally>> allies;
                 size_t nextIndex = (m_currentIndex + 1) % m_characters.size();

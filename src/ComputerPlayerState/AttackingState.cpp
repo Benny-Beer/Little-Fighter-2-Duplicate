@@ -21,7 +21,6 @@ AttackingState::AttackingState(std::shared_ptr<Object> target)
 }
 
 void AttackingState::enter(PlayableObject& player) {
-    std::cout << "enter:: AttackingState\n";
 
     //auto target = std::dynamic_pointer_cast<PlayableObject>(m_target);
     
@@ -73,7 +72,6 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
     //const float attackRange = 150.f;
     if (distance > player.getAttackRange()) {
         // Too far — switch back to approach state
-        std::cout << "here? range is: " << player.getAttackRange() << "\n";
         player.setState(std::make_unique<ApproachingEnemyState>(m_target));
         return;
     }
@@ -125,16 +123,13 @@ void AttackingState::alignAttacker(PlayableObject& player)
 }
 
 void AttackingState::name() {
-    std::cout << "AttackingState" << std::endl;
 }
 
 void AttackingState::onHandsAttack(PlayableObject& player)
 {
-    std::cout << "im in attacking\n";
     player.setState(std::make_unique<BlockingState>());
 }
 void AttackingState::onStoneHit(PlayableObject& player) {
-    std::cout << player.getName() << " inAttackingState::onStoneHit\n";
 	player.setState(std::make_unique<GotHitState>());
 
 }

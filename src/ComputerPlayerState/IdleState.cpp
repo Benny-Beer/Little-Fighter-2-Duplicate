@@ -80,7 +80,6 @@ void IdleState::exit(ComputerPlayer& player) {
 }
 
 void IdleState::onHandsAttack(PlayableObject& player) {
-    std::cout << "Im in IdleState and i got attacked by hands\n";
     player.setState(std::make_unique<BlockingState>());
 
 }
@@ -97,5 +96,4 @@ void IdleState::onExplosion(PlayableObject& player) {
 }
 
 void IdleState::name() {
-    std::cout << "IdleState" << std::endl;
 }

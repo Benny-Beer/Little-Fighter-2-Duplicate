@@ -6,12 +6,10 @@
 BoxAttack::BoxAttack(const std::string& name, std::shared_ptr<PickableObject> obj, PlayableObject* player)
 	: m_player(player), m_box(obj)
 {
-	std::cout << " creating attack\n";
 }
 
 void BoxAttack::attack()
 {
-	std::cout << "in RockAttack::attack\n";
 	if (m_box)
 	{
 		dynamic_cast<Box*>(m_box.get())->throwMe(m_player->getDirection(), m_player->getPosition().y);

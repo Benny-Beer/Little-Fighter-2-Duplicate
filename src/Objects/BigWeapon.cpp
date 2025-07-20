@@ -9,7 +9,6 @@ BigWeapon::BigWeapon(const sf::Vector2f pos, const std::string& name, std::uniqu
 void BigWeapon::update(float dt)
 {
     if (!picked()) {
-        std::cout << "Status is: " << getStatus() << "\n";
         Object::update(dt);
     }
     if (m_isFlying)
@@ -29,7 +28,6 @@ void BigWeapon::update(float dt)
             m_isFlying = false;  // הפסיק לעוף
             m_velocity = { 0.f, 0.f };
 			m_status = ON_EARTH; // Change status to ON_EARTH
-            std::cout << "Rock landed!\n";
             setAnimation(AnimationManager::getAnimation("r", getTexture()));
             
             
@@ -52,5 +50,4 @@ void BigWeapon::throwMe(int direction, float groundY, float speed)
     m_velocity.y = -100.f;  // לזרוק קצת למעלה (שלילי כי Y יורד למטה)
     setAnimation(AnimationManager::getAnimation("rock_flying", getTexture()));
 
-    std::cout << "thrown! Velocity x=" << m_velocity.x << " y=" << m_velocity.y << " groundY=" << m_groundY << "\n";
 }

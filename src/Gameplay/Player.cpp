@@ -11,7 +11,6 @@ Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
 {
 	//setSize(1.2);
     resetHP();
-    std::cout <<"speed " << speed << " and pos " << pos.x << "," << pos.y << "\n";
 	m_attack = Factory<AttackBehavior>::createAttackBehavior("h", nullptr, this);
     m_speed = speed;
     m_name = "player";

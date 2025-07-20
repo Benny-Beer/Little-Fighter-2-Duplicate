@@ -126,7 +126,6 @@ void ComputerPlayer::performAttack(PlayableObject& target)
 void ComputerPlayer::pickUp(PickableObject& pickable)
 {
     // TODO: implement his properly (pick only if collision it true)
-    std::cout << "picking up the item now" << std::endl;
 
 }
 

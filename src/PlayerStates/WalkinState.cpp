@@ -36,7 +36,6 @@ std::unique_ptr<PlayableObjectState> WalkingState::handleInput(Input input)
 
 void WalkingState::enter(PlayableObject& player)
 {
-	std::cout << "enter:: WalkingState\n";
 	player.setAniName("walking");
 	player.setDiraction(m_input);
 	

@@ -10,7 +10,6 @@ void PlayableObject::setState(std::unique_ptr<PlayableObjectState> newState)
 
 void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
 {
-	std::cout << getName() << " is handling command\n";
     command->execute(*this);
 }
 
@@ -96,7 +95,6 @@ std::shared_ptr<PickableObject> PlayableObject::getHeldObj() const
 }
 
 void PlayableObject::dropHeldObj() {
-    std::cout << "\nin dropHeldObj \n\n";
 ;    if (m_heldObject) {
         m_attackRange = HANDS_ATTACK_RANGE;
         m_strategyName = "";
@@ -137,7 +135,6 @@ void PlayableObject::takeDamage(int damageAmount) {
 
 void PlayableObject::resetDirection()
 {
-	std::cout << "Resetting direction for " << getName() << std::endl;
     if (m_direction.x != 0 || m_direction.y != 0)
     {
         m_direction = { 0.f, 0.f };

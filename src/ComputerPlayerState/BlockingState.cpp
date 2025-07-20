@@ -7,7 +7,6 @@
 BlockingState::BlockingState() = default;
 
 void BlockingState::enter(PlayableObject& player) {
-    std::cout << "enter:: BlockingState\n";
     player.dropHeldObj();
 
     player.setAniName("blocking");
@@ -18,7 +17,6 @@ void BlockingState::enter(PlayableObject& player) {
 }
 
 void BlockingState::update(PlayableObject& player, float deltaTime) {
-    std::cout << player.getName() << "in BlockingState\n";
 
     m_elapsedTime += deltaTime;
 
@@ -33,7 +31,6 @@ void BlockingState::exit(ComputerPlayer& player) {
 }
 
 void BlockingState::name() {
-    std::cout << "BlockingState" << std::endl;
 }
 void BlockingState::onHandsAttack(PlayableObject& player) {
    

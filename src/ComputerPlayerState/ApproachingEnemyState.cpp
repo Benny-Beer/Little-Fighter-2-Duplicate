@@ -37,7 +37,6 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     }
     if (auto enemy = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
         if (!enemy->getState()->isAccessible()) {
-            std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\im hehr\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
             m_target = player.getTarget();
         }
     }
@@ -56,7 +55,6 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     //std::cout << "[ApproachingEnemyState] " << player.getName() << " distance to " << m_target->getName() << ":" << distance << std::endl;
 
     if (distance < player.getAttackRange() /* && (playerPos.x - target->getPosition().x) == 0.f*/) {
-        std::cout << "im here\n";
         player.setState(std::make_unique<AttackingState>(m_target));
         return;
     }
@@ -82,15 +80,13 @@ void ApproachingEnemyState::exit(ComputerPlayer& player) {
 }
 
 void ApproachingEnemyState::onHandsAttack(PlayableObject& player) {
-    std::cout << player.getName() << " is in [ApproachingEnemyState] and i got attacked by hands\n"
-        "activating blocking state\n";
+
     player.setState(std::make_unique<BlockingState>());
 
     //player.setState(std::make_unique<BlockingState>());
 }
 
 void ApproachingEnemyState::onStoneHit(PlayableObject& player) {
-    std::cout << "inApproachingEnemyState::onStoneHit!!!!!\n";
     player.setState(std::make_unique<GotHitState>());
 }
 void ApproachingEnemyState::onBoxHit(PlayableObject& player)
@@ -101,5 +97,4 @@ void ApproachingEnemyState::onExplosion(PlayableObject& player) {
 
 }
 void ApproachingEnemyState::name() {
-    std::cout << "ApproachingEnemyState" << std::endl;
 }

@@ -67,7 +67,6 @@ void PickingUpItemState::exit(ComputerPlayer& player) {
 }
 
 void PickingUpItemState::name() {
-    std::cout << "PickingUpItemState" << std::endl;
 }
 
 void PickingUpItemState::onHandsAttack(PlayableObject& player) {
@@ -76,7 +75,6 @@ void PickingUpItemState::onHandsAttack(PlayableObject& player) {
 }
 
 void PickingUpItemState::onStoneHit(PlayableObject& player) {
-    std::cout << "inPickingUpItemState::onStoneHit\n";
     player.setState(std::make_unique<GotHitState>());
 }
 void PickingUpItemState::onBoxHit(PlayableObject& player)

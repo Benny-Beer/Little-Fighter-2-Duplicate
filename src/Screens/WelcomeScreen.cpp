@@ -14,7 +14,6 @@ WelcomeScreen::WelcomeScreen(sf::RenderWindow& window, GameManager& manager) : I
 	sf::Vector2f screenSize( static_cast <sf::Vector2f> (m_window.getSize()));
 	m_backGround = Background(screenSize, ResourceManager::instance().getTexture("screen_backgrounds/Welcome_bg"));
     m_startButton = Button("Ready To Play?", sf::Vector2f(screenSize.x / 4, screenSize.y / 4), sf::Vector2f(screenSize.x / 2, screenSize.y / 2), sf::Color::Transparent, 30);
-	std::cout << "WelcomeState created, m_manager ptr: " << &m_manager << std::endl;
 }
 
 void WelcomeScreen::handleEvents(sf::Event& ev) {

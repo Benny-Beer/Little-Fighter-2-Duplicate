@@ -147,8 +147,6 @@ void Controller::updateWorld(float deltaTime)
     }
 	m_level->update(deltaTime);
     std::erase_if(m_pickables, [](std::shared_ptr<PickableObject>& obj) {
-		std::cout << "im here in Controller erase_if\n";
-		std::cout << obj->getName() << " isUsed: " << obj->isUsed() << "\n";
         return obj->isUsed();
         });
 

@@ -40,7 +40,6 @@ using objectVsObjectMap = std::map<KeyOO, ObjectCollisionFunc>;
 template <typename T>
 void playerPickableObject(Object& playerObj, std::shared_ptr<PickableObject> pickableObj)
 {
-	std::cout << "in playerPickableObject\n";
     Player& player = static_cast<Player&>(playerObj);
     auto& object = pickableObj;
     if (player.isHoldingWeapon(object))
@@ -70,7 +69,6 @@ void enemyAttackingAlly(Object& playerObj, std::shared_ptr<PickableObject> picka
 	if(pickableObj->thrown())
     {
         pickableObj->collide();
-		std::cout << "in computerPlayerPickable before handle command\n";
         ally.handleCommand((pickableObj->getHitCommand()));
     }
     else if (pickableObj->isExploded())
@@ -81,12 +79,10 @@ void enemyAttackingAlly(Object& playerObj, std::shared_ptr<PickableObject> picka
 }
 
 void enemyAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableObj) {
-    std::cout << pickableObj->getStatus() << std::endl;
     auto& enemy = static_cast<Enemy&>(playerObj);
     if (pickableObj->thrown() )
     {
         pickableObj->collide();
-        std::cout << "in computerPlayerPickable before handle command\n";
         enemy.handleCommand((pickableObj->getHitCommand()->clone()));
     }
     else if (pickableObj->isExploded())
@@ -102,7 +98,6 @@ void playerAttacked(Object& playerObj, std::shared_ptr<PickableObject> pickableO
     if (pickableObj->thrown())
     {
 		pickableObj->collide();
-        std::cout << "in computerPlayerPickable before handle command\n";
         player.handleCommand((pickableObj->getHitCommand()));
     }
     else if (pickableObj->isExploded())

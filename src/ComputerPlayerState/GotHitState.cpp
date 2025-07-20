@@ -6,7 +6,6 @@
 GotHitState::GotHitState() = default;
 
 void GotHitState::enter(PlayableObject& player) {
-    std::cout << "enter:: GotHitState\n";
     player.dropHeldObj();
 
     //Animation knockedDownAnim(player.getTexture(),

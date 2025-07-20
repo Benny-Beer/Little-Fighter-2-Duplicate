@@ -6,8 +6,6 @@
 Box::Box(const sf::Vector2f pos, const std::string& name)
 	:BigWeapon(pos, name, std::make_unique<BoxHitCommand>())
 {
-	std::cout << "in Box constructor\n";
-	std::cout << name << '\n';
 	setAnimation(AnimationManager::getAnimation(name, getTexture()));
 	
 }
@@ -15,7 +13,6 @@ Box::Box(const sf::Vector2f pos, const std::string& name)
 void Box::update(float dt)
 {
     if (!picked()) {
-        std::cout << "Status is: " << getStatus() << "\n";
         Object::update(dt);
     }
     if (isExploded())
@@ -49,7 +46,6 @@ void Box::update(float dt)
     }
     if (getState())
     {
-        std::cout << "Box state is not null\n";
         getState()->update(*this, dt);
     }
 
