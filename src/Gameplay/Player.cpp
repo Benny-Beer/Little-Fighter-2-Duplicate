@@ -3,6 +3,7 @@
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
 #include "PlayableObjectStates/PlayerStates/PlayerBaseState.h"
 #include "PlayableObjectStates/ComputerPlayerState/DeadState.h"
+#include "PlayableObjectStates/PlayerStates/PlayerDeadState.h"
 #include "Management/AnimationManager.h"
 #include "Objects/ObjectStates/HeldObjState.h"
 
@@ -50,6 +51,9 @@ void Player::handleInput(sf::Event event)
 
 void Player::update(float dt)
 {
+    if (m_hitCooldown > 0.f)
+        m_hitCooldown -= dt;
+
     Object::update(dt);
     if (m_currentAnimationName != m_aniName + m_strategyName) {
         setAnimation(AnimationManager::getAnimation(m_aniName + m_strategyName, getTexture()));
@@ -193,7 +197,7 @@ void Player::onStoneHit()
     if (m_hp <= 0) {
         m_hp = 0;
         m_potentialHp = 0;
-        setState(std::make_unique<DeadState>());
+        setState(std::make_unique<PlayerDeadState>());
     }
     m_state->onStoneHit(*this);
 }
@@ -204,7 +208,7 @@ void Player::onBoxHit()
     if (m_hp <= 0) {
         m_hp = 0;
         m_potentialHp = 0;
-        setState(std::make_unique<DeadState>());
+        setState(std::make_unique<PlayerDeadState>());
     }
     m_state->onBoxHit(*this);
 }
@@ -214,7 +218,7 @@ void Player::onHandsAttack()
     if (m_hp <= 0) {
         m_hp = 0;
         m_potentialHp = 0;
-        setState(std::make_unique<DeadState>());
+        setState(std::make_unique<PlayerDeadState>());
     }
     m_state->onHandsAttack(*this);
 }
@@ -225,7 +229,7 @@ void Player::onExplosion()
     if (m_hp <= 0) {
         m_hp = 0;
         m_potentialHp = 0;
-        setState(std::make_unique<DeadState>());
+        setState(std::make_unique<PlayerDeadState>());
     }
     m_state->onExplosion(*this);
 }
