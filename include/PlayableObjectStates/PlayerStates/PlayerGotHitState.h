@@ -16,6 +16,6 @@ public:
 	void onBoxHit(PlayableObject& player) override {};
 	void onExplosion(PlayableObject& player) override {};
 private:
-	float m_recoveryTime = 0.5f;  // Time lying down before recovery
+	float m_recoveryTime = 0.15f;  // Time lying down before recovery
 	float m_elapsedTime = 0.0f;
 };
