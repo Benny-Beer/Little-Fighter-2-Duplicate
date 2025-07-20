@@ -9,10 +9,15 @@ public:
 	Enemy(const sf::Vector2f pos, const std::string& name, float speed = 20.f);
 	void update(float dt) override;
 	void handleCollision() override;
-
+	void resetHP();
 	bool isAlive() const;
+	float getHitCooldown() const; 
+	void setHitCooldown(float cooldown); 
 private:
 	//sf::Text m_name;
 	bool m_alive = true;
+	// Enemy.h
+	float m_hitCooldown = 0.f;
+
 
 };
