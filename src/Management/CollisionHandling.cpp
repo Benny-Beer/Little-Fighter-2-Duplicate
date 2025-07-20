@@ -237,9 +237,9 @@ void enemyVSAlly(Object& Obj1, Object& Obj2) {
 	auto enemyState = attacker.getState();
 	if (typeid(*enemyState) == typeid(AttackingState))
 	{
-        alignAttacker(enemyObj, allyObj);
-		    ally.handleCommand(std::make_unique<HandsAttackCommand>());
-		    ally.setHitCooldown(0.2f);
+        alignAttacker(attacker, attacked);
+		attacked.handleCommand(std::make_unique<HandsAttackCommand>());
+        attacked.setHitCooldown(0.2f);
 
 	}
 }
