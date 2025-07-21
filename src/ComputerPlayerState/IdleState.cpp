@@ -9,13 +9,15 @@
 
 
 void IdleState::enter(PlayableObject& player) {
+	std::cout << player.getName() << " is now idle." << std::endl;
 
     player.setAniName("standing");
 }
 
 void IdleState::update(PlayableObject& player, float deltaTime) {
+	auto compPlayer = dynamic_cast<ComputerPlayer*>(&player);
     
-    std::shared_ptr<Object> target = player.getTarget();
+    std::shared_ptr<Object> target = (*compPlayer).getTarget();
     if (!target)
     {
         return;

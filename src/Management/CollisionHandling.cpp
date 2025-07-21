@@ -154,7 +154,7 @@ void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
     static HitMap map = initializeCollisionMap();
     Object* holder = obj2->getHolder();
     std::type_index holderType = holder ? typeid(*holder) : typeid(void);
-    std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << " IN STATUS: " << obj2->getStatus() << " and holder was " << holderType.name() << std::endl;
+    //std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << " IN STATUS: " << obj2->getStatus() << " and holder was " << holderType.name() << std::endl;
 	auto it = map.find({ typeid(obj1), typeid(*obj2), holderType });
     if (it != map.end())
     {
@@ -201,7 +201,7 @@ void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
         if (enemy.getDirection() < 0)
             return;
     }
-    else if (enemy.getPosition().x < player.getPosition().x)
+    else if (enemy.getPosition().x > player.getPosition().x)
     {
         if (enemy.getDirection() > 0)
             return;
@@ -228,7 +228,7 @@ void enemyVSAlly(Object& Obj1, Object& Obj2) {
         if (attacker.getDirection() < 0)
             return;
     }
-    else if (attacker.getPosition().x < attacked.getPosition().x)
+    else if (attacker.getPosition().x > attacked.getPosition().x)
     {
         if (attacker.getDirection() > 0)
             return;

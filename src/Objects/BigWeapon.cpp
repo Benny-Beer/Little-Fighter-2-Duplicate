@@ -13,7 +13,7 @@ void BigWeapon::update(float dt)
     }
     if (m_isFlying)
     {
-
+		std::cout << "BigWeapon is flying" << std::endl;
         sf::Vector2f pos = getPosition();
         pos.x += m_velocity.x * dt;
         pos.y += m_velocity.y * dt;
