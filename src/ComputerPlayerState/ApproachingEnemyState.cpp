@@ -22,20 +22,25 @@ void ApproachingEnemyState::enter(PlayableObject& player) {
 
 }
 void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
-    if (!m_target)
+    if (!m_target) {
+
         return;
+    }
 
     if (!player.getTarget()) {
+
         player.setState(std::make_unique<IdleState>());
         return;
     }
 
     if (auto object = std::dynamic_pointer_cast<PickableObject>(m_target)) {
+
         player.setState(std::make_unique<PickingUpItemState>(object));
         return;
     }
 
     if (auto enemy = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
+
         if (!enemy->getState()->isAccessible()) {
             m_target = player.getTarget();
         }
@@ -49,7 +54,6 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     float absDy = std::abs(dy);
     float attackRange = player.getAttackRange();
 
-    // אם בתוך טווח התקיפה, עבור לתקיפה
     float distance = std::sqrt(dx * dx + dy * dy);
     if (distance < attackRange && absDy < 20.f) {
         player.setState(std::make_unique<AttackingState>(m_target));
@@ -58,9 +62,11 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
 
     sf::Vector2f direction(0.f, 0.f);
     if (absDy > 20.f) {
+
         direction.y = (dy > 0) ? 1.f : -1.f; // up/down only
     }
     else {
+
         direction.x = (dx > 0) ? 1.f : -1.f; // left/right only
         // keep y in the same level
         if (absDy > 5.f)
@@ -71,6 +77,7 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
     player.move(direction * speed * deltaTime);
 
     if (player.getHeldObj()) {
+
         player.getHeldObj()->move(player.getPosition());
     }
 }

@@ -140,7 +140,6 @@ void Player::onHandsAttack()
         setState(std::make_unique<PlayerDeadState>());
     }
     m_state->onHandsAttack(*this);
-    std::cout << typeid(*m_state).name() << "\n";
 }
 
 void Player::onExplosion()

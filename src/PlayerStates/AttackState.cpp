@@ -28,7 +28,6 @@ std::unique_ptr<PlayableObjectState> AttackState::handleInput(Input input)
 
 void AttackState::enter(PlayableObject& player)
 {
-    std::cout << "AttackState::enter\n";
 
     player.setAniName("attacking");
     player.attack();
