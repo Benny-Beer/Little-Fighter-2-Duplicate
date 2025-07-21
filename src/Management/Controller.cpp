@@ -53,8 +53,9 @@ void Controller::updateWorld(float deltaTime)
 
     //===========================================
     //===== MOVE INSIDE FUNC ====================
-    if (m_players.empty() && m_allies.empty()) {
-
+    if (m_players.size() == 0 && m_allies.size() == 0) {
+        std::cout << "In lose condition\n";
+        m_manager.switchScreen(std::make_unique<LoseScreen>(m_window, m_manager));
     }
     if (m_waitingForNextWave) {
         m_DelayTimer += deltaTime;
