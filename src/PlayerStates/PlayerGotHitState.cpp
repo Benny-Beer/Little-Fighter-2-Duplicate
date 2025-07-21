@@ -10,7 +10,6 @@ std::unique_ptr<PlayableObjectState> PlayerGotHitState::handleInput(Input input)
 
 void PlayerGotHitState::enter(PlayableObject& player)
 {
-	std::cout << "PlayerGotHitState::enter\n";
 
 	player.setAniName("gothit");
 	player.dropHeldObj();
@@ -19,7 +18,6 @@ void PlayerGotHitState::enter(PlayableObject& player)
 
 void PlayerGotHitState::update(PlayableObject& player, float dt)
 {
-	std::cout << "PlayerGotHitState::update\n";
 
 	m_elapsedTime += dt;
 

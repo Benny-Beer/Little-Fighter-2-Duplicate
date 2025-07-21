@@ -48,7 +48,7 @@ std::unique_ptr<PlayableObjectState> CollideWithObject::handleInput(Input input)
 
 void CollideWithObject::enter(PlayableObject& player)
 {
-	std::cout << "CollideWithObject::enter\n";
+	//std::cout << player.getName() << " CollideWithObject::enter\n";
 }
 
 void CollideWithObject::update(PlayableObject& player, float dt)

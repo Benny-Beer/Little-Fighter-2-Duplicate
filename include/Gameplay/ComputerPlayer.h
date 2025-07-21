@@ -37,7 +37,6 @@ protected:
     std::shared_ptr<Object> m_target = nullptr;
     bool m_controllable = true;
     bool m_blocking = false;
-    bool m_attackTimer = false;
     
 
 private:

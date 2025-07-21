@@ -237,6 +237,7 @@ void enemyVSAlly(Object& Obj1, Object& Obj2) {
 	auto enemyState = attacker.getState();
 	if (typeid(*enemyState) == typeid(AttackingState))
 	{
+
         alignAttacker(attacker, attacked);
 		attacked.handleCommand(std::make_unique<HandsAttackCommand>());
         attacked.setHitCooldown(0.2f);
@@ -272,6 +273,7 @@ void processCollision(Object& object1, Object& object2)
 
 void alignAttacker(Object& enemyObj, Object& playerObj)
 {
+
     sf::Vector2f playerPos = enemyObj.getPosition();
     sf::Vector2f targetPos = playerObj.getPosition();
 

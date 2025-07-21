@@ -14,13 +14,14 @@
 
 AttackingState::AttackingState(std::shared_ptr<Object> target)
     : m_target(std::move(target)) {
-    m_attackCooldown = ATTACK_COOLDOWN; 
+    m_attackCooldown = 0; 
 }
 
 void AttackingState::enter(PlayableObject& player) {
-    std::cout << player.getName() << "im in AttackingState::enter\n";
+
     player.setAniName("attacking");
     player.attack();
+    m_attackCooldown = ATTACK_COOLDOWN;
     player.adjustRange(HANDS_ATTACK_RANGE);
     player.setStrategyName("");
     player.wantItem();
@@ -29,23 +30,38 @@ void AttackingState::enter(PlayableObject& player) {
 }
 
 void AttackingState::update(PlayableObject& player, float deltaTime) {
-    //std::cout << "canAttack: " << player.canAttack() << "\n";
 
-    if (player.canAttack()) {
-        if (!m_target)
+    if (m_attackCooldown > 0) {
+
+        m_attackCooldown -= deltaTime;
+        return;
+    }
+    else {
+        m_attackCooldown = ATTACK_COOLDOWN;
+
+
+        if (!m_target) {
+
             return;
+        }
 
         if (!player.getTarget()) {
+
             player.setState(std::make_unique<IdleState>());
             return;
         }
         if (auto enemy = std::dynamic_pointer_cast<PlayableObject>(m_target)) {
+
             if (!enemy->getState()->isAccessible()) {
                 m_target = player.getTarget();
             }
         }
 
+
+
+
         player.setAniName("attacking");
+
 
         sf::Vector2f playerPos = player.getPosition();
 
@@ -56,18 +72,14 @@ void AttackingState::update(PlayableObject& player, float deltaTime) {
             std::pow(playerPos.y - targetPos.y, 2));
 
         if (distance > player.getAttackRange()) {
-            // Too far — switch back to approach state
             player.setState(std::make_unique<ApproachingEnemyState>(m_target));
             return;
         }
-
-
-        // Countdown attack cooldown
-        if (m_attackCooldown > 0) {
-            m_attackCooldown -= deltaTime;
-            return;
-        }
     }
+
+    // Countdown attack cooldown
+
+
 
 }
 

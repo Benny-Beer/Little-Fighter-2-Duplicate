@@ -4,6 +4,9 @@
 
 void HandsAttackCommand::execute(PlayableObject& player)
 {
+
+
+
 	player.reduceHp(HANDS_DAMAGE);
 	player.onHandsAttack();
 }

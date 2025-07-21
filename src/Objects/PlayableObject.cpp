@@ -9,6 +9,7 @@ void PlayableObject::setState(std::unique_ptr<PlayableObjectState> newState)
 
 void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
 {
+
     command->execute(*this);
 }
 
@@ -76,6 +77,7 @@ void PlayableObject::attack()
 
     if (m_attack)
     {
+
         m_attack->attack();
 		std::cout << "Attacking with strategy: " << typeid(*m_attack).name() << "\n";
     }
