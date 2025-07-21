@@ -5,7 +5,7 @@
 
 class WinScreen : public IScreen {
 public:
-	WelcomeScreen(sf::RenderWindow& window, GameManager& manager);
+	WinScreen(sf::RenderWindow& window, GameManager& manager);
 	void handleEvents(sf::Event& ev) override;
 	void render() override;
 private:

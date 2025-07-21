@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <iostream>
+#include "Management/GameManager.h"
 #include "Gameplay/Level.h"
 #include "Gameplay/Player.h"
 #include "Gameplay/Ally.h"
@@ -13,8 +14,9 @@ class Controller
 public:
     // Constructor: receives all game data needed to run the battle
     Controller(sf::RenderWindow& window,
+        GameManager& manager,
         std::unique_ptr<Level> level,
-        std::vector<std::shared_ptr<Player>> players,     // human-controlled
+        std::vector<std::shared_ptr<Player>> players,
         std::vector<std::shared_ptr<Ally>> allies);       // CP-controlled allies
 
 
@@ -38,6 +40,7 @@ private:
     std::vector<std::shared_ptr<PickableObject>> m_pickables;
     std::vector<std::shared_ptr<PickableObject>> m_objQueue;
     std::vector<std::shared_ptr<PlayableObject>> m_deads;
+    GameManager& m_manager;
     int m_numOfLevels;
     int m_nextLevelIndex = 1; // means level 2
     int m_nextStageIndex = 1;
