@@ -41,14 +41,14 @@ void IdleState::onHandsAttack(PlayableObject& player) {
 }
 
 void IdleState::onStoneHit(PlayableObject& player) {
-
+    player.setState(std::make_unique<GotHitState>());
 }
 void IdleState::onBoxHit(PlayableObject& player)
 {
+    player.setState(std::make_unique<GotHitState>());
 }
 void IdleState::onExplosion(PlayableObject& player) {
-    player.setState(std::make_unique<GotHitState>());
-
+	player.setState(std::make_unique<KnockedDownState>());
 }
 
 void IdleState::name() {

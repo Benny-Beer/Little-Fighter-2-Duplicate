@@ -79,20 +79,21 @@ void AttackingState::exit(ComputerPlayer& player) {
 void AttackingState::name() {
 }
 
-void AttackingState::onHandsAttack(PlayableObject& player)
-{
+void AttackingState::onHandsAttack(PlayableObject& player){
     player.setState(std::make_unique<BlockingState>());
 }
+
 void AttackingState::onStoneHit(PlayableObject& player) {
 	player.setState(std::make_unique<GotHitState>());
 
 }
-void AttackingState::onExplosion(PlayableObject& player) {
 
-
+void AttackingState::onBoxHit(PlayableObject& player) {
+    player.setState(std::make_unique<GotHitState>());
 }
 
-void AttackingState::onBoxHit(PlayableObject& player)
-{
+void AttackingState::onExplosion(PlayableObject& player) {
     player.setState(std::make_unique<KnockedDownState>());
 }
+
+

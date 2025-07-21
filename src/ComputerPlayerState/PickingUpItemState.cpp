@@ -66,16 +66,15 @@ void PickingUpItemState::name() {
 
 void PickingUpItemState::onHandsAttack(PlayableObject& player) {
     player.setState(std::make_unique<BlockingState>());
-
 }
 
 void PickingUpItemState::onStoneHit(PlayableObject& player) {
     player.setState(std::make_unique<GotHitState>());
 }
-void PickingUpItemState::onBoxHit(PlayableObject& player)
-{
-    player.setState(std::make_unique<KnockedDownState>());
+void PickingUpItemState::onBoxHit(PlayableObject& player){
+    player.setState(std::make_unique<GotHitState>());
 }
 void PickingUpItemState::onExplosion(PlayableObject& player) {
+    player.setState(std::make_unique<KnockedDownState>());
 
 }

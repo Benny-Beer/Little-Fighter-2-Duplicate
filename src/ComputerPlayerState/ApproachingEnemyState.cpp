@@ -80,9 +80,7 @@ void ApproachingEnemyState::exit(ComputerPlayer& player) {
 }
 
 void ApproachingEnemyState::onHandsAttack(PlayableObject& player) {
-
     player.setState(std::make_unique<BlockingState>());
-
 }
 
 void ApproachingEnemyState::onStoneHit(PlayableObject& player) {
@@ -90,10 +88,10 @@ void ApproachingEnemyState::onStoneHit(PlayableObject& player) {
 }
 void ApproachingEnemyState::onBoxHit(PlayableObject& player)
 {
-    player.setState(std::make_unique<KnockedDownState>());
+    player.setState(std::make_unique<GotHitState>());
 }
 void ApproachingEnemyState::onExplosion(PlayableObject& player) {
-
+    player.setState(std::make_unique<KnockedDownState>());
 }
 void ApproachingEnemyState::name() {
 }
