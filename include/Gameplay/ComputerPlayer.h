@@ -29,7 +29,7 @@ public:
     void performAttack(PlayableObject &target);
     void pickUp(PickableObject& pickable);
     virtual void updateDirection() override;
-
+  
 protected:
     bool m_wasHit = false;
     bool m_wasKnockedDown = false;

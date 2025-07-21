@@ -39,6 +39,7 @@ void AttackState::update(PlayableObject& player, float dt)
     {
         player.setStrategyName("");
         player.setState(std::make_unique<StandingState>(Input::NONE));
+		player.stopAttack();
     }
 }
 

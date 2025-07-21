@@ -15,4 +15,5 @@ public:
 	void onBoxHit(PlayableObject& player) override {};
 	void onStoneHit(PlayableObject& player) override {};
 	void onExplosion(PlayableObject& player) override {};
+	bool isAccessible() const override { return false; }
 };

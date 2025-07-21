@@ -48,5 +48,5 @@ public:
     virtual void onHandsAttack();
     virtual void onExplosion();
 private:
-    bool m_alive = true;
+    bool m_alive = true;	
 };

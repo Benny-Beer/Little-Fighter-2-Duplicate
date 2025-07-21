@@ -66,6 +66,12 @@ public:
 	void setXHit(int xdirHit) { m_xdirHit = xdirHit; }
 	float getHitCooldown() const;
 	void setHitCooldown(float cooldown);
+	virtual void setDir(float x) { m_xDir = x; }
+	virtual float getDir() const { return m_xDir; }
+	virtual void startAttack() { m_startedAttack = true; }
+	virtual void stopAttack() { m_startedAttack = false; }
+	virtual bool isStartedAttack() const { return m_startedAttack; }
+
 protected:
 	int m_hp;
 	int m_potentialHp;
@@ -87,9 +93,11 @@ protected:
 	sf::Vector2f m_safeZone = { 0.f, 0.f };
 	float m_attackRange = 50.f;
 	int m_xdirHit = 0;
+	float m_xDir = 0;
 	float m_hitCooldown = 0.f;
 	bool m_attackTimer = false;
 	bool m_canAttack = true;
+	bool m_startedAttack = false;
 };
 
 

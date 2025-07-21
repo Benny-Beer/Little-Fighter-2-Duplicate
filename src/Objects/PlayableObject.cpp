@@ -15,7 +15,6 @@ void PlayableObject::handleCommand(std::unique_ptr<ICommand> command)
 
 void PlayableObject::pickUpObject(std::shared_ptr<PickableObject> obj)
 {
-	std::cout << "Picking up object: " << obj->getName() << "\n";
     m_heldObject = obj;
 	m_heldObject->move(getPosition());
     m_heldObject->setHolder(this);
@@ -79,12 +78,10 @@ void PlayableObject::attack()
     {
 
         m_attack->attack();
-		std::cout << "Attacking with strategy: " << typeid(*m_attack).name() << "\n";
     }
     
     if (m_heldObject)
     {
-		std::cout << "Attacking with " << m_heldObject->getName() << "\n";
         m_heldObject->throwIt();
         m_heldObject = nullptr;
 

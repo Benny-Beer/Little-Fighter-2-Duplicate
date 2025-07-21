@@ -154,7 +154,6 @@ void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
     static HitMap map = initializeCollisionMap();
     Object* holder = obj2->getHolder();
     std::type_index holderType = holder ? typeid(*holder) : typeid(void);
-    //std::cout << typeid(obj1).name() << " collided with " << typeid(*obj2).name() << " IN STATUS: " << obj2->getStatus() << " and holder was " << holderType.name() << std::endl;
 	auto it = map.find({ typeid(obj1), typeid(*obj2), holderType });
     if (it != map.end())
     {
@@ -166,9 +165,12 @@ void processCollision(Object& obj1, std::shared_ptr<PickableObject> obj2)
 
 void playerVsenemy(Object& playerObj, Object& enemyObj)
 {
+    
 	Player& player = static_cast<Player&>(playerObj);
 	Enemy& enemy = static_cast<Enemy&>(enemyObj);
 
+    if (player.isStartedAttack())
+        return;
     if (enemy.getHitCooldown() > 0.f)
         return; //
     auto playerDirX = player.getDirection();
@@ -184,26 +186,32 @@ void playerVsenemy(Object& playerObj, Object& enemyObj)
 
 	if (typeid(*playerState) == typeid(AttackState))
 	{
+		player.startAttack();
 		enemy.handleCommand(std::make_unique<HandsAttackCommand>());
         enemy.setHitCooldown(0.5f);
+        
 	}    
 }
 
 void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
+
     Player& player = static_cast<Player&>(playerObj);
     Enemy& enemy = static_cast<Enemy&>(enemyObj);
-    enemy.updateDirection();
+
+    
     if (player.getHitCooldown() > 0.f)
         return;
-
+    
+    //ennemy left to player
     if (enemy.getPosition().x < player.getPosition().x)
     {
-        if (enemy.getDirection() < 0)
+        if (enemy.getDir() < 0)
             return;
     }
+	//enemy right to player
     else if (enemy.getPosition().x > player.getPosition().x)
     {
-        if (enemy.getDirection() > 0)
+        if (enemy.getDir() > 0)
             return;
     }
 
@@ -221,23 +229,24 @@ void enemyVSAlly(Object& Obj1, Object& Obj2) {
 	auto& attacker  = static_cast<ComputerPlayer&>(Obj1);
 	auto& attacked = static_cast<ComputerPlayer&>(Obj2);
 
+    
 	if (attacked.getHitCooldown() > 0.f)
 		return;
     if (attacker.getPosition().x < attacked.getPosition().x)
     {
-        if (attacker.getDirection() < 0)
+        if (attacker.getDir() < 0)
             return;
     }
     else if (attacker.getPosition().x > attacked.getPosition().x)
     {
-        if (attacker.getDirection() > 0)
+        if (attacker.getDir() > 0)
             return;
     }
 
 	auto enemyState = attacker.getState();
 	if (typeid(*enemyState) == typeid(AttackingState))
 	{
-
+        
         alignAttacker(attacker, attacked);
 		attacked.handleCommand(std::make_unique<HandsAttackCommand>());
         attacked.setHitCooldown(0.2f);
@@ -262,7 +271,6 @@ objectVsObjectMap initializeOvsOmap(){
 void processCollision(Object& object1, Object& object2)
 {
 	static objectVsObjectMap map = initializeOvsOmap();
-	//std::cout << "Processing collision between " << typeid(object1).name() << " and " << typeid(object2).name() << std::endl;
 	auto it = map.find({ typeid(object1), typeid(object2) });
 	if (it != map.end())
 	{

@@ -9,8 +9,6 @@
 
 
 void IdleState::enter(PlayableObject& player) {
-	std::cout << player.getName() << " is now idle." << std::endl;
-
     player.setAniName("standing");
 }
 

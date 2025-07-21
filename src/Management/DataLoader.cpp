@@ -30,13 +30,6 @@ void DataLoader::parseDataIndex()
 	}
 }
 
-void DataLoader::printPaths() const
-{
-	for (const auto& member : m_datPaths) {
-		std::cout << "type: " << member.first << " path: " << member.second << std::endl;
-	}
-}
-
 bool DataLoader::loadCharacterDat()
 {
 	if (m_currentIndex == m_datPaths.size()) return false;

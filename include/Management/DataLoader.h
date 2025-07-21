@@ -5,7 +5,6 @@ class DataLoader {
 public:
 	DataLoader(std::string pathToIndex);
 	void parseDataIndex();
-	void printPaths() const;
 	bool loadCharacterDat();
 	std::string getCurrentlyLoadingFile() const;
 private:

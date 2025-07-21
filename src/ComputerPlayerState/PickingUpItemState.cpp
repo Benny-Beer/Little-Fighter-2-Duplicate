@@ -42,7 +42,6 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
 
     if (distance <= PICK_UP_RANGE) {
         // Pick up item
-		std::cout << player.getName() << "Picking up item: " << m_targetItem->getName() << std::endl;   
         player.pickUpObject(m_targetItem);
         player.tookItem();
         player.setState(std::make_unique<IdleState>());

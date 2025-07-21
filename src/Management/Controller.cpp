@@ -20,7 +20,7 @@ Controller::Controller(sf::RenderWindow& window,
     m_players(std::move(players)),
     m_allies(std::move(allies)),
     m_stats(HUD(window.getSize(), getPlayerAndAllies()))
-{   
+{ 
     m_numOfLevels = ResourceManager::instance().getNumOfLevels();
     m_enemies = m_level->getAllEnemies();
     m_objQueue = m_level->getAllObjects();

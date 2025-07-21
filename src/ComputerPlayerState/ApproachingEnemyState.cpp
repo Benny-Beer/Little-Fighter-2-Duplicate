@@ -17,7 +17,6 @@ ApproachingEnemyState::ApproachingEnemyState(std::shared_ptr<Object> target)
 }
 
 void ApproachingEnemyState::enter(PlayableObject& player) {
-	std::cout << player.getName() << " is now approaching an enemy." << std::endl;
     player.setAniName("walking");
 
 }
@@ -75,7 +74,7 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
 
     float speed = player.getSpeed();
     player.move(direction * speed * deltaTime);
-    player.updateDirection();
+	player.setDir(direction.x);
 	
     if (player.getHeldObj()) {
 

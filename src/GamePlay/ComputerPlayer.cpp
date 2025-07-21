@@ -17,16 +17,12 @@ ComputerPlayer::ComputerPlayer(PlayerData p) : PlayableObject(p.m_animationSheet
 }
 void ComputerPlayer::update(float dt)
 {
-    //std::cout << "ComputerPlayer::update\n";
     if (m_hitCooldown > 0.f)
         m_hitCooldown -= dt;
-    //std::cout << m_attackTimer << std::endl;
     if (m_attackTimer) {
 
         m_attackCoolDown += dt;
-        //std::cout << m_attackCoolDown << std::endl;
         if (m_attackCoolDown >= m_attackWaitingTime) {
-            //std::cout << "m_attackCoolDown >= m_attackWaitingTime\n";
             m_canAttack = true;
             m_attackTimer = false;
             m_attackCoolDown = 0.f;
