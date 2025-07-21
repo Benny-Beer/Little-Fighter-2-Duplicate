@@ -154,14 +154,13 @@ void Controller::updateWorld(float deltaTime)
     }
 
 
-    m_stats.update();
+    m_stats.update(getPlayerAndAllies(), m_enemies ,getLevelInfo());
 
     if(m_players.size())
         m_level->handleCollisionsWithPlayer(*m_players.back()); 
 
 
 }
-
 
 
 void Controller::checkLevelEndConditions()
@@ -216,15 +215,12 @@ void Controller::render()
     for (const auto& player : m_players)
     {
         player->draw(m_window);
-
     }
 
   
     for (const auto& ally : m_allies)
     {
-
         ally->draw(m_window);
-
     }
     
 
@@ -232,7 +228,6 @@ void Controller::render()
     for (const auto& enemy : m_enemies)
     {
         enemy->draw(m_window);
- 
     }
 
     if (m_waitingForNextWave) {
@@ -411,6 +406,13 @@ void Controller::resetPlayersStats()
         ally->resetHP();
         ally->setPosition(getRandomYPosition(50, 380, 800));
     }
+}
+
+std::string Controller::getLevelInfo() const
+{
+    std::string amountOfLevels = std::to_string(m_numOfLevels);
+    std::string currLevel = std::to_string(m_nextStageIndex);
+    return currLevel + " - " + amountOfLevels;
 }
 
 
