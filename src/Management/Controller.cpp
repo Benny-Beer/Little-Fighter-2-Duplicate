@@ -53,6 +53,9 @@ void Controller::updateWorld(float deltaTime)
 
     //===========================================
     //===== MOVE INSIDE FUNC ====================
+    if (m_players.empty() && m_allies.empty()) {
+
+    }
     if (m_waitingForNextWave) {
         m_DelayTimer += deltaTime;
         if (m_DelayTimer >= WAVE_DELAY) {
@@ -240,7 +243,7 @@ void Controller::render()
     }
     if (m_playerWon)
     {
-        m_manager.switchScreen(std::make_unique<WinScreen>(m_window, m_manager));
+        m_manager.switchScreen(std::make_unique<LoseScreen>(m_window, m_manager));
     }
 	m_stats.draw(m_window);
 
