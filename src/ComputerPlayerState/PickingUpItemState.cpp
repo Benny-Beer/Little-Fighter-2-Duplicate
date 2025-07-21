@@ -42,9 +42,11 @@ void PickingUpItemState::update(PlayableObject& player, float deltaTime) {
 
     if (distance <= PICK_UP_RANGE) {
         // Pick up item
+		std::cout << player.getName() << "Picking up item: " << m_targetItem->getName() << std::endl;   
         player.pickUpObject(m_targetItem);
         player.tookItem();
         player.setState(std::make_unique<IdleState>());
+        return;
     }
     else {
         // Move toward item
@@ -66,16 +68,15 @@ void PickingUpItemState::name() {
 
 void PickingUpItemState::onHandsAttack(PlayableObject& player) {
     player.setState(std::make_unique<BlockingState>());
-
 }
 
 void PickingUpItemState::onStoneHit(PlayableObject& player) {
     player.setState(std::make_unique<GotHitState>());
 }
-void PickingUpItemState::onBoxHit(PlayableObject& player)
-{
-    player.setState(std::make_unique<KnockedDownState>());
+void PickingUpItemState::onBoxHit(PlayableObject& player){
+    player.setState(std::make_unique<GotHitState>());
 }
 void PickingUpItemState::onExplosion(PlayableObject& player) {
+    player.setState(std::make_unique<KnockedDownState>());
 
 }

@@ -201,7 +201,7 @@ void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
         if (enemy.getDirection() < 0)
             return;
     }
-    else if (enemy.getPosition().x < player.getPosition().x)
+    else if (enemy.getPosition().x > player.getPosition().x)
     {
         if (enemy.getDirection() > 0)
             return;
@@ -228,7 +228,7 @@ void enemyVSAlly(Object& Obj1, Object& Obj2) {
         if (attacker.getDirection() < 0)
             return;
     }
-    else if (attacker.getPosition().x < attacked.getPosition().x)
+    else if (attacker.getPosition().x > attacked.getPosition().x)
     {
         if (attacker.getDirection() > 0)
             return;
@@ -239,8 +239,8 @@ void enemyVSAlly(Object& Obj1, Object& Obj2) {
 	{
 
         alignAttacker(attacker, attacked);
-		    attacked.handleCommand(std::make_unique<HandsAttackCommand>());
-            attacked.setHitCooldown(0.2f);
+		attacked.handleCommand(std::make_unique<HandsAttackCommand>());
+        attacked.setHitCooldown(0.2f);
 
 	}
 }
