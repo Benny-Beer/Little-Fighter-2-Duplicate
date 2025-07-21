@@ -18,7 +18,7 @@ AttackingState::AttackingState(std::shared_ptr<Object> target)
 }
 
 void AttackingState::enter(PlayableObject& player) {
-    std::cout << "im in AttackingState::enter\n";
+    std::cout << player.getName() << "im in AttackingState::enter\n";
     player.setAniName("attacking");
     player.attack();
     player.adjustRange(HANDS_ATTACK_RANGE);
