@@ -29,7 +29,7 @@ public:
     void handleInput(sf::Event event);                 // Reads arrow-key state (?) m_direction
     void update(float dt);
     void handleCollision() override;    
-
+    virtual void updateDirection() override {};
     void setSpeed(float speed);
 
     bool isAlive() const;

@@ -75,7 +75,8 @@ void ApproachingEnemyState::update(PlayableObject& player, float deltaTime) {
 
     float speed = player.getSpeed();
     player.move(direction * speed * deltaTime);
-
+    player.updateDirection();
+	
     if (player.getHeldObj()) {
 
         player.getHeldObj()->move(player.getPosition());

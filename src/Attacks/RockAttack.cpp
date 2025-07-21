@@ -20,7 +20,6 @@ void RockAttack::attack()
 {
     if (m_rock)
     {
-
 		dynamic_cast<Rock*>(m_rock.get())->throwMe(m_player->getDirection(), m_player->getPosition().y);
 		m_rock = nullptr; 
     } 

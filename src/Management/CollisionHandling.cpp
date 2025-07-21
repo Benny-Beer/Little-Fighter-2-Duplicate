@@ -192,7 +192,7 @@ void playerVsenemy(Object& playerObj, Object& enemyObj)
 void enemyVSPlayer(Object& enemyObj, Object& playerObj) {
     Player& player = static_cast<Player&>(playerObj);
     Enemy& enemy = static_cast<Enemy&>(enemyObj);
-
+    enemy.updateDirection();
     if (player.getHitCooldown() > 0.f)
         return;
 

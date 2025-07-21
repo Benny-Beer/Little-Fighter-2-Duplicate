@@ -21,6 +21,7 @@ public:
 	virtual int getDirection() const { return static_cast<int>(m_dir); }
 	virtual void setStrategyName(const std::string& name);
 	virtual void resetDirection(); 
+	virtual void updateDirection() = 0;
 	const PlayableObjectState* getState() const { return m_state.get(); }
 
 	virtual void takeDamage(int damageAmount);

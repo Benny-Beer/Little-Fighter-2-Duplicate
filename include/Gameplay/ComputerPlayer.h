@@ -28,8 +28,7 @@ public:
     void setControllable(bool control);
     void performAttack(PlayableObject &target);
     void pickUp(PickableObject& pickable);
-
-
+    virtual void updateDirection() override;
 
 protected:
     bool m_wasHit = false;
@@ -41,7 +40,6 @@ protected:
 
 private:
     float distance(const sf::Vector2f& a, const sf::Vector2f& b);
-    void updateDirection();
     virtual void onStoneHit();
     virtual void onBoxHit();
     virtual void onHandsAttack();
