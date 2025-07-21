@@ -1,6 +1,7 @@
 #include "UI/HUD.h"
 #include <SFML/Graphics.hpp>
 #include <Objects/PlayableObject.h>
+#include "Gameplay/Enemy.h"
 #include <iostream>
 HUD::HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<PlayableObject>>& members) : m_members(members) {
     // Step 1: HUD frame setup (top 15% of screen, blue color)
@@ -9,8 +10,35 @@ HUD::HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<Playab
     m_frame.setSize(sf::Vector2f(frameWidth, frameHeight));
     m_frame.setPosition(0.f, 0.f);
     m_frame.setFillColor(sf::Color(0,0,102));
-
     
+    m_infoFrame.setSize(sf::Vector2f(frameWidth, 40.f));
+    m_infoFrame.setPosition(0.f, frameHeight);
+    m_infoFrame.setFillColor(sf::Color(0, 0, 0));
+
+    if (!m_font.loadFromFile("resources/Fonts/lesterbold.ttf")) {
+        std::cerr << "Failed to load font\n";
+        return;
+    }
+   //allies info 
+    m_alliesInfo.setFont(m_font);
+    m_alliesInfo.setString("Hp : malan");
+    m_alliesInfo.setCharacterSize(20);
+    m_alliesInfo.setPosition(20.f, frameHeight + 5.f);
+    m_alliesInfo.setFillColor(sf::Color::White);
+    //level info
+    m_levelInfo.setFont(m_font);
+    m_levelInfo.setString("0-0");
+    m_levelInfo.setCharacterSize(20);
+    m_levelInfo.setOrigin(.5f, 0.f);
+    m_levelInfo.setPosition(frameWidth / 2, frameHeight + 5.f);
+    m_levelInfo.setFillColor(sf::Color::White);
+    //enemy info
+    m_enemyInfo.setFont(m_font);
+    m_enemyInfo.setString("Hp : malan");
+    m_enemyInfo.setCharacterSize(20);
+    m_enemyInfo.setPosition(frameWidth - m_enemyInfo.getGlobalBounds().width - 20.f, frameHeight + 5.f);
+    m_enemyInfo.setFillColor(sf::Color::White);
+
     int numFrames = 3;
     float spacing = 20.f; 
     float totalSpacing = spacing * (numFrames + 1);
@@ -26,7 +54,7 @@ HUD::HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<Playab
         m_characterFrames.emplace_back(size, position, members[i]);
     }
 }
-void HUD::update()
+void HUD::update(const std::vector<std::shared_ptr<PlayableObject>>& allies, const std::vector< std::shared_ptr<Enemy>>& enemies, const std::string levelInfo)
 {
     int i = 0;
     for (auto& frame : m_characterFrames) {
@@ -35,6 +63,10 @@ void HUD::update()
 }
 void HUD::draw(sf::RenderWindow& window) {
     window.draw(m_frame);
+    window.draw(m_infoFrame);
+    window.draw(m_alliesInfo);c
+    window.draw(m_levelInfo);
+    window.draw(m_enemyInfo);
     for (auto& frame : m_characterFrames) {
         frame.draw(window);
     }

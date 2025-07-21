@@ -154,14 +154,13 @@ void Controller::updateWorld(float deltaTime)
     }
 
 
-    m_stats.update();
+    m_stats.update(getPlayerAndAllies(), m_enemies ,getLevelInfo());
 
     if(m_players.size())
         m_level->handleCollisionsWithPlayer(*m_players.back()); 
 
 
 }
-
 
 
 void Controller::checkLevelEndConditions()
@@ -411,6 +410,11 @@ void Controller::resetPlayersStats()
         ally->resetHP();
         ally->setPosition(getRandomYPosition(50, 380, 800));
     }
+}
+
+std::string Controller::getLevelInfo()
+{
+    //format and return the level data string
 }
 
 

@@ -68,6 +68,7 @@ private:
 	void checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy);
 	void checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy);
     void resetPlayersStats();
+    std::string getLevelInfo();
 
     template<typename Container>
     void checkClosest(const Container& container, const sf::Vector2f& enemyPos,

@@ -4,16 +4,22 @@
 #include <vector>
 struct  PlayerData; // forward declaration
 class Player; // forward declaration
-class Ally; // forwars declaration
+class Ally; // forward declaration
+class Enemy;// forward declaration
 class PlayableObject;
 
 class HUD {
 public:
 	HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<PlayableObject>>& members);
-	void update();
+	void update(const std::vector<std::shared_ptr<PlayableObject>>& allies,const std::vector< std::shared_ptr<Enemy>>& enemies, const std::string levelInfo);
 	void draw(sf::RenderWindow& window);
 private:
 	sf::RectangleShape m_frame;
+	sf::Font m_font;
+	sf::RectangleShape m_infoFrame;
+	sf::Text m_alliesInfo;
+	sf::Text m_enemyInfo;
+	sf::Text m_levelInfo;
 	class CharacterFrame {
 	public:
 		CharacterFrame(const sf::Vector2f size, const sf::Vector2f position, const std::shared_ptr<PlayableObject>& member);
