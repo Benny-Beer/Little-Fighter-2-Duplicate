@@ -243,7 +243,7 @@ void Controller::render()
     }
     if (m_playerWon)
     {
-        m_manager.switchScreen(std::make_unique<LoseScreen>(m_window, m_manager));
+        m_manager.switchScreen(std::make_unique<WinScreen>(m_window, m_manager));
     }
 	m_stats.draw(m_window);
 
