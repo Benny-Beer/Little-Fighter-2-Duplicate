@@ -17,7 +17,6 @@ public:
         std::vector<std::shared_ptr<Player>> players,     // human-controlled
         std::vector<std::shared_ptr<Ally>> allies);       // CP-controlled allies
 
-
     // ========== Core logic ==========
     void handleInput(sf::Event ev);                  // Input for human-controlled players
     void updateWorld(float deltaTime);   // Updates players, allies, level, etc.
@@ -68,7 +67,7 @@ private:
 	void checkCollisionsWithAllies(std::shared_ptr<Enemy> enemy);
 	void checkCollisionsWithPlayers(std::shared_ptr<Enemy> enemy);
     void resetPlayersStats();
-    std::string getLevelInfo();
+    std::string getLevelInfo() const;
 
     template<typename Container>
     void checkClosest(const Container& container, const sf::Vector2f& enemyPos,

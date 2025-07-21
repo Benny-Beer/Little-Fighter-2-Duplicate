@@ -215,15 +215,12 @@ void Controller::render()
     for (const auto& player : m_players)
     {
         player->draw(m_window);
-
     }
 
   
     for (const auto& ally : m_allies)
     {
-
         ally->draw(m_window);
-
     }
     
 
@@ -231,7 +228,6 @@ void Controller::render()
     for (const auto& enemy : m_enemies)
     {
         enemy->draw(m_window);
- 
     }
 
     if (m_waitingForNextWave) {
@@ -412,9 +408,11 @@ void Controller::resetPlayersStats()
     }
 }
 
-std::string Controller::getLevelInfo()
+std::string Controller::getLevelInfo() const
 {
-    //format and return the level data string
+    std::string amountOfLevels = std::to_string(m_numOfLevels);
+    std::string currLevel = std::to_string(m_nextStageIndex);
+    return currLevel + " - " + amountOfLevels;
 }
 
 

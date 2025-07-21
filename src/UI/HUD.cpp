@@ -34,7 +34,7 @@ HUD::HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<Playab
     m_levelInfo.setFillColor(sf::Color::White);
     //enemy info
     m_enemyInfo.setFont(m_font);
-    m_enemyInfo.setString("Hp : malan");
+    m_enemyInfo.setString("amout - malan hp - lot");
     m_enemyInfo.setCharacterSize(20);
     m_enemyInfo.setPosition(frameWidth - m_enemyInfo.getGlobalBounds().width - 20.f, frameHeight + 5.f);
     m_enemyInfo.setFillColor(sf::Color::White);
@@ -56,17 +56,32 @@ HUD::HUD(const sf::Vector2u screenSize, const std::vector<std::shared_ptr<Playab
 }
 void HUD::update(const std::vector<std::shared_ptr<PlayableObject>>& allies, const std::vector< std::shared_ptr<Enemy>>& enemies, const std::string levelInfo)
 {
-    int i = 0;
+    std::string alliesInfo, enemyInfo;
+    int alliesHp = 0, enemyHp = 0;
+    for (const auto& p : allies) {
+        alliesHp += p->getHp();
+    }
+    alliesInfo = "amount - " + std::to_string(allies.size()) + " hp - " + std::to_string(alliesHp);
+    for (const auto& p : enemies) {
+        enemyHp += p->getHp();
+    }
+    enemyInfo = "amount - " + std::to_string(enemies.size()) + " hp - " + std::to_string(enemyHp);
+
+    m_alliesInfo.setString(alliesInfo);
+    m_enemyInfo.setString(enemyInfo);
+    m_levelInfo.setString(levelInfo);
     for (auto& frame : m_characterFrames) {
         frame.update();
     }
 }
 void HUD::draw(sf::RenderWindow& window) {
+
     window.draw(m_frame);
     window.draw(m_infoFrame);
-    window.draw(m_alliesInfo);c
+    window.draw(m_alliesInfo);
     window.draw(m_levelInfo);
     window.draw(m_enemyInfo);
+
     for (auto& frame : m_characterFrames) {
         frame.draw(window);
     }
