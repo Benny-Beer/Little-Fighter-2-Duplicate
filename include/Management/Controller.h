@@ -53,7 +53,6 @@ private:
     float m_objectTimer = 0.f;
     float m_newObjectCoolDown = OBJECT_COOLDOWN;
 
-    void printHp(int hp, const sf::Vector2f& position, bool potential);
     float distanceBetween(sf::Vector2f a, sf::Vector2f b);
     bool enemyExist() { return m_enemies.size(); }
     bool alliesExist() { return m_allies.size() + m_players.size(); }

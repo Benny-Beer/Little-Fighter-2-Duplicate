@@ -5,7 +5,6 @@
 #include "PlayableObjectStates/ComputerPlayerState/DeadState.h"
 #include "PlayableObjectStates/PlayerStates/PlayerDeadState.h"
 #include "Management/AnimationManager.h"
-// #include "Objects/ObjectStates/HeldObjState.h"
 
 Player::Player(const sf::Vector2f pos, const std::string& name, float speed)
     : PlayableObject(pos, name)
