@@ -1,7 +1,10 @@
 #include "Management/Controller.h"
 #include "Management/CollisionHandling.h"
+#include "Management/GameManager.h"
 #include "Gameplay/Level.h"
 #include "PlayableObjectStates/PlayerStates/StandingState.h"
+#include "Screens/WinScreen.h"
+#include "Screens/LoseScreen.h"
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window.hpp>
@@ -12,6 +15,7 @@
 
 
 Controller::Controller(sf::RenderWindow& window,
+    GameManager& manager,
     std::unique_ptr<Level> level,
     std::vector<std::shared_ptr<Player>> players,
     std::vector<std::shared_ptr<Ally>> allies)
@@ -19,8 +23,9 @@ Controller::Controller(sf::RenderWindow& window,
     m_level(std::move(level)),
     m_players(std::move(players)),
     m_allies(std::move(allies)),
-    m_stats(HUD(window.getSize(), getPlayerAndAllies()))
-{ 
+    m_stats(HUD(window.getSize(), getPlayerAndAllies())),
+    m_manager(manager)
+{   
     m_numOfLevels = ResourceManager::instance().getNumOfLevels();
     m_enemies = m_level->getAllEnemies();
     m_objQueue = m_level->getAllObjects();
@@ -48,6 +53,9 @@ void Controller::updateWorld(float deltaTime)
 
     //===========================================
     //===== MOVE INSIDE FUNC ====================
+    if (m_players.size() == 0 && m_allies.size() == 0) {
+        m_manager.switchScreen(std::make_unique<LoseScreen>(m_window, m_manager));
+    }
     if (m_waitingForNextWave) {
         m_DelayTimer += deltaTime;
         if (m_DelayTimer >= WAVE_DELAY) {
@@ -99,22 +107,18 @@ void Controller::updateWorld(float deltaTime)
     {
         player->update(deltaTime);
         m_level->handleCollisionsWithPlayer(*player); 
-
     }
 
     for (auto& ally : m_allies)
     {
-
        ally->update(deltaTime);
        m_level->handleCollisionsWithPlayer(*ally);
-
     }
     for (auto& enemy : m_enemies)
     {
         enemy->update(deltaTime);
         m_level->handleCollisionsWithPlayer(*enemy);
 		checkCollisions(enemy);
-
     }
     for (auto& obj : m_pickables)
     {
@@ -131,10 +135,6 @@ void Controller::updateWorld(float deltaTime)
     {
         dead->update(deltaTime);
     }
-
-
-    
-  
     updateComputerPlayerStats();
 
     for (int i = 0; i < m_players.size(); i++) {
@@ -158,8 +158,6 @@ void Controller::updateWorld(float deltaTime)
 
     if(m_players.size())
         m_level->handleCollisionsWithPlayer(*m_players.back()); 
-
-
 }
 
 
@@ -240,7 +238,7 @@ void Controller::render()
     }
     if (m_playerWon)
     {
-        printStageAlert("Congratulations! \n YOU WON!");
+        m_manager.switchScreen(std::make_unique<WinScreen>(m_window, m_manager));
     }
 	m_stats.draw(m_window);
 

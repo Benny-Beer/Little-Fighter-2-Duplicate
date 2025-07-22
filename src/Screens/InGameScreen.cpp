@@ -13,7 +13,7 @@
 
 
 InGameScreen::InGameScreen(sf::RenderWindow& window, GameManager& manager, std::shared_ptr<PlayerData> p, std::vector<std::shared_ptr<Ally>> allies) : IScreen(window, manager),
-																						   m_controller(window, ResourceManager::instance().getLevel(0),
+																						   m_controller(window, manager, ResourceManager::instance().getLevel(0),
 																						   std::vector<std::shared_ptr<Player>>{std::make_shared<Player>(*p)},
 																						   allies)
 {}
