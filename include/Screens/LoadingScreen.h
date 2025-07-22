@@ -14,7 +14,6 @@ public:
 	void render() override;
 private:
 	std::optional<Background> m_backGround;
-	Button m_startButton;
 	sf::Text m_currentlyLoading;
 	sf::Text m_chienese;
 	sf::Font m_font;

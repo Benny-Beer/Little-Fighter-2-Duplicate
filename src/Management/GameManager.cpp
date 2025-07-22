@@ -38,10 +38,8 @@ void GameManager::run()
             {
                 m_currScreen = std::move(m_nextScreen);
             }
-
         }
         sf::Time deltaTime = clock.restart();
-
         m_currScreen->update(deltaTime);
 
         m_window.clear();
