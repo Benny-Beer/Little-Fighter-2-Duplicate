@@ -18,7 +18,6 @@ LoadingScreen::LoadingScreen(sf::RenderWindow& window, GameManager& manager) : I
 	AnimationManager::loadAnimations();
 	sf::Vector2f screenSize(static_cast <sf::Vector2f> (m_window.getSize()));
 	m_backGround = Background(screenSize, ResourceManager::instance().getTexture("screen_backgrounds/Loading_bg"));
-	m_startButton = Button("  to character\n select screen", sf::Vector2f(screenSize.x / 4, screenSize.y / 4), sf::Vector2f(screenSize.x / 2, screenSize.y / 2), sf::Color::Transparent, 30);
 
 	if (m_font.getInfo().family.empty()) {
 		if (!m_font.loadFromFile("C:/Windows/Fonts/arialbd.ttf")) {
@@ -51,6 +50,7 @@ LoadingScreen::LoadingScreen(sf::RenderWindow& window, GameManager& manager) : I
 }
 
 void LoadingScreen::update(sf::Time deltaTime) {
+	
 	if (m_dataLoader.loadCharacterDat()) {
 		m_currentlyLoading.setString(m_dataLoader.getCurrentlyLoadingFile());
 	}
@@ -63,20 +63,12 @@ void LoadingScreen::update(sf::Time deltaTime) {
 }
 
 void LoadingScreen::handleEvents(sf::Event& ev) {
-	
-if (ev.type == sf::Event::MouseButtonPressed && 
-	ev.mouseButton.button == sf::Mouse::Button::Left && m_canSwitchScreen) {
-		auto mousePos = sf::Vector2f(ev.mouseButton.x, ev.mouseButton.y);
-		if (m_startButton.isClicked(mousePos)) {
-			m_manager.switchScreen(std::make_unique<CharacterSelectScreen>(m_window, m_manager));
-		}
-	}
+	if (m_canSwitchScreen) m_manager.switchScreen(std::make_unique<CharacterSelectScreen>(m_window, m_manager));
 }
 
 void LoadingScreen::render() {
 
 	m_backGround->draw(m_window, sf::RenderStates::Default);
-	m_startButton.draw(m_window, sf::RenderStates::Default);
 	m_window.draw(m_chienese);
 	m_window.draw(m_currentlyLoading);
 	sf::sleep(sf::milliseconds(250.f));

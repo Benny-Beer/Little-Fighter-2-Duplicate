@@ -95,7 +95,7 @@ void Controller::updateWorld(float deltaTime)
             m_DelayTimer = 0.f;
         }
         else {
-            m_playerWon = true;
+            m_manager.switchScreen(std::make_unique<WinScreen>(m_window, m_manager));
         }
     }
     else if (m_enemies.empty()) {
@@ -233,17 +233,9 @@ void Controller::render()
         printStageAlert("Stage: " + std::to_string(m_nextStageIndex));
     }
     if (m_waitingForNextLevel) {
-
-        printStageAlert("New level!\n strating level " + std::to_string(m_nextLevelIndex + 1) + ".");
+        printStageAlert("New level!\nStarting level " + std::to_string(m_nextLevelIndex + 1) + ".");
     }
-    if (m_playerWon)
-    {
-        m_manager.switchScreen(std::make_unique<WinScreen>(m_window, m_manager));
-    }
-	m_stats.draw(m_window);
-
-
-            
+	m_stats.draw(m_window);            
 }
 
 void Controller::setPlayer(PlayerData player)
@@ -272,7 +264,6 @@ void Controller::launchNextStage()
             });
         m_enemies = m_level->getAllEnemies();
     }
-
 }
 
 void Controller::launchNextLevel()
@@ -301,8 +292,6 @@ void Controller::updateComputerPlayerStats() {
 
 }
 
-//======================================
-//======= NOT SURE IF NEEDED ===========
 bool Controller::isLevelFinished() const
 {
     return m_levelFinished;
@@ -312,17 +301,12 @@ bool Controller::didWin() const
 {
     return m_playerWon;
 }
-//======================================
-
-
 // Calculates the Euclidean distance between two 2D points
 float Controller::distanceBetween(sf::Vector2f a, sf::Vector2f b) {
     float dx = a.x - b.x;
     float dy = a.y - b.y;
     return std::sqrt(dx * dx + dy * dy);
 }
-
-
 
 void Controller::restoreKnockedAccess() {
     auto it = m_deads.begin();
@@ -397,11 +381,9 @@ void Controller::resetPlayersStats()
     bringPlayersBack();
 
     for (auto& player : m_players) {
-        player->resetHP();
         player->setPosition(getRandomYPosition(50, 380, 800));
     }
     for (auto& ally : m_allies) {
-        ally->resetHP();
         ally->setPosition(getRandomYPosition(50, 380, 800));
     }
 }
