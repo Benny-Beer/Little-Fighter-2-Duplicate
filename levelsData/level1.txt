@@ -1,5 +1,5 @@
 b1
 b3
-b20
+b13
 obj
-r r r r
+b r b r r

@@ -31,6 +31,7 @@ inline const AnimationInfo HELD = { 146, 98, 42, 46, 0, 0.7f, true };
 inline const AnimationInfo BOX_EXPLOIDING = { 58, 0, 58, 58, 2, 0.2f, false };
 inline const AnimationInfo BLOCKING = { 480, 400, 80, 80, 2, 0.2f, false };
 inline const AnimationInfo KNOCKEDDOWN = { 240, 240, 80, 80, 2, 0.2f, false };
+inline const AnimationInfo KNOCKEDDOWNR = { 240, 240, 80, 80, 2, 0.2f, false };
 
 inline const AnimationInfo GOTHIT = { 480, 320, 80, 80, 3, 0.2f, false };
 
@@ -40,7 +41,7 @@ inline const AnimationInfo RUNNING = { 0, 160, 80, 80, 4, 0.1f, true };
 inline const AnimationInfo RUNNING_WITH_ROCK = { 320, 160, 80, 80, 4, 0.1f, true };
 
 inline const AnimationInfo DEAD = { 0, 240, 80, 80, 5, 0.1f, false }; 
-inline const AnimationInfo DEAD_WITH_ROCK = { 0, 240, 80, 80, 5, 0.1f, false }; // for debug porpuses, dont let it stay
+inline const AnimationInfo DEAD_WITH_ROCK = { 0, 240, 80, 80, 5, 0.1f, false }; 
 
 inline const AnimationInfo KNOCKED_DOWN = { 0, 320, 80, 80, 5, 0.1f, false };
 

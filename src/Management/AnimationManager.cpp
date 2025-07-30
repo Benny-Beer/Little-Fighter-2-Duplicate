@@ -36,6 +36,8 @@ void AnimationManager::loadAnimations() {
 	s_animationMap["held"] = HELD;
     s_animationMap["boxExploiding"] = BOX_EXPLOIDING;
 	s_animationMap["knockedDown"] = KNOCKEDDOWN;
+    s_animationMap["knockedDownr"] = KNOCKEDDOWNR;
+
 }
 
 
