@@ -15,7 +15,7 @@ A modern, C++-based reimplementation of the classic **Little Fighter 2** game us
 - Play as a fighter on a 2D battlefield with enemies and allies.
 - Move, attack, and dodge using keyboard controls.
 - The game supports win/lose states, loading screens, and computer-controlled behavior.
-
+![Gameplay Screenshot](assets/screenshots/battlefield.png)
 ---
 
 ## Project Structure
